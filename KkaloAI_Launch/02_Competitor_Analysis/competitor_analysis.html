@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Competitor Analysis</title>
+<style>
+  :root {
+    --graphite: #1a1a1a;
+    --graphite-2: #242424;
+    --graphite-3: #2f2f2f;
+    --graphite-4: #383838;
+    --gold: #D4AF37;
+    --gold-soft: #C9A961;
+    --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0;
+    --pearl-dim: #ECE9DF;
+    --muted: #9A9A9A;
+    --green: #5CB874;
+    --red: #E16A6A;
+    --amber: #E0A14C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--graphite);
+    color: var(--pearl);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1480px; margin: 0 auto; padding: 48px 28px 96px; }
+
+  header {
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo-mark {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite); display: grid; place-items: center;
+    font-weight: 800; font-size: 20px; letter-spacing: -0.5px;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.3);
+  }
+  .brand-text h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .brand-text small { color: var(--muted); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .meta { text-align: right; color: var(--muted); font-size: 13px; }
+  .meta strong { color: var(--gold); font-weight: 600; }
+
+  .title-block { margin-bottom: 32px; }
+  .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
+  h2.page-title {
+    font-size: clamp(30px, 4.6vw, 44px);
+    font-weight: 700; letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px;
+  }
+  h2.page-title .accent { color: var(--gold); }
+  .lede { font-size: 16px; color: var(--pearl-dim); max-width: 880px; }
+
+  /* Toolbar */
+  .toolbar {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+  .toolbar label {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .toolbar input, .toolbar select {
+    width: 100%;
+    background: var(--graphite-3);
+    color: var(--pearl);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.18s ease;
+  }
+  .toolbar input:focus, .toolbar select:focus { border-color: var(--gold); }
+  .toolbar input::placeholder { color: var(--muted); }
+
+  .results-info {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px; font-size: 13px; color: var(--muted);
+  }
+  .results-info strong { color: var(--gold); font-weight: 600; }
+  .reset-btn {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .reset-btn:hover { background: var(--gold-dim); }
+
+  /* Table */
+  .table-shell {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+  thead {
+    background: linear-gradient(180deg, var(--graphite-3), var(--graphite-2));
+    position: sticky; top: 0; z-index: 2;
+  }
+  th {
+    text-align: left;
+    padding: 16px 14px;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    border-bottom: 1px solid var(--gold-dim);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s ease;
+  }
+  th:hover { background: rgba(212,175,55,0.05); }
+  th .sort-icon { display: inline-block; margin-left: 6px; opacity: 0.4; font-size: 10px; }
+  th.sort-asc .sort-icon, th.sort-desc .sort-icon { opacity: 1; color: var(--gold); }
+  td {
+    padding: 16px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13.5px;
+    vertical-align: top;
+    color: var(--pearl-dim);
+  }
+  tr.kkalo-row td {
+    background: linear-gradient(90deg, rgba(212,175,55,0.10), rgba(212,175,55,0.02));
+    border-bottom: 1px solid var(--gold-dim);
+    color: var(--pearl);
+  }
+  tr.kkalo-row td:first-child { border-left: 3px solid var(--gold); }
+  tr:not(.kkalo-row):hover td { background-color: rgba(255,255,255,0.02); }
+
+  .app-cell { display: flex; align-items: center; gap: 12px; min-width: 170px; }
+  .app-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 14px;
+    flex-shrink: 0;
+    background: var(--graphite-4);
+    color: var(--pearl);
+  }
+  .app-icon.kkalo {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite);
+  }
+  .app-name { font-weight: 600; color: var(--pearl); display: block; }
+  .app-tag { font-size: 11px; color: var(--muted); }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .pill-free { background: rgba(92,184,116,0.12); color: var(--green); }
+  .pill-freemium { background: rgba(224,161,76,0.12); color: var(--amber); }
+  .pill-paid { background: rgba(225,106,106,0.12); color: var(--red); }
+  .pill-trial { background: rgba(212,175,55,0.15); color: var(--gold); }
+
+  .badge {
+    display: inline-block;
+    background: var(--graphite-4);
+    color: var(--pearl-dim);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    margin: 2px 4px 2px 0;
+  }
+  .badge-gold { background: var(--gold-dim); color: var(--gold); }
+
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); opacity: 0.6; }
+  .partial { color: var(--amber); font-weight: 700; }
+
+  .price-main { font-weight: 600; color: var(--pearl); display: block; }
+  .price-sub { font-size: 11px; color: var(--muted); }
+
+  details.swot {
+    cursor: pointer;
+  }
+  details.swot summary {
+    list-style: none;
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 0;
+    user-select: none;
+  }
+  details.swot summary::after { content: ' ▾'; opacity: 0.6; }
+  details.swot[open] summary::after { content: ' ▴'; }
+  details.swot summary::-webkit-details-marker { display: none; }
+  .swot-body { margin-top: 8px; font-size: 12px; line-height: 1.55; }
+  .swot-line { margin-bottom: 6px; }
+  .swot-line .label { color: var(--gold); font-weight: 600; }
+  .swot-line.weak .label { color: var(--red); }
+
+  /* Insights */
+  .takeaways {
+    margin-top: 40px;
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .takeaways h3 {
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .takeaways-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .takeaway {
+    padding: 16px;
+    background: var(--graphite-3);
+    border-radius: 12px;
+    border-left: 3px solid var(--gold);
+  }
+  .takeaway h4 {
+    font-size: 14px;
+    color: var(--pearl);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .takeaway p {
+    font-size: 13px;
+    color: var(--pearl-dim);
+    line-height: 1.55;
+  }
+
+  footer {
+    margin-top: 60px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer .tag { color: var(--gold); font-weight: 600; letter-spacing: 1px; }
+
+  @media (max-width: 980px) {
+    .toolbar { grid-template-columns: 1fr 1fr; }
+    .takeaways-grid { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    html, body { background: white; color: black; }
+    .wrap { max-width: 100%; padding: 12px; }
+    .toolbar { display: none; }
+    .results-info { display: none; }
+    .table-shell, .takeaways {
+      background: white !important;
+      border: 1px solid #ccc !important;
+      page-break-inside: auto;
+    }
+    table { min-width: 100%; font-size: 9px; }
+    th { background: #f4ecd2 !important; color: #8a6d1a !important; padding: 6px 4px; font-size: 8px; }
+    td { color: #333 !important; padding: 6px 4px; font-size: 9px; }
+    tr.kkalo-row td { background: #fef9e6 !important; color: #1a1a1a !important; }
+    .app-name { color: #1a1a1a !important; }
+    .app-icon { background: #ddd !important; color: #1a1a1a !important; }
+    .app-icon.kkalo { background: #D4AF37 !important; }
+    details.swot { display: none; }
+    .takeaway { background: #f8f6f0 !important; color: #333 !important; }
+    .takeaway h4 { color: #1a1a1a !important; }
+    .takeaway p { color: #555 !important; }
+    h2.page-title, .brand-text h1 { color: #1a1a1a !important; }
+    h2.page-title .accent, .eyebrow, .takeaways h3 { color: #8a6d1a !important; }
+    .lede, .meta { color: #555 !important; }
+    .pill-free { background: #e6f5e9 !important; color: #2c7a3e !important; }
+    .pill-freemium { background: #fbf1de !important; color: #8a5a14 !important; }
+    .pill-paid { background: #fbe5e5 !important; color: #a23030 !important; }
+    .pill-trial { background: #faf2d8 !important; color: #8a6d1a !important; }
+    .badge { background: #eee !important; color: #333 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo-mark">K</div>
+      <div class="brand-text">
+        <h1>KkaloAI</h1>
+        <small>Competitive Intelligence</small>
+      </div>
+    </div>
+    <div class="meta">
+      Step 2 of 6 · <strong>Competitor Analysis</strong><br/>
+      11 apps benchmarked · April 2026
+    </div>
+  </header>
+
+  <div class="title-block">
+    <div class="eyebrow">Direct & Adjacent Competitors · 2026</div>
+    <h2 class="page-title">Where every player wins —<br/>and where <span class="accent">KkaloAI takes ground.</span></h2>
+    <p class="lede">Eleven apps benchmarked across pricing, AI capabilities, ecosystem fit, and specialized health modes. Filter by tier, sort by any column, and expand each row for SWOT detail. KkaloAI is highlighted at the top for direct comparison.</p>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div>
+      <label for="search">Search by name or feature</label>
+      <input id="search" type="text" placeholder="e.g. AI photo, GLP-1, micronutrients..." />
+    </div>
+    <div>
+      <label for="filter-tier">Pricing tier</label>
+      <select id="filter-tier">
+        <option value="">All tiers</option>
+        <option value="Free">Free</option>
+        <option value="Freemium">Freemium</option>
+        <option value="Paid-only">Paid-only</option>
+      </select>
+    </div>
+    <div>
+      <label for="filter-ai">AI capability</label>
+      <select id="filter-ai">
+        <option value="">Any AI level</option>
+        <option value="AI-native">AI-native</option>
+        <option value="AI-assist">AI-assist</option>
+        <option value="Manual">Manual / barcode</option>
+      </select>
+    </div>
+    <div>
+      <label for="filter-niche">Specialty mode</label>
+      <select id="filter-niche">
+        <option value="">All</option>
+        <option value="GLP-1">GLP-1 support</option>
+        <option value="PCOS">PCOS / hormonal</option>
+        <option value="Bulking">Bulking / muscle</option>
+        <option value="Behavioral">Behavioral / coaching</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="results-info">
+    <span><strong id="result-count">11</strong> of <strong id="total-count">11</strong> apps shown</span>
+    <button class="reset-btn" id="reset-btn">Reset filters</button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-shell">
+    <div class="table-scroll">
+      <table id="comp-table">
+        <thead>
+          <tr>
+            <th data-sort="name">App<span class="sort-icon">↕</span></th>
+            <th data-sort="positioning">Positioning<span class="sort-icon">↕</span></th>
+            <th data-sort="users">Users<span class="sort-icon">↕</span></th>
+            <th data-sort="tier">Pricing tier<span class="sort-icon">↕</span></th>
+            <th data-sort="price">Price (annual)<span class="sort-icon">↕</span></th>
+            <th data-sort="ai">AI capability<span class="sort-icon">↕</span></th>
+            <th>Key features</th>
+            <th>Specialty modes</th>
+            <th>SWOT</th>
+          </tr>
+        </thead>
+        <tbody id="comp-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Takeaways -->
+  <div class="takeaways">
+    <h3>Strategic Takeaways</h3>
+    <div class="takeaways-grid">
+      <div class="takeaway">
+        <h4>1 · The GLP-1 / PCOS lane is empty</h4>
+        <p>Of 10 incumbents, <strong style="color:var(--gold)">zero</strong> ship dedicated GLP-1 or PCOS modes. Noom flirts with behavioral content but doesn't tailor the food log to medication cycles or cycle phases.</p>
+      </div>
+      <div class="takeaway">
+        <h4>2 · Pricing is opaque on purpose</h4>
+        <p>MyFitnessPal, Lifesum, and Foodvisor hide pricing behind onboarding. Users complain about surprise paywalls — KkaloAI's <strong style="color:var(--gold)">"no payment for trial"</strong> + transparent tier list is a direct counter-position.</p>
+      </div>
+      <div class="takeaway">
+        <h4>3 · AI without user control loses trust</h4>
+        <p>SnapCalorie / Cal AI / Foodvisor all use AI photo recognition — but force you to accept the AI's portion estimate. The <strong style="color:var(--gold)">0.5×–2.5× confirm-and-adjust slider</strong> is unique, and reviews confirm "AI got it wrong" is the #1 churn reason in this category.</p>
+      </div>
+      <div class="takeaway">
+        <h4>4 · Health Connect is still niche</h4>
+        <p>Most competitors do one-way Apple Health export. <strong style="color:var(--gold)">Native two-way Health Connect</strong> matters as Android wearables (Pixel Watch, Galaxy Ring, Oura Android) explode. KkaloAI ships first.</p>
+      </div>
+      <div class="takeaway">
+        <h4>5 · Anonymous trial removes the #1 funnel leak</h4>
+        <p>Cal AI, Lifesum, Yazio require account + payment method up-front. Industry data: <strong style="color:var(--gold)">~50% drop-off</strong> at email gate. KkaloAI delays both until value is proven.</p>
+      </div>
+      <div class="takeaway">
+        <h4>6 · Viral share is undermonetized everywhere</h4>
+        <p>None of the top apps export progress as TikTok-friendly visuals. KkaloAI's <strong style="color:var(--gold)">3D scan + daily-win share cards</strong> turn users into a CAC channel — directly aligned with the planned TikTok-led growth strategy.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="tag">STOP GUESSING. START KNOWING.</div>
+    <div style="margin-top:8px;">© 2026 KkaloAI · Competitive Intelligence · Step 2 of 6</div>
+  </footer>
+</div>
+
+<script>
+const apps = [
+  {
+    isKkalo: true,
+    name: "KkaloAI",
+    iconLetter: "K",
+    tagline: "AI calorie tracking, in your control",
+    positioning: "User-controlled AI · transparent pricing · specialty modes",
+    users: 0,
+    usersDisplay: "Launching 2026",
+    tier: "Freemium",
+    priceAnnual: 59.99,
+    priceDisplay: "$59.99/yr",
+    priceSub: "or $7.99/mo · 7-day free trial, no card",
+    ai: "AI-native",
+    aiNote: "0.5×–2.5× slider",
+    features: ["Confirm & Adjust slider", "Health Connect 2-way", "Barcode (3M+)", "3D scan share", "Anonymous auth", "Weekly AI report"],
+    niches: ["GLP-1", "PCOS", "Bulking", "Weight Mgmt"],
+    strengths: "Only app with user-tunable AI portions. Only one with GLP-1 + PCOS modes. Anonymous trial removes friction.",
+    weaknesses: "Pre-launch — no review base, no brand recognition yet."
+  },
+  {
+    name: "MyFitnessPal",
+    iconLetter: "MF",
+    tagline: "Mass-market incumbent",
+    positioning: "Largest food database, broad consumer brand",
+    users: 220,
+    usersDisplay: "220M registered",
+    tier: "Freemium",
+    priceAnnual: 79.99,
+    priceDisplay: "$79.99/yr",
+    priceSub: "or $19.99/mo",
+    ai: "AI-assist",
+    aiNote: "Photo Snap (Premium)",
+    features: ["14M+ food DB", "Barcode", "Recipe import", "Apple Health", "Premium dashboards"],
+    niches: ["Weight Mgmt"],
+    strengths: "Massive food database. Universal brand recognition. Strong barcode catalog.",
+    weaknesses: "Aggressive paywall, dated UX, –5.7% YoY revenue. AI feels bolted on."
+  },
+  {
+    name: "Lose It!",
+    iconLetter: "LI",
+    tagline: "Friendlier MFP alternative",
+    positioning: "Mid-market, snap-it photo, simple UX",
+    users: 45,
+    usersDisplay: "45M registered",
+    tier: "Freemium",
+    priceAnnual: 39.99,
+    priceDisplay: "$39.99/yr",
+    priceSub: "Premium tier",
+    ai: "AI-assist",
+    aiNote: "Snap It photo",
+    features: ["32M+ food DB", "Barcode", "Snap It photo", "Pattern reports", "Apple Health"],
+    niches: ["Weight Mgmt"],
+    strengths: "Friendliest UX in mass-market tier. Cheapest among big incumbents. Active community.",
+    weaknesses: "Snap It accuracy mediocre. No specialty health modes. Slow on Android."
+  },
+  {
+    name: "Cronometer",
+    iconLetter: "CR",
+    tagline: "Micronutrient nerd app",
+    positioning: "Scientific accuracy, full micronutrient panel",
+    users: 6,
+    usersDisplay: "6M+ registered",
+    tier: "Freemium",
+    priceAnnual: 49.99,
+    priceDisplay: "$49.99/yr",
+    priceSub: "Gold subscription",
+    ai: "Manual",
+    aiNote: "—",
+    features: ["NCCDB nutrient DB", "84 micronutrients", "Biomarker tracking", "Lab results import", "Fasting timer"],
+    niches: [],
+    strengths: "Best-in-class micronutrient depth. Trusted by RDs and biohackers. Clean data.",
+    weaknesses: "No AI photo. Steep learning curve. Fewer foods than MFP."
+  },
+  {
+    name: "Foodvisor",
+    iconLetter: "FV",
+    tagline: "AI photo + nutritionist plans",
+    positioning: "AI vision + human-built coaching plans",
+    users: 12,
+    usersDisplay: "12M downloads",
+    tier: "Freemium",
+    priceAnnual: 84,
+    priceDisplay: "$84/yr",
+    priceSub: "or $15/mo · 14-day trial",
+    ai: "AI-native",
+    aiNote: "Vision recognition",
+    features: ["AI photo", "Nutritionist plans", "Barcode", "Workout videos", "Apple Health"],
+    niches: ["Weight Mgmt"],
+    strengths: "Strong AI vision. Human-curated programs. Recipe library with macros.",
+    weaknesses: "Pricey. No GLP-1 / PCOS specialization. AI portions not adjustable."
+  },
+  {
+    name: "SnapCalorie",
+    iconLetter: "SC",
+    tagline: "Free AI-first newcomer",
+    positioning: "Ex-Google AI team, peer-reviewed accuracy",
+    users: 1.5,
+    usersDisplay: "~1.5M users",
+    tier: "Free",
+    priceAnnual: 0,
+    priceDisplay: "Free",
+    priceSub: "Ad-free, no subscription",
+    ai: "AI-native",
+    aiNote: "16% error rate (best-in-class)",
+    features: ["AI photo", "Voice log", "500K USDA DB", "100+ nutrients", "Label scan"],
+    niches: [],
+    strengths: "Best AI accuracy in class. 100% free. Strong technical credibility.",
+    weaknesses: "No specialty modes. Monetization unclear (sustainability risk). iOS-first, weak Android."
+  },
+  {
+    name: "Calorie Mama",
+    iconLetter: "CM",
+    tagline: "Computer-vision veteran",
+    positioning: "Pioneer of food-image deep learning",
+    users: 3,
+    usersDisplay: "~3M users",
+    tier: "Freemium",
+    priceAnnual: 29.99,
+    priceDisplay: "$29.99/yr",
+    priceSub: "Pro tier",
+    ai: "AI-native",
+    aiNote: "Deep learning vision",
+    features: ["AI photo", "Multi-cuisine recognition", "Macro tracking", "API for devs"],
+    niches: [],
+    strengths: "Long-running vision tech. Cheap. API/B2B angle.",
+    weaknesses: "Aging UX. No native ecosystem sync. Marketing invisible."
+  },
+  {
+    name: "Yazio",
+    iconLetter: "YZ",
+    tagline: "EU-leading nutrition + recipes",
+    positioning: "Recipe-led, fasting timer, EU-strong brand",
+    users: 80,
+    usersDisplay: "80M downloads",
+    tier: "Freemium",
+    priceAnnual: 47.90,
+    priceDisplay: "$47.90/yr",
+    priceSub: "PRO tier",
+    ai: "AI-assist",
+    aiNote: "Smart suggestions",
+    features: ["Barcode", "4K+ recipes", "Fasting tracker", "Meal plans", "Body data sync"],
+    niches: ["Weight Mgmt"],
+    strengths: "Strong in EU markets. Beautiful UI. Recipe library is best in class.",
+    weaknesses: "Weak AI. No specialty health modes. Limited US presence."
+  },
+  {
+    name: "Noom",
+    iconLetter: "NM",
+    tagline: "Behavioral psychology coach",
+    positioning: "CBT-based weight loss, color-coded foods",
+    users: 50,
+    usersDisplay: "50M+ users",
+    tier: "Paid-only",
+    priceAnnual: 209,
+    priceDisplay: "$209/yr",
+    priceSub: "or $70/mo · 14-day trial",
+    ai: "AI-assist",
+    aiNote: "Coach-bot",
+    features: ["CBT lessons", "Color food system", "Coach chat", "Weight curve", "Group support"],
+    niches: ["Behavioral", "Weight Mgmt"],
+    strengths: "Strongest behavioral angle. Real coaches. $580M revenue scale.",
+    weaknesses: "Most expensive on the list. Heavy onboarding. Negative press on cancellation UX."
+  },
+  {
+    name: "MacroFactor",
+    iconLetter: "MF",
+    tagline: "Algorithmic macro coach",
+    positioning: "Best-in-class adaptive macros for athletes",
+    users: 0.8,
+    usersDisplay: "~800K paying",
+    tier: "Paid-only",
+    priceAnnual: 71.99,
+    priceDisplay: "$71.99/yr",
+    priceSub: "or $11.99/mo · 14-day trial",
+    ai: "AI-assist",
+    aiNote: "Adaptive algorithm",
+    features: ["Auto macro adjustments", "Weight trend math", "Diet phase planner", "Custom foods"],
+    niches: ["Bulking"],
+    strengths: "Trusted by serious lifters. Math is rigorous. No ads, no fluff.",
+    weaknesses: "Niche audience only. No AI photo. Steep learning curve. Paid-only blocks discovery."
+  },
+  {
+    name: "Lifesum",
+    iconLetter: "LS",
+    tagline: "Lifestyle + nutrition hybrid",
+    positioning: "Premium UX, diet-pattern (keto, Med, etc.)",
+    users: 65,
+    usersDisplay: "65M downloads",
+    tier: "Freemium",
+    priceAnnual: 99.99,
+    priceDisplay: "$99.99/yr",
+    priceSub: "Premium tier",
+    ai: "AI-assist",
+    aiNote: "AI Calorie Counter",
+    features: ["Diet plans", "Recipes", "Habit tracker", "Water log", "Meal photo"],
+    niches: ["Weight Mgmt"],
+    strengths: "Best-looking app in category. Multiple diet templates. Strong onboarding.",
+    weaknesses: "Most expensive freemium. AI is shallow. No specialty medical modes."
+  },
+  {
+    name: "Cal AI",
+    iconLetter: "CA",
+    tagline: "Viral TikTok-led AI tracker",
+    positioning: "Photo-first AI, simple, going viral on TikTok",
+    users: 5,
+    usersDisplay: "~5M downloads",
+    tier: "Paid-only",
+    priceAnnual: 71.99,
+    priceDisplay: "$71.99/yr",
+    priceSub: "or $5.99/mo · 3-day trial",
+    ai: "AI-native",
+    aiNote: "Photo-only flow",
+    features: ["AI photo", "Macro estimate", "Weight log", "Streaks"],
+    niches: ["Weight Mgmt"],
+    strengths: "Massive TikTok presence. Simple onboarding. Fast-growing.",
+    weaknesses: "AI accuracy mediocre. Shallow features. Aggressive paywall, no Android polish."
+  }
+];
+
+const aiOrder = { "AI-native": 3, "AI-assist": 2, "Manual": 1 };
+const tierOrder = { "Free": 1, "Freemium": 2, "Paid-only": 3 };
+
+const tbody = document.getElementById('comp-body');
+const searchInput = document.getElementById('search');
+const tierFilter = document.getElementById('filter-tier');
+const aiFilter = document.getElementById('filter-ai');
+const nicheFilter = document.getElementById('filter-niche');
+const resultCount = document.getElementById('result-count');
+const totalCount = document.getElementById('total-count');
+totalCount.textContent = apps.length;
+
+let currentSort = { key: null, dir: 'asc' };
+
+function render() {
+  const q = searchInput.value.trim().toLowerCase();
+  const tier = tierFilter.value;
+  const ai = aiFilter.value;
+  const niche = nicheFilter.value;
+
+  let filtered = apps.filter(a => {
+    if (a.isKkalo) return true;
+    if (tier && a.tier !== tier) return false;
+    if (ai && a.ai !== ai) return false;
+    if (niche && !a.niches.includes(niche)) return false;
+    if (q) {
+      const hay = (a.name + ' ' + a.positioning + ' ' + a.features.join(' ') + ' ' + a.niches.join(' ') + ' ' + a.tagline).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (currentSort.key) {
+    const k = currentSort.key;
+    const dir = currentSort.dir === 'asc' ? 1 : -1;
+    const kkalo = filtered.find(a => a.isKkalo);
+    let rest = filtered.filter(a => !a.isKkalo);
+    rest.sort((a, b) => {
+      let av, bv;
+      if (k === 'name') { av = a.name; bv = b.name; }
+      else if (k === 'positioning') { av = a.positioning; bv = b.positioning; }
+      else if (k === 'users') { av = a.users; bv = b.users; }
+      else if (k === 'tier') { av = tierOrder[a.tier]; bv = tierOrder[b.tier]; }
+      else if (k === 'price') { av = a.priceAnnual; bv = b.priceAnnual; }
+      else if (k === 'ai') { av = aiOrder[a.ai]; bv = aiOrder[b.ai]; }
+      if (typeof av === 'string') return av.localeCompare(bv) * dir;
+      return (av - bv) * dir;
+    });
+    filtered = kkalo ? [kkalo, ...rest] : rest;
+  }
+
+  resultCount.textContent = filtered.length;
+  tbody.innerHTML = filtered.map(rowHtml).join('');
+}
+
+function rowHtml(a) {
+  const features = a.features.map(f => `<span class="badge">${f}</span>`).join('');
+  const niches = a.niches.length
+    ? a.niches.map(n => `<span class="badge badge-gold">${n}</span>`).join('')
+    : '<span style="color:var(--muted);font-size:12px">—</span>';
+  return `
+    <tr class="${a.isKkalo ? 'kkalo-row' : ''}">
+      <td>
+        <div class="app-cell">
+          <div class="app-icon ${a.isKkalo ? 'kkalo' : ''}">${a.iconLetter}</div>
+          <div>
+            <span class="app-name">${a.name}</span>
+            <span class="app-tag">${a.tagline}</span>
+          </div>
+        </div>
+      </td>
+      <td style="max-width:200px">${a.positioning}</td>
+      <td>${a.usersDisplay}</td>
+      <td><span class="pill pill-${a.tier.toLowerCase().replace('-only','')}">${a.tier}</span></td>
+      <td>
+        <span class="price-main">${a.priceDisplay}</span>
+        <span class="price-sub">${a.priceSub}</span>
+      </td>
+      <td>
+        <span class="pill pill-${a.ai === 'AI-native' ? 'trial' : a.ai === 'AI-assist' ? 'freemium' : 'paid'}">${a.ai}</span>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">${a.aiNote}</div>
+      </td>
+      <td style="max-width:240px">${features}</td>
+      <td style="max-width:160px">${niches}</td>
+      <td style="min-width:150px">
+        <details class="swot">
+          <summary>SWOT</summary>
+          <div class="swot-body">
+            <div class="swot-line"><span class="label">Strengths:</span> ${a.strengths}</div>
+            <div class="swot-line weak"><span class="label">Weaknesses:</span> ${a.weaknesses}</div>
+          </div>
+        </details>
+      </td>
+    </tr>
+  `;
+}
+
+document.querySelectorAll('th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    if (currentSort.key === key) {
+      currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+    } else {
+      currentSort.key = key;
+      currentSort.dir = 'asc';
+    }
+    document.querySelectorAll('th').forEach(x => x.classList.remove('sort-asc', 'sort-desc'));
+    th.classList.add(currentSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+    render();
+  });
+});
+
+[searchInput, tierFilter, aiFilter, nicheFilter].forEach(el =>
+  el.addEventListener('input', render)
+);
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  searchInput.value = '';
+  tierFilter.value = '';
+  aiFilter.value = '';
+  nicheFilter.value = '';
+  currentSort = { key: null, dir: 'asc' };
+  document.querySelectorAll('th').forEach(x => x.classList.remove('sort-asc', 'sort-desc'));
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

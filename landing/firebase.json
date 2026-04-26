@@ -1,0 +1,63 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "site": "snapcal-9b8e5",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/*.py",
+      "audit.py",
+      "feature_translations.py"
+    ],
+    "headers": [
+      {
+        "source": "/favicon.ico",
+        "headers": [
+          { "key": "Content-Type", "value": "image/x-icon" },
+          { "key": "Cache-Control", "value": "public, max-age=86400" }
+        ]
+      },
+      {
+        "source": "/favicon.svg",
+        "headers": [
+          { "key": "Content-Type", "value": "image/svg+xml" },
+          { "key": "Cache-Control", "value": "public, max-age=86400" }
+        ]
+      },
+      {
+        "source": "/favicon-32.png",
+        "headers": [
+          { "key": "Content-Type", "value": "image/png" },
+          { "key": "Cache-Control", "value": "public, max-age=86400" }
+        ]
+      },
+      {
+        "source": "/favicon-192.png",
+        "headers": [
+          { "key": "Content-Type", "value": "image/png" },
+          { "key": "Cache-Control", "value": "public, max-age=86400" }
+        ]
+      },
+      {
+        "source": "/favicon-512.png",
+        "headers": [
+          { "key": "Content-Type", "value": "image/png" },
+          { "key": "Cache-Control", "value": "public, max-age=86400" }
+        ]
+      },
+      {
+        "source": "/.well-known/assetlinks.json",
+        "headers": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Cache-Control", "value": "public, max-age=3600" }
+        ]
+      }
+    ],
+    "rewrites": []
+  }
+}

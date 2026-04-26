@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Block admin/private paths (none exist currently, but good practice)
+Disallow: /.well-known/
+
+# Sitemap location
+Sitemap: https://kkaloai.com/sitemap.xml

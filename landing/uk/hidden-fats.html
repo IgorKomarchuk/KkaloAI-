@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cooking Method Detection | Hidden Fat Identifier | KkaloAI</title>
+    <meta name="description" content="Find the hidden calories in your meals. KkaloAI uses Gemini 2.5 Flash AI to detect oils, butter, and cooking methods like frying or sauteing from a single photo.">
+    <link rel="stylesheet" href="../index.css">
+    <script src="../language.js"></script>
+    <style>
+        .feature-details { padding: 100px 20px; max-width: 1000px; margin: 0 auto; line-height: 1.6; }
+        .feature-hero { text-align: center; margin-bottom: 60px; }
+        .feature-hero h1 { font-size: 48px; border-bottom: 4px solid #f39c12; display: inline-block; padding-bottom: 10px; }
+        .feature-hero img { width: 100%; max-width: 800px; border-radius: 24px; margin-top: 30px; box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
+        .feature-content { background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
+        .fat-example { background: rgba(243, 156, 18, 0.1); border-radius: 16px; padding: 20px; margin: 20px 0; border: 1px dashed #f39c12; }
+        
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(16px); border-bottom: 1px solid var(--card-border); background: rgba(3, 7, 18, 0.7); }
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: -1px; color: var(--primary); text-decoration: none; }
+        .logo span { color: #fff; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">Kkalo<span>AI</span></a>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <select onchange="window.setKkaloLanguage(this.value);" style="background: rgba(17, 24, 39, 0.9); color: var(--text-main); border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; font-family: 'Outfit'; font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en">🇬🇧 EN</option>
+                <option value="uk" selected>🇺🇦 UK</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="feature-details">
+        <a href="index.html#features" class="back-link">← Назад до функцій</a>
+        <div class="feature-hero">
+            <h1>AI Cooking Method Detection</h1>
+            <p style="font-size: 20px; margin-top: 20px;">Розкриваємо приховані калорії, що гальмують ваш прогрес.</p>
+            <img src="../hidden-fats.png" loading="lazy" alt="KkaloAI Hidden Fats Feature">
+        </div>
+
+        <div class="feature-content">
+            <h2>The "Invisible" Calorie Problem</h2>
+            <p>Did you know that "Steamed Vegetables" at a restaurant are often tossed in 15g of butter? Or that "Grilled Chicken" might be basted in oil? Most people fail their diets not because they eat too much food, but because they don't see the <strong>приховані кулінарні олії</strong>.</p>
+            
+            <div class="fat-example">
+                <strong>Gemini 2.5 Flash Vision:</strong> Our advanced visual model looks for surface textures, sheen, and color gradients to identify if a food item was <em>смаженим у фритюрі, на сковороді або на пару</em>.
+            </div>
+
+            <h2 style="margin-top: 30px; color: var(--primary);">Як це працює</h2>
+            <p>KkaloAI doesn't just identify "Chicken". It analyzes the preparation:</p>
+
+            <ul style="margin-top: 20px; list-style-type: none; padding: 0;">
+                <li style="margin-bottom: 15px;">🍳 <strong>Аналіз текстури олії:</strong> Detects the distinctive sheen of vegetable oils vs. animal fats.</li>
+                <li style="margin-bottom: 15px;">🔍 <strong>Сканування поверхні:</strong> Identifies breading, char patterns, and moisture levels to determine the cooking temperature.</li>
+                <li style="margin-bottom: 15px;">📊 <strong>Попередньо налаштована щільність:</strong> Automatically adds the 50-150 extra calories from hidden oils that other apps miss.</li>
+            </ul>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="#download" class="btn">Перестаньте вгадувати калорії</a>
+            </div>
+        </div>
+
+        <div class="seo-section" style="margin-top: 50px;">
+            <h3>Точність відстеження в ресторанах</h3>
+            <p>Dining out is the biggest challenge for weight loss. With KkaloAI's AI Визначення готування, you can finally log restaurant meals with confidence. By recognizing hidden preparation methods, KkaloAI provides a realistic calorie count that reflects the actual ingredients used, not just a generic database entry.</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 KkaloAI. Чесність у харчуванні.</p>
+    </footer>
+</body>
+</html>

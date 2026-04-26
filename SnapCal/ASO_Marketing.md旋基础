@@ -1,0 +1,58 @@
+# SnapCal Play Store ASO & Marketing Strategy
+
+This document contains all the materials required to launch **SnapCal** on the Google Play Store with maximum impact, based on the **ASO Expert** agent skill and your Business Plan.
+
+## 1. Store Metadata
+
+| Field | Content | Rationale |
+| :--- | :--- | :--- |
+| **App Title** (30 chars) | **SnapCal: AI Calorie & Macros** | Includes core keywords (AI, Calorie) for high search volume. |
+| **Short Description** (80 chars) | **Snap food photo → instant calories. Health Connect. Honest price upfront.** | Focuses on speed (2 sec), transparency, and Android-native features. |
+| **Full Description** | *See below* | SEO optimized with secondary keywords (food scanner, macro tracker). |
+
+### Full Description (Draft)
+"Track your nutrition in seconds with SnapCal – the first Android-native AI calorie tracker built for accuracy and honesty.
+
+**PHOTO → RESULT IN 2 SECONDS**
+Just snap a photo of your plate. Our advanced AI (Gemini 1.5 Flash) identifies every item and estimates your calories, protein, carbs, and fats instantly.
+
+**WHY SNAPCAL IS BETTER:**
+1. **CONFIRM & ADJUST**: Don't let AI have the final say. Use our portion slider to adjust results for 100% accuracy.
+2. **TRANSPARENT PRICING**: We show you the price upfront before you even sign up. No hidden fees, just honesty.
+3. **HEALTH CONNECT NATIVE**: Perfectly synced with the Android ecosystem. Share data seamlessly with Google Fit and other health apps.
+4. **BARCODE SCANNER**: For packaged foods, use our lightning-fast barcode scanner powered by OpenFoodFacts (3M+ products).
+
+**KEY FEATURES:**
+- AI Food Recognition & Estimator
+- Daily Progress Dashboard with Macro Rings
+- Barcode Scanner for packaged goods
+- Water Tracker (Coming soon!)
+- 7-Day Free Trial
+
+Stop guessing. Start snapping. Download SnapCal today!"
+
+---
+
+## 2. Screenshot Strategy (5-Screen Sequence)
+
+1. **The WOW Moment**: "Photo → 347 kcal in 2 sec" (Show a real plate of food, not stock footage).
+2. **The Differentiator**: "Confirm & Adjust Portions" (Highlight the slider UI).
+3. **Android Ecosystem**: "Works with Health Connect" (Feature the Google Health brand).
+4. **Trust Factor**: "Honest Pricing. Shown Upfront." (Screenshot of the paywall).
+5. **The Hub**: "Your Daily Progress at a Glance" (Clean dashboard view).
+
+---
+
+## 3. Keywords Matrix (For Search Optimization)
+
+- **Primary**: `ai calorie tracker`, `food scanner calories`, `calorie counter photo`.
+- **Secondary**: `macro tracker android`, `health connect calorie`, `snap calories`.
+- **Long-tail**: `ai nutritionist app`, `easy food log camera`, `calorie deficit tracker`.
+
+---
+
+## 4. App Icon Concepts
+I have generated a premium icon concept. You can find it in the artifacts.
+
+**Project Location**: `d:\Cal AI\SnapCal`
+**Source Code**: `d:\Cal AI\SnapCal\app\src\main\java\com\pokupka\snapcal`

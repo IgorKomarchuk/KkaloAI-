@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant AI Food Scanner | Snap & Track Calories | KkaloAI</title>
+    <meta name="description" content="Stop typing, start snapping. KkaloAI uses advanced Gemini 2.5 Flash technology to instantly recognize your meals from a single photo. The fastest way to log calories.">
+    <link rel="stylesheet" href="index.css">
+    <script src="language.js"></script>
+    <style>
+        .feature-details { padding: 100px 20px; max-width: 1000px; margin: 0 auto; line-height: 1.6; }
+        .feature-hero { text-align: center; margin-bottom: 60px; }
+        .feature-hero h1 { font-size: 48px; border-bottom: 4px solid var(--primary); display: inline-block; padding-bottom: 10px; }
+        .feature-hero img { width: 100%; max-width: 800px; border-radius: 24px; margin-top: 30px; box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
+        .feature-content { background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
+        .demo-box { border: 2px solid var(--primary); padding: 20px; border-radius: 16px; margin: 20px 0; text-align: center; background: rgba(0, 242, 254, 0.05); }
+        
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(16px); border-bottom: 1px solid var(--card-border); background: rgba(3, 7, 18, 0.7); }
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: -1px; color: var(--primary); text-decoration: none; }
+        .logo span { color: #fff; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">Kkalo<span>AI</span></a>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <select onchange="window.setKkaloLanguage(this.value);" style="background: rgba(17, 24, 39, 0.9); color: var(--text-main); border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; font-family: 'Outfit'; font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en" selected>🇬🇧 EN</option>
+                <option value="uk">🇺🇦 UK</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="feature-details">
+        <a href="index.html#features" class="back-link">← Back to Features</a>
+        <div class="feature-hero">
+            <h1>Instant AI Snap & Track</h1>
+            <p style="font-size: 20px; margin-top: 20px;">The foundation of precision nutrition. No typing, just tapping.</p>
+            <img src="instant-snap.png" alt="KkaloAI Instant Snap Feature">
+        </div>
+
+        <div class="feature-content">
+            <h2>The End of Manual Logging</h2>
+            <p>Traditional calorie tracking apps fail because they treat you like a data entry clerk. Searching for "Chicken breast" and guessing the weight is tedious. <strong>KkaloAI changes everything.</strong></p>
+            
+            <h2 style="margin-top: 30px; color: var(--primary);">Powered by Gemini 2.5 Flash</h2>
+            <p>Our core technology uses state-of-the-art vision models to instantly analyze your plate:</p>
+
+            <ul style="margin-top: 20px; list-style-type: none; padding: 0;">
+                <li style="margin-bottom: 15px;">📸 <strong>Point & Shoot:</strong> Just frame your meal and snap a photo. That's it.</li>
+                <li style="margin-bottom: 15px;">🔍 <strong>Complex Meal Breakdown:</strong> Mixed salads, stews, or layered bowls? The AI identifies multiple ingredients in a single shot.</li>
+                <li style="margin-bottom: 15px;">⚡ <strong>Lightning Fast:</strong> Results are returned in milliseconds, complete with calories, proteins, carbs, and fats.</li>
+                <li style="margin-bottom: 15px;">✏️ <strong>Easy Refinement:</strong> Need to adjust? Tweak the portion size slider with a single swipe before confirming.</li>
+            </ul>
+
+            <div class="demo-box">
+                <strong>From Photo to Diary in 3 Seconds.</strong> Experience the lowest-friction diet tracker ever built.
+            </div>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="#download" class="btn">Try the AI Camera</a>
+            </div>
+        </div>
+
+        <div class="seo-section" style="margin-top: 50px;">
+            <h3>Why AI Food Recognition is the Future</h3>
+            <p>The biggest barrier to weight loss isn't a lack of knowledge; it's a lack of time. By eliminating the friction of manual database searches, KkaloAI ensures that you actually stick to your goals. Our AI food scanner isn't just a gimmick—it's the fundamental tool that makes consistent tracking possible for busy people.</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 KkaloAI. Precision Nutrition Intelligence.</p>
+    </footer>
+</body>
+</html>

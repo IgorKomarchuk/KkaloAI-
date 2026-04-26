@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Синхронізація біофідбеку | Health Connect Integration | KkaloAI</title>
+    <meta name="description" content="Sync your fitness data with KkaloAI. We integrate with Health Connect to track your steps, active calories, and weight to adjust your diet goals dynamically.">
+    <link rel="stylesheet" href="../index.css">
+    <script src="../language.js"></script>
+    <style>
+        .feature-details { padding: 100px 20px; max-width: 1000px; margin: 0 auto; line-height: 1.6; }
+        .feature-hero { text-align: center; margin-bottom: 60px; }
+        .feature-hero h1 { font-size: 48px; border-bottom: 4px solid #2ecc71; display: inline-block; padding-bottom: 10px; }
+        .feature-hero img { width: 100%; max-width: 800px; border-radius: 24px; margin-top: 30px; box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
+        .feature-content { background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
+        .sync-badge { background: #2ecc71; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; }
+        
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(16px); border-bottom: 1px solid var(--card-border); background: rgba(3, 7, 18, 0.7); }
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: -1px; color: var(--primary); text-decoration: none; }
+        .logo span { color: #fff; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">Kkalo<span>AI</span></a>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <select onchange="window.setKkaloLanguage(this.value);" style="background: rgba(17, 24, 39, 0.9); color: var(--text-main); border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; font-family: 'Outfit'; font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en">🇬🇧 EN</option>
+                <option value="uk" selected>🇺🇦 UK</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="feature-details">
+        <a href="index.html#features" class="back-link">← Назад до функцій</a>
+        <div class="feature-hero">
+            <h1>Синхронізація біофідбеку та підключення</h1>
+            <p style="font-size: 20px; margin-top: 20px;">Зв'язуємо сигнали вашого тіла з щоденним харчуванням.</p>
+            <img src="../health-connect.png" loading="lazy" alt="KkaloAI Health Connect Feature">
+        </div>
+
+        <div class="feature-content">
+            <h2>Єдине джерело правди: Health Connect</h2>
+            <p>Your nutrition doesn't exist in a vacuum. KkaloAI integrates deeply with <strong>Android Health Connect</strong>, pulling data from your smartwatch, smart scales, and fitness trackers into one unified dashboard.</p>
+            
+            <h2 style="margin-top: 30px; color: var(--primary);">Корекція бюджету в реальному часі</h2>
+            <p>Stop following static plans. KkaloAI adjusts your calorie and macro budget based on what happened in the last 24 hours:</p>
+
+            <ul style="margin-top: 20px; list-style-type: none; padding: 0;">
+                <li style="margin-bottom: 15px;">🏃 <strong>Синхронізація активного спалювання:</strong> If you went for a 5km run, KkaloAI automatically detects the burned energy and adjusts your protein and carb needs for recovery.</li>
+                <li style="margin-bottom: 15px;">⚖️ <strong>Логіка тренду ваги:</strong> Seamlessly imports weight data to calculate your actual TDEE (Total Daily Energy Expenditure) over time.</li>
+                <li style="margin-bottom: 15px;">💤 <strong>Зв'язок сну та харчування:</strong> Your AI Coach analyzes how poor sleep affects your craving patterns, helping you prepare for difficult days.</li>
+            </ul>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="#download" class="btn">Підключіть свої пристрої</a>
+            </div>
+        </div>
+
+        <div class="seo-section" style="margin-top: 50px;">
+            <h3>Екосистема сучасного здоров'я</h3>
+            <p>We support all major platforms including Google Fit, Fitbit, Samsung Health, and Oura via Health Connect. By centralizing your data, KkaloAI becomes the "Brain" of your health ecosystem, making sense of the noise and giving you clear, actionable instructions on what to eat next.</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 KkaloAI. Підключене здоров'я.</p>
+    </footer>
+</body>
+</html>

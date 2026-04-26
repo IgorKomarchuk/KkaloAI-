@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Interactive Price Calculator</title>
+<style>
+  :root {
+    --graphite: #1a1a1a;
+    --graphite-2: #242424;
+    --graphite-3: #2f2f2f;
+    --graphite-4: #383838;
+    --gold: #D4AF37;
+    --gold-soft: #C9A961;
+    --gold-deep: #8C7A3F;
+    --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0;
+    --pearl-dim: #ECE9DF;
+    --muted: #9A9A9A;
+    --green: #5CB874;
+    --amber: #E0A14C;
+    --red: #E16A6A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--graphite);
+    color: var(--pearl);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 48px 28px 96px; }
+
+  header {
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo-mark {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite); display: grid; place-items: center;
+    font-weight: 800; font-size: 20px; letter-spacing: -0.5px;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.3);
+  }
+  .brand-text h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .brand-text small { color: var(--muted); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .meta { text-align: right; color: var(--muted); font-size: 13px; }
+  .meta strong { color: var(--gold); font-weight: 600; }
+
+  .hero { margin-bottom: 40px; }
+  .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
+  h2.page-title {
+    font-size: clamp(32px, 4.6vw, 46px);
+    font-weight: 700; letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px;
+  }
+  h2.page-title .accent { color: var(--gold); }
+  .lede { font-size: 16px; color: var(--pearl-dim); max-width: 800px; }
+
+  /* Layout: 2-col */
+  .calc-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 28px;
+  }
+
+  /* Selector Panel */
+  .selector-panel {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 28px;
+  }
+
+  /* Plan Switcher */
+  .plan-switcher {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    background: var(--graphite-3);
+    padding: 6px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+  }
+  .plan-switcher button {
+    background: transparent;
+    color: var(--pearl-dim);
+    border: none;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .plan-switcher button:hover { color: var(--pearl); }
+  .plan-switcher button.active {
+    background: var(--gold);
+    color: var(--graphite);
+    box-shadow: 0 4px 14px rgba(212,175,55,0.25);
+  }
+  .plan-switcher .sub {
+    display: block; font-size: 10px; opacity: 0.7; margin-top: 2px;
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+  }
+
+  /* Billing Toggle */
+  .billing-toggle {
+    display: flex;
+    background: var(--graphite-3);
+    padding: 4px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+    width: fit-content;
+  }
+  .billing-toggle button {
+    background: transparent;
+    color: var(--pearl-dim);
+    border: none;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+  .billing-toggle button.active { background: var(--gold); color: var(--graphite); }
+  .billing-toggle button .save {
+    background: rgba(26,26,26,0.18);
+    color: var(--graphite);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    margin-left: 4px;
+    font-weight: 800;
+  }
+
+  /* Section heading */
+  .group-head {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 28px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(212,175,55,0.12);
+  }
+  .group-head:first-of-type { margin-top: 0; }
+
+  /* Feature row */
+  .feature-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    gap: 12px;
+  }
+  .feature-row:last-child { border-bottom: none; }
+  .feature-row .info { flex-grow: 1; }
+  .feature-row .ttl {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pearl);
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .feature-row .ttl .badge {
+    background: var(--gold-dim);
+    color: var(--gold);
+    font-size: 9px;
+    letter-spacing: 1px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .feature-row .desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .feature-row .ctrl {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .feature-row .price-tag {
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 600;
+    min-width: 56px;
+    text-align: right;
+  }
+  .feature-row .price-tag.included { color: var(--green); }
+  .feature-row .price-tag.locked { color: var(--muted); }
+
+  /* Toggle switch */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 42px; height: 24px;
+    flex-shrink: 0;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute; cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--graphite-4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    transition: 0.2s;
+  }
+  .slider::before {
+    content: '';
+    position: absolute;
+    height: 18px; width: 18px;
+    left: 2px; top: 2px;
+    background: var(--pearl-dim);
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+  input:checked + .slider {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  input:checked + .slider::before {
+    transform: translateX(18px);
+    background: var(--graphite);
+  }
+  input:disabled + .slider {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+  .feature-row.included-row {
+    opacity: 0.95;
+  }
+
+  /* Summary panel */
+  .summary-panel {
+    background: linear-gradient(180deg, var(--graphite-2) 0%, var(--graphite-3) 100%);
+    border: 1px solid var(--gold-dim);
+    border-radius: 18px;
+    padding: 30px 28px;
+    position: sticky;
+    top: 24px;
+    height: fit-content;
+  }
+  .summary-panel .label {
+    color: var(--gold); font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700;
+  }
+  .summary-panel h3 {
+    font-size: 24px;
+    color: var(--pearl);
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin: 6px 0 22px;
+  }
+  .total-block {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(212,175,55,0.18);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 22px;
+  }
+  .total-block .total-label {
+    color: var(--muted); font-size: 11px;
+    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+  }
+  .total-block .total-amount {
+    font-size: 52px; font-weight: 800; letter-spacing: -2px;
+    color: var(--pearl); margin: 6px 0 4px;
+    line-height: 1;
+  }
+  .total-block .total-amount .sym { color: var(--gold); font-size: 28px; vertical-align: top; margin-right: 2px; }
+  .total-block .total-amount .per {
+    color: var(--muted); font-size: 16px; font-weight: 500;
+    margin-left: 6px; letter-spacing: 0;
+  }
+  .total-block .total-sub {
+    font-size: 12px; color: var(--gold-soft); margin-top: 8px;
+  }
+  .total-block .savings {
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(92,184,116,0.12);
+    color: var(--green);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .breakdown {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 18px;
+  }
+  .breakdown h4 {
+    color: var(--muted); font-size: 11px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 12px;
+  }
+  .br-item {
+    display: flex; justify-content: space-between;
+    padding: 7px 0; font-size: 13px;
+  }
+  .br-item .name { color: var(--pearl-dim); }
+  .br-item .val { color: var(--gold); font-weight: 600; }
+  .br-item.empty .name { color: var(--muted); font-style: italic; }
+  .br-item.empty .val { color: var(--muted); }
+
+  .cta-block {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .cta-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite);
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .cta-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(212,175,55,0.3);
+  }
+  .cta-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 10px;
+  }
+
+  /* Comparison strip */
+  .compare-strip {
+    margin-top: 36px;
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 22px 26px;
+  }
+  .compare-strip h4 {
+    color: var(--gold); font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 12px;
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    align-items: center;
+  }
+  .compare-item {
+    text-align: center;
+    padding: 10px 8px;
+    border-radius: 10px;
+    background: var(--graphite-3);
+  }
+  .compare-item.you {
+    background: var(--gold-dim);
+    border: 1px solid var(--gold);
+  }
+  .compare-item .ci-name { font-size: 11px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+  .compare-item.you .ci-name { color: var(--gold); }
+  .compare-item .ci-price { font-size: 17px; font-weight: 700; color: var(--pearl); }
+  .compare-item.you .ci-price { color: var(--gold); }
+
+  footer {
+    margin-top: 60px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer .tag { color: var(--gold); font-weight: 600; letter-spacing: 1px; }
+
+  @media (max-width: 980px) {
+    .calc-layout { grid-template-columns: 1fr; }
+    .summary-panel { position: relative; top: 0; }
+    .compare-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media print {
+    html, body { background: white; color: black; }
+    .wrap { max-width: 100%; padding: 12px; }
+    .selector-panel, .summary-panel, .compare-strip, .total-block { background: white !important; border: 1px solid #ccc !important; }
+    .summary-panel { position: relative; top: 0; }
+    h2.page-title, .brand-text h1, .summary-panel h3, .total-block .total-amount, .feature-row .ttl, .compare-item .ci-price { color: #1a1a1a !important; }
+    h2.page-title .accent, .eyebrow, .label, .group-head, .total-block .total-amount .sym, .br-item .val, .compare-strip h4, .compare-item.you .ci-price { color: #8a6d1a !important; }
+    .lede, .feature-row .desc, .total-block .total-label, .total-block .total-sub, .br-item .name, .compare-item .ci-name, .meta { color: #444 !important; }
+    .plan-switcher, .billing-toggle, .cta-block, .switch { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo-mark">K</div>
+      <div class="brand-text">
+        <h1>KkaloAI</h1>
+        <small>Pricing Calculator</small>
+      </div>
+    </div>
+    <div class="meta">
+      Step 4 of 6 · <strong>Interactive Cost Calculator</strong><br/>
+      Build your KkaloAI · April 2026
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="eyebrow">Choose what you need · See the price live</div>
+    <h2 class="page-title">Pick your <span class="accent">specialty modes</span> and<br/>features. We'll do the math.</h2>
+    <p class="lede">Toggle modules on or off, switch between monthly and annual billing, and watch the total update instantly. No hidden fees, no surprise upsells — every tier and add-on is on this page.</p>
+  </div>
+
+  <div class="calc-layout">
+
+    <!-- Selector -->
+    <div class="selector-panel">
+
+      <!-- Plan -->
+      <div class="plan-switcher" id="planSwitcher">
+        <button data-plan="free" class="active">Free<span class="sub">$0 forever</span></button>
+        <button data-plan="trial">Trial<span class="sub">7 days · no card</span></button>
+        <button data-plan="premium">Premium<span class="sub">Full access</span></button>
+      </div>
+
+      <!-- Billing toggle -->
+      <div class="billing-toggle" id="billingToggle">
+        <button data-bill="monthly" class="active">Monthly</button>
+        <button data-bill="annual">Annual <span class="save">Save 38%</span></button>
+      </div>
+
+      <!-- Specialty modes group -->
+      <div class="group-head">Specialty Health Modes</div>
+      <div class="feature-row" data-cat="mode" data-id="glp1" data-price="2.50">
+        <div class="info">
+          <div class="ttl">GLP-1 Support Mode <span class="badge">Signature</span></div>
+          <div class="desc">For users on Ozempic, Wegovy, Mounjaro, or Zepbound — injection day, side effects, protein floor.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="mode" data-id="pcos" data-price="2.50">
+        <div class="info">
+          <div class="ttl">PCOS & Hormonal Balance <span class="badge">Signature</span></div>
+          <div class="desc">Cycle-phase aware tracking, carb-quality scoring, hormonal-friendly meal filter.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="mode" data-id="bulk" data-price="2.00">
+        <div class="info">
+          <div class="ttl">Bulking / Muscle Gain</div>
+          <div class="desc">Adaptive surplus, protein/kg targets, training-day vs rest-day calories.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="mode" data-id="weight" data-price="2.00">
+        <div class="info">
+          <div class="ttl">Weight Management</div>
+          <div class="desc">Adaptive deficit based on real weight trend, plateau detection, refeed suggestions.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- AI Power -->
+      <div class="group-head">AI Power Features</div>
+      <div class="feature-row" data-cat="ai" data-id="photo" data-price="3.00">
+        <div class="info">
+          <div class="ttl">AI Photo + Confirm & Adjust <span class="badge">Signature</span></div>
+          <div class="desc">Snap a photo, fine-tune the portion estimate with the 0.5×–2.5× slider before confirming.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$3.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="ai" data-id="voice" data-price="1.50">
+        <div class="info">
+          <div class="ttl">Voice Log</div>
+          <div class="desc">Speak your meal in natural language. AI parses, estimates, and pushes to your log.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$1.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="ai" data-id="report" data-price="2.00">
+        <div class="info">
+          <div class="ttl">Weekly AI Report</div>
+          <div class="desc">Sunday personalized summary with patterns and one actionable nudge for next week.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="ai" data-id="suggest" data-price="1.50">
+        <div class="info">
+          <div class="ttl">Meal Recommendations</div>
+          <div class="desc">3 mode-aware meal suggestions per day to close your remaining macro gaps.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$1.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Health Hub -->
+      <div class="group-head">Total Health Hub</div>
+      <div class="feature-row" data-cat="hub" data-id="bio" data-price="1.00">
+        <div class="info">
+          <div class="ttl">Biofeedback Tracker</div>
+          <div class="desc">30-second daily check-in: sleep, stress, energy, mood, digestion — cross-linked to macros.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$1.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row included-row" data-cat="hub" data-id="water" data-price="0">
+        <div class="info">
+          <div class="ttl">Water Tracker</div>
+          <div class="desc">Smart goal, quick-add buttons, home-screen widget.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag included">Free</span>
+          <label class="switch"><input type="checkbox" disabled checked /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row included-row" data-cat="hub" data-id="hc" data-price="0">
+        <div class="info">
+          <div class="ttl">Health Connect 2-Way Sync</div>
+          <div class="desc">Native Android Health Connect / Apple Health two-way integration.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag included">Free</span>
+          <label class="switch"><input type="checkbox" disabled checked /><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Add-ons -->
+      <div class="group-head">Premium Add-ons</div>
+      <div class="feature-row" data-cat="addon" data-id="3d" data-price="2.00">
+        <div class="info">
+          <div class="ttl">3D Scan Export <span class="badge">Q3 2026</span></div>
+          <div class="desc">Monthly 3D body scan rendered as GIF/MP4 — viral-ready progress posts.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="addon" data-id="cloud" data-price="0.50">
+        <div class="info">
+          <div class="ttl">Cloud Backup & Sync</div>
+          <div class="desc">Encrypted cloud backup, multi-device sync, full export to JSON/CSV.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$0.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="addon" data-id="priority" data-price="1.00">
+        <div class="info">
+          <div class="ttl">Priority AI Processing</div>
+          <div class="desc">Skip the queue at peak hours. Faster photo recognition response (under 2 sec).</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$1.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-panel">
+      <div class="label">Your Estimate</div>
+      <h3 id="planTitle">Free Plan</h3>
+
+      <div class="total-block">
+        <div class="total-label" id="totalLabel">Monthly cost</div>
+        <div class="total-amount">
+          <span class="sym">$</span><span id="totalAmount">0.00</span><span class="per" id="totalPer">/mo</span>
+        </div>
+        <div class="total-sub" id="totalSub">Free forever — no card needed.</div>
+        <span class="savings" id="savingsTag" style="display:none">Save $0/yr with annual billing</span>
+      </div>
+
+      <div class="breakdown">
+        <h4>What's included</h4>
+        <div id="breakdownList">
+          <div class="br-item empty"><span class="name">No paid features selected yet</span><span class="val">—</span></div>
+        </div>
+      </div>
+
+      <div class="cta-block">
+        <button class="cta-btn" id="ctaBtn">Start 7-Day Free Trial</button>
+        <div class="cta-note">No credit card · Cancel anytime · Soft graceful downgrade</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Strip -->
+  <div class="compare-strip">
+    <h4>How your build compares to incumbents (annual)</h4>
+    <div class="compare-grid">
+      <div class="compare-item you"><div class="ci-name">Your KkaloAI</div><div class="ci-price" id="cmpYou">$0</div></div>
+      <div class="compare-item"><div class="ci-name">Lose It! Premium</div><div class="ci-price">$39.99</div></div>
+      <div class="compare-item"><div class="ci-name">Yazio PRO</div><div class="ci-price">$47.90</div></div>
+      <div class="compare-item"><div class="ci-name">MyFitnessPal Premium</div><div class="ci-price">$79.99</div></div>
+      <div class="compare-item"><div class="ci-name">Lifesum Premium</div><div class="ci-price">$99.99</div></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="tag">STOP GUESSING. START KNOWING.</div>
+    <div style="margin-top:8px;">© 2026 KkaloAI · Interactive Pricing Calculator · Step 4 of 6</div>
+  </footer>
+</div>
+
+<script>
+const PLAN_BASE = { free: 0, trial: 0, premium: 4.99 };
+const ANNUAL_DISCOUNT = 0.62; // pay 62% of 12 months → save 38%
+
+let plan = 'free';
+let billing = 'monthly';
+
+const switchEls = document.querySelectorAll('#planSwitcher button');
+const billEls = document.querySelectorAll('#billingToggle button');
+const totalAmountEl = document.getElementById('totalAmount');
+const totalPerEl = document.getElementById('totalPer');
+const totalLabelEl = document.getElementById('totalLabel');
+const totalSubEl = document.getElementById('totalSub');
+const planTitleEl = document.getElementById('planTitle');
+const breakdownList = document.getElementById('breakdownList');
+const savingsTag = document.getElementById('savingsTag');
+const ctaBtn = document.getElementById('ctaBtn');
+const cmpYou = document.getElementById('cmpYou');
+const featureRows = document.querySelectorAll('.feature-row[data-id]');
+
+switchEls.forEach(b => b.addEventListener('click', () => {
+  switchEls.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  plan = b.dataset.plan;
+  applyPlanLock();
+  recalc();
+}));
+
+billEls.forEach(b => b.addEventListener('click', () => {
+  billEls.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  billing = b.dataset.bill;
+  recalc();
+}));
+
+featureRows.forEach(row => {
+  const cb = row.querySelector('input[type="checkbox"]');
+  if (cb) cb.addEventListener('change', recalc);
+});
+
+function applyPlanLock() {
+  featureRows.forEach(row => {
+    const cb = row.querySelector('input[type="checkbox"]');
+    const price = parseFloat(row.dataset.price) || 0;
+    if (price === 0) return; // always-included rows
+    const tag = row.querySelector('.price-tag');
+    if (plan === 'free') {
+      cb.checked = false;
+      cb.disabled = true;
+      tag.classList.add('locked');
+      tag.classList.remove('included');
+      tag.textContent = 'Premium';
+    } else if (plan === 'trial') {
+      cb.disabled = true;
+      cb.checked = true;
+      tag.classList.remove('locked');
+      tag.classList.add('included');
+      tag.textContent = 'Included';
+    } else {
+      cb.disabled = false;
+      tag.classList.remove('locked', 'included');
+      const monthlyPrice = '+$' + price.toFixed(2) + '/mo';
+      tag.textContent = monthlyPrice;
+    }
+  });
+}
+
+function recalc() {
+  let monthly = PLAN_BASE[plan];
+  const selected = [];
+
+  if (plan === 'trial' || plan === 'premium') {
+    selected.push({ name: 'Premium base', val: PLAN_BASE.premium });
+  }
+
+  featureRows.forEach(row => {
+    const cb = row.querySelector('input[type="checkbox"]');
+    const price = parseFloat(row.dataset.price) || 0;
+    if (price === 0) return;
+    if (plan === 'free') return;
+    if (cb.checked) {
+      monthly += price;
+      selected.push({
+        name: row.querySelector('.ttl').firstChild.textContent.trim(),
+        val: price
+      });
+    }
+  });
+
+  // Override base for free
+  if (plan === 'free') monthly = 0;
+
+  // Plan title + sub
+  if (plan === 'free') {
+    planTitleEl.textContent = 'Free Plan';
+    totalSubEl.textContent = 'Free forever — no card needed. Upgrade anytime.';
+    ctaBtn.textContent = 'Download Free';
+  } else if (plan === 'trial') {
+    planTitleEl.textContent = '7-Day Free Trial';
+    totalSubEl.textContent = 'Full access for 7 days. No payment info required.';
+    ctaBtn.textContent = 'Start 7-Day Free Trial';
+  } else {
+    planTitleEl.textContent = 'Premium Plan';
+    totalSubEl.textContent = 'Cancel anytime · Auto-renew · Soft downgrade if you stop.';
+    ctaBtn.textContent = 'Upgrade to Premium';
+  }
+
+  // Display amount based on billing
+  let display, per, label, savings;
+  if (plan === 'free' || plan === 'trial') {
+    display = 0;
+    per = '/mo';
+    label = plan === 'free' ? 'Monthly cost' : 'During the trial';
+    savings = null;
+  } else if (billing === 'monthly') {
+    display = monthly;
+    per = '/mo';
+    label = 'Monthly cost';
+    const annualEq = monthly * 12;
+    const annualPrice = monthly * 12 * ANNUAL_DISCOUNT;
+    savings = annualEq - annualPrice;
+  } else {
+    const annualPrice = monthly * 12 * ANNUAL_DISCOUNT;
+    display = annualPrice;
+    per = '/yr';
+    label = 'Annual cost';
+    savings = (monthly * 12) - annualPrice;
+  }
+
+  totalAmountEl.textContent = display.toFixed(2);
+  totalPerEl.textContent = per;
+  totalLabelEl.textContent = label;
+
+  if (savings && savings > 0.5) {
+    savingsTag.style.display = 'inline-block';
+    if (billing === 'annual') {
+      savingsTag.textContent = `Saving $${savings.toFixed(2)}/yr vs monthly`;
+    } else {
+      savingsTag.textContent = `Save $${savings.toFixed(2)}/yr by switching to annual`;
+    }
+  } else {
+    savingsTag.style.display = 'none';
+  }
+
+  // Breakdown list
+  if (plan === 'free') {
+    breakdownList.innerHTML = '<div class="br-item"><span class="name">Barcode scanner · Favorites · Water · Health Connect</span><span class="val">Included</span></div>';
+  } else if (selected.length === 1) {
+    breakdownList.innerHTML = '<div class="br-item"><span class="name">Premium base (all features)</span><span class="val">$' + PLAN_BASE.premium.toFixed(2) + '/mo</span></div>';
+  } else {
+    breakdownList.innerHTML = selected.map(item =>
+      `<div class="br-item"><span class="name">${item.name}</span><span class="val">$${item.val.toFixed(2)}/mo</span></div>`
+    ).join('');
+  }
+
+  // Comparison
+  let annualForCompare;
+  if (plan === 'free') annualForCompare = 0;
+  else if (plan === 'trial') annualForCompare = 0;
+  else annualForCompare = (billing === 'annual') ? display : monthly * 12 * ANNUAL_DISCOUNT;
+  cmpYou.textContent = '$' + annualForCompare.toFixed(2);
+}
+
+applyPlanLock();
+recalc();
+</script>
+</body>
+</html>

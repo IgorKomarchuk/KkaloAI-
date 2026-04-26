@@ -1,0 +1,28 @@
+# Android build artifacts
+**/build/
+*.apk
+*.aar
+*.jks
+*.keystore
+
+# Local configuration
+local.properties
+
+# Secrets
+google-services.json
+snapcal-*.json
+Keys/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+firebase-debug.log
+logcat_dump.txt

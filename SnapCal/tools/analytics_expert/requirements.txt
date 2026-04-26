@@ -1,0 +1,4 @@
+google-analytics-admin==0.28.0
+google-analytics-data==0.21.0
+google-auth==2.38.0
+pandas

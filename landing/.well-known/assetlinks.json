@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.kkaloai.app",
+      "sha256_cert_fingerprints": [
+        "E5:57:F5:28:C3:B7:15:D6:CD:7F:43:12:18:F8:C4:4C:BF:2C:EE:18:17:64:9A:5C:41:78:8B:F2:56:39:DF:9C"
+      ]
+    }
+  }
+]

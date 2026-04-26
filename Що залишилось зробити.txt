@@ -1,0 +1,19 @@
+ўо залишилось
+ѕакет 2 Ч Retention + ARPU prep (2-3 год)
+?? D. Progress Charts Ч окремий екран Stats з граф≥ками weight/calories/macros (Compose Canvas)
+?? E. Achievements + Daily Missions Ч 15+ ач≥вок, "Today's mission" картка, XP система
+?? O. Feature Gates Ч центральна лог≥ка premium vs base tier
+?? P. Planned meal push Ч нагадуванн€ "Did you eat Chicken Salad at 13:00?"
+ѕакет 3 Ч AI moat (4-5 год)
+?? H. Recipe Scanner Ч фото рецепту > per-serving калор≥њ
+?? I. Restaurant Menu Scanner Ч фото меню > макро кожноњ страви
+?? J. Fridge Scanner Ч "що приготувати з цим?"
+?? K. Weekly AI Meal Plans + PDF export Ч 7-денний план + PDF
+ѕакет 4 Ч монетизац≥€ (2-3 год)
+?? F. Premium+ tier ($9.99/м≥с) Ч gating AI Planner, PDF export, advanced analytics
+?? G. Family plan ($14.99) + Lifetime ($59 one-time)
+?? M. Gemini image cache Ч Firestore hash lookup > -40-60% API costs
+ѕакет 5 Ч Scale (3-4 год)
+?? N. Remote Config A/B framework Ч Firebase Remote Config + feature flags
+?? Q. Cloud Functions weekly report Ч перенос на сервер (Blaze активний, готово)
+?? R. Localized paywall pricing Ч Play Billing auto-формат локальноњ валюти

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly AI Health Coaching | Personalized Nutrition Analytics | KkaloAI</title>
+    <meta name="description" content="Get a personal AI dietitian in your pocket. KkaloAI provides weekly health reports, deep behavioral analysis, and custom-generated healthy recipes based on your habits.">
+    <link rel="stylesheet" href="index.css">
+    <script src="language.js"></script>
+    <style>
+        .feature-details { padding: 100px 20px; max-width: 1000px; margin: 0 auto; line-height: 1.6; }
+        .feature-hero { text-align: center; margin-bottom: 60px; }
+        .feature-hero h1 { font-size: 48px; border-bottom: 4px solid #9b59b6; display: inline-block; padding-bottom: 10px; }
+        .feature-hero img { width: 100%; max-width: 800px; border-radius: 24px; margin-top: 30px; box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
+        .feature-content { background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
+        .quote-box { background: rgba(155, 89, 182, 0.1); border-radius: 16px; padding: 25px; margin: 25px 0; font-style: italic; color: #dcdde1; }
+        
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(16px); border-bottom: 1px solid var(--card-border); background: rgba(3, 7, 18, 0.7); }
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: -1px; color: var(--primary); text-decoration: none; }
+        .logo span { color: #fff; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">Kkalo<span>AI</span></a>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <select onchange="window.setKkaloLanguage(this.value);" style="background: rgba(17, 24, 39, 0.9); color: var(--text-main); border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; font-family: 'Outfit'; font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en" selected>🇬🇧 EN</option>
+                <option value="uk">🇺🇦 UK</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="feature-details">
+        <a href="index.html#features" class="back-link">← Back to Features</a>
+        <div class="feature-hero">
+            <h1>Personalized AI Health Coaching</h1>
+            <p style="font-size: 20px; margin-top: 20px;">Data-driven insights to break your plateaus.</p>
+            <img src="ai-coaching.png" alt="KkaloAI AI Coaching Feature">
+        </div>
+
+        <div class="feature-content">
+            <h2>Your Sunday Performance Review</h2>
+            <p>Every Sunday at 9:00 AM, KkaloAI delivers a <strong>Weekly AI Health Report</strong>. This isn't just a bar chart of calories; it's a deep behavioral audit powered by advanced natural language models.</p>
+            
+            <div class="quote-box">
+                "I noticed you tend to crave high-sodium snacks after 8:00 PM on Wednesdays. This correlates with your lower sleep quality recorded in Health Connect. Try this Magnesium-rich evening recipe I generated for you..."
+            </div>
+
+            <h2 style="margin-top: 30px; color: var(--primary);">Intelligent Adaptations</h2>
+            <p>Static calorie goals are dead. KkaloAI adapts to your reality:</p>
+
+            <ul style="margin-top: 20px; list-style-type: none; padding: 0;">
+                <li style="margin-bottom: 15px;">📊 <strong>Trend Analysis:</strong> AI identifies your "Danger Zones" and suggests grocery swaps before you binge.</li>
+                <li style="margin-bottom: 15px;">🥣 <strong>Custom Recipes:</strong> Gemini 2.5 Flash generates meal prep ideas based <em>only</em> on the ingredients you actually like and log.</li>
+                <li style="margin-bottom: 15px;">📈 <strong>Dynamic Adjustments:</strong> If your activity level drops, your AI coach suggests a gentle adjustment to your daily goal to keep you on track.</li>
+            </ul>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="#download" class="btn">Start Your AI Coaching</a>
+            </div>
+        </div>
+
+        <div class="seo-section" style="margin-top: 50px;">
+            <h3>The Science of Behavioral Nutrition</h3>
+            <p>Weight loss is 20% biology and 80% psychology. Our AI coaching logic is based on verified behavioral change frameworks. By providing small, actionable insights rather than overwhelming raw data, KkaloAI helps bridge the gap between "knowing what to do" and "actually doing it."</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 KkaloAI. Intelligent Weight Loss.</p>
+    </footer>
+</body>
+</html>

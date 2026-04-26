@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Stop Guessing. Start Knowing.</title>
+<style>
+  :root {
+    --graphite: #0F0F0F;
+    --graphite-2: #1a1a1a;
+    --graphite-3: #242424;
+    --graphite-4: #2f2f2f;
+    --gold: #D4AF37;
+    --gold-soft: #C9A961;
+    --gold-deep: #8C7A3F;
+    --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0;
+    --pearl-dim: #ECE9DF;
+    --muted: #9A9A9A;
+    --green: #5CB874;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--graphite);
+    color: var(--pearl);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+  /* ================ NAV ================ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 16px 0;
+    background: rgba(15,15,15,0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(212,175,55,0.08);
+  }
+  .nav-row {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; }
+  .nav-logo {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite); display: grid; place-items: center;
+    font-weight: 800; font-size: 17px;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.3);
+  }
+  .nav-name {
+    font-size: 17px; font-weight: 700; letter-spacing: -0.3px;
+  }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a {
+    color: var(--pearl-dim); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    transition: color 0.18s ease;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--graphite);
+    padding: 9px 18px; border-radius: 999px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(212,175,55,0.3);
+  }
+  @media (max-width: 768px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  /* ================ HERO ================ */
+  .hero {
+    padding: 140px 0 100px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 12px; letter-spacing: 2.5px;
+    text-transform: uppercase; font-weight: 700;
+    margin-bottom: 20px;
+    padding: 6px 14px;
+    background: var(--gold-dim);
+    border-radius: 999px;
+    border: 1px solid rgba(212,175,55,0.25);
+    animation: fadeInUp 0.6s ease both;
+  }
+  .hero h1 {
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 800; line-height: 1.02;
+    letter-spacing: -2px; margin-bottom: 24px;
+    animation: fadeInUp 0.7s 0.1s ease both;
+  }
+  .hero h1 .accent {
+    background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p.lede {
+    font-size: 18px; color: var(--pearl-dim); max-width: 540px;
+    margin-bottom: 36px;
+    animation: fadeInUp 0.7s 0.2s ease both;
+  }
+  .hero-ctas {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin-bottom: 32px;
+    animation: fadeInUp 0.7s 0.3s ease both;
+  }
+  .btn {
+    padding: 16px 28px; border-radius: 12px;
+    font-family: inherit; font-size: 14px; font-weight: 700;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    letter-spacing: 0.4px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite);
+    box-shadow: 0 8px 24px rgba(212,175,55,0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(212,175,55,0.45);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--pearl);
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-trust {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    animation: fadeInUp 0.7s 0.4s ease both;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--muted);
+  }
+  .trust-item .check {
+    color: var(--gold); font-weight: 700;
+  }
+
+  /* Phone mock */
+  .hero-visual {
+    position: relative; height: 540px;
+    display: flex; align-items: center; justify-content: center;
+    animation: fadeInRight 0.9s 0.2s ease both;
+  }
+  .phone {
+    width: 280px; height: 540px;
+    background: linear-gradient(180deg, var(--graphite-3) 0%, var(--graphite-2) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 38px;
+    padding: 14px;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.6),
+      0 0 0 8px var(--graphite-2),
+      0 0 0 9px rgba(255,255,255,0.04),
+      0 0 60px rgba(212,175,55,0.12);
+    position: relative;
+    transform: rotate(-2deg);
+    transition: transform 0.4s ease;
+  }
+  .phone:hover { transform: rotate(0deg) scale(1.02); }
+  .phone-screen {
+    background: var(--graphite);
+    width: 100%; height: 100%;
+    border-radius: 26px;
+    padding: 32px 18px 20px;
+    overflow: hidden;
+    position: relative;
+  }
+  .phone-notch {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 22px;
+    background: var(--graphite); border-radius: 0 0 16px 16px;
+    z-index: 2;
+  }
+  .ph-greet { font-size: 11px; color: var(--muted); }
+  .ph-name { font-size: 18px; color: var(--pearl); font-weight: 700; margin: 2px 0 16px; }
+  .ph-card {
+    background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.04));
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .ph-card .lab { font-size: 9px; color: var(--gold); letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; }
+  .ph-card .num { font-size: 24px; color: var(--pearl); font-weight: 800; letter-spacing: -1px; margin: 2px 0; }
+  .ph-card .num .of { color: var(--muted); font-size: 13px; font-weight: 500; }
+  .ph-bar {
+    height: 6px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden;
+    margin-top: 8px;
+  }
+  .ph-bar > div {
+    height: 100%; width: 67%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+    border-radius: 999px;
+    animation: barFill 1.4s 0.6s ease both;
+  }
+  .ph-meal {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--graphite-2);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 6px;
+  }
+  .ph-meal-img {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--gold-deep), var(--gold-soft));
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .ph-meal-info { flex-grow: 1; }
+  .ph-meal-info .nm { font-size: 11px; color: var(--pearl); font-weight: 600; }
+  .ph-meal-info .kc { font-size: 9px; color: var(--muted); }
+  .ph-slider {
+    margin-top: 14px;
+    background: var(--graphite-2);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(212,175,55,0.18);
+  }
+  .ph-slider .lab { font-size: 9px; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .ph-slider .track {
+    height: 4px; background: rgba(255,255,255,0.08); border-radius: 999px; position: relative;
+    margin: 14px 0 6px;
+  }
+  .ph-slider .knob {
+    position: absolute; left: 60%; top: 50%; transform: translate(-50%, -50%);
+    width: 14px; height: 14px;
+    background: var(--gold); border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(212,175,55,0.2);
+    animation: knobPulse 2.4s ease infinite;
+  }
+  .ph-slider .scale {
+    display: flex; justify-content: space-between;
+    font-size: 8px; color: var(--muted);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes barFill { from { width: 0; } to { width: 67%; } }
+  @keyframes knobPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(212,175,55,0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(212,175,55,0.35); }
+  }
+
+  /* ================ SOCIAL PROOF STRIP ================ */
+  .strip {
+    background: var(--graphite-2);
+    padding: 28px 0;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .strip-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    text-align: center;
+  }
+  .strip-item .num {
+    font-size: 28px; color: var(--gold); font-weight: 800;
+    letter-spacing: -1px;
+  }
+  .strip-item .lab {
+    font-size: 12px; color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ================ SECTIONS COMMON ================ */
+  section.lp { padding: 100px 0; position: relative; }
+  .sec-eyebrow {
+    color: var(--gold); font-size: 12px; letter-spacing: 2.5px;
+    text-transform: uppercase; font-weight: 700;
+    text-align: center; margin-bottom: 14px;
+  }
+  .sec-title {
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800; letter-spacing: -1px; line-height: 1.1;
+    text-align: center; margin-bottom: 16px;
+  }
+  .sec-title .accent { color: var(--gold); }
+  .sec-lede {
+    font-size: 16px; color: var(--pearl-dim);
+    text-align: center; max-width: 720px;
+    margin: 0 auto 56px;
+  }
+
+  /* Reveal-on-scroll */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* ================ FEATURES GRID ================ */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .f-card {
+    background: linear-gradient(180deg, var(--graphite-2) 0%, var(--graphite-3) 100%);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 28px;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+  .f-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold-dim);
+  }
+  .f-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: var(--gold-dim); color: var(--gold);
+    display: grid; place-items: center;
+    font-size: 24px; margin-bottom: 18px;
+  }
+  .f-card h4 {
+    font-size: 18px; color: var(--pearl); font-weight: 700;
+    margin-bottom: 10px; letter-spacing: -0.3px;
+  }
+  .f-card p {
+    font-size: 14px; color: var(--pearl-dim);
+    line-height: 1.6;
+  }
+
+  /* ================ HOW IT WORKS ================ */
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    position: relative;
+  }
+  .how-step {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .how-num {
+    width: 44px; height: 44px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite);
+    display: grid; place-items: center;
+    font-size: 18px; font-weight: 800;
+    box-shadow: 0 6px 18px rgba(212,175,55,0.25);
+  }
+  .how-step h4 {
+    font-size: 16px; color: var(--pearl); font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .how-step p {
+    font-size: 13px; color: var(--pearl-dim);
+    line-height: 1.55;
+  }
+
+  /* ================ SPECIALTY MODES ================ */
+  .modes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .mode-card {
+    background: linear-gradient(135deg, var(--graphite-2), var(--graphite-3));
+    border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease;
+  }
+  .mode-card:hover { transform: translateY(-4px); }
+  .mode-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(212,175,55,0.10) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .mode-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--graphite);
+    font-size: 10px; letter-spacing: 1.5px; font-weight: 800;
+    padding: 3px 8px; border-radius: 4px;
+    margin-bottom: 14px;
+  }
+  .mode-tag.subtle {
+    background: var(--gold-dim); color: var(--gold);
+  }
+  .mode-card h4 {
+    font-size: 22px; color: var(--pearl); font-weight: 700;
+    letter-spacing: -0.4px; margin-bottom: 10px;
+  }
+  .mode-card p {
+    font-size: 14px; color: var(--pearl-dim); margin-bottom: 16px;
+    line-height: 1.55;
+  }
+  .mode-card ul { list-style: none; padding: 0; }
+  .mode-card ul li {
+    font-size: 13px; color: var(--pearl-dim);
+    padding: 4px 0 4px 18px; position: relative;
+  }
+  .mode-card ul li::before {
+    content: '◆'; color: var(--gold); position: absolute; left: 0; font-size: 8px; top: 6px;
+  }
+
+  /* ================ PRICING ================ */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .pr-card {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 32px 28px;
+    position: relative;
+    transition: transform 0.25s ease;
+  }
+  .pr-card:hover { transform: translateY(-4px); }
+  .pr-card.popular {
+    border: 1px solid var(--gold);
+    background: linear-gradient(180deg, rgba(212,175,55,0.08), var(--graphite-2) 60%);
+    box-shadow: 0 12px 40px rgba(212,175,55,0.15);
+    transform: scale(1.03);
+  }
+  .pr-card.popular:hover { transform: scale(1.03) translateY(-4px); }
+  .pr-card.popular::before {
+    content: 'BEST VALUE';
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--graphite);
+    font-size: 10px; padding: 4px 12px; border-radius: 999px;
+    font-weight: 800; letter-spacing: 1.5px;
+  }
+  .pr-name {
+    font-size: 12px; color: var(--gold); letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 12px;
+  }
+  .pr-price {
+    font-size: 48px; color: var(--pearl); font-weight: 800;
+    letter-spacing: -2px; line-height: 1;
+  }
+  .pr-price .per { font-size: 14px; color: var(--muted); font-weight: 500; margin-left: 4px; }
+  .pr-sub { color: var(--muted); font-size: 13px; margin: 8px 0 22px; }
+  .pr-card ul { list-style: none; }
+  .pr-card ul li {
+    font-size: 13px; color: var(--pearl-dim);
+    padding: 7px 0 7px 22px; position: relative;
+  }
+  .pr-card ul li::before {
+    content: '✓'; color: var(--gold); position: absolute; left: 0; font-weight: 700;
+  }
+  .pr-cta {
+    margin-top: 24px;
+    width: 100%;
+    padding: 13px;
+    background: var(--graphite-3);
+    border: 1px solid rgba(212,175,55,0.2);
+    color: var(--gold);
+    border-radius: 10px;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .pr-cta:hover { background: var(--gold-dim); }
+  .pr-card.popular .pr-cta {
+    background: var(--gold); color: var(--graphite); border-color: var(--gold);
+  }
+  .pr-card.popular .pr-cta:hover {
+    background: var(--gold-soft);
+  }
+
+  /* ================ TESTIMONIALS ================ */
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .test {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+  }
+  .test::before {
+    content: '"';
+    position: absolute; top: 14px; right: 18px;
+    font-size: 60px; color: var(--gold);
+    opacity: 0.25;
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .test-stars {
+    color: var(--gold);
+    font-size: 14px;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+  }
+  .test-text {
+    font-size: 14px; color: var(--pearl-dim);
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+  .test-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .test-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-deep), var(--gold-soft));
+    color: var(--graphite);
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .test-author .nm { font-size: 13px; color: var(--pearl); font-weight: 600; }
+  .test-author .ro { font-size: 11px; color: var(--muted); }
+  .test-placeholder {
+    text-align: center;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  /* ================ LEAD FORM ================ */
+  .lead-section {
+    background: linear-gradient(180deg, var(--graphite-2) 0%, var(--graphite) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .lead-section::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(212,175,55,0.10) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .lead-form {
+    max-width: 580px; margin: 0 auto;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--gold-dim);
+    border-radius: 20px;
+    padding: 36px;
+    position: relative;
+    backdrop-filter: blur(10px);
+  }
+  .lead-form .field { margin-bottom: 16px; }
+  .lead-form label {
+    display: block;
+    font-size: 11px; color: var(--gold);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 6px; font-weight: 700;
+  }
+  .lead-form input, .lead-form select, .lead-form textarea {
+    width: 100%;
+    background: var(--graphite-3);
+    color: var(--pearl);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.18s ease;
+  }
+  .lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus {
+    border-color: var(--gold);
+  }
+  .lead-form textarea { resize: vertical; min-height: 90px; }
+  .lead-form .field-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .lead-submit {
+    width: 100%;
+    margin-top: 8px;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite);
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px; font-weight: 800;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .lead-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(212,175,55,0.4);
+  }
+  .lead-success {
+    display: none;
+    text-align: center;
+    padding: 30px;
+  }
+  .lead-success.shown { display: block; }
+  .lead-success .ok {
+    width: 60px; height: 60px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--gold-dim); color: var(--gold);
+    display: grid; place-items: center;
+    font-size: 28px; font-weight: 800;
+  }
+  .lead-success h4 { color: var(--pearl); font-size: 22px; margin-bottom: 8px; }
+  .lead-success p { color: var(--pearl-dim); font-size: 14px; }
+
+  .form-disclaimer {
+    margin-top: 18px;
+    font-size: 11px; color: var(--muted);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* ================ DISCLAIMER STRIP ================ */
+  .disclaimer-strip {
+    margin-top: 48px;
+    padding: 22px 28px;
+    background: rgba(225,106,106,0.06);
+    border: 1px solid rgba(225,106,106,0.18);
+    border-radius: 14px;
+    color: var(--pearl-dim);
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .disclaimer-strip strong { color: var(--pearl); }
+
+  /* ================ FOOTER ================ */
+  footer.site {
+    background: var(--graphite-2);
+    padding: 60px 0 32px;
+    border-top: 1px solid rgba(212,175,55,0.08);
+  }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 36px;
+    margin-bottom: 36px;
+  }
+  .foot-brand p {
+    font-size: 13px; color: var(--muted); max-width: 320px;
+    margin-top: 12px; line-height: 1.6;
+  }
+  .foot-col h5 {
+    font-size: 11px; color: var(--gold); letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .foot-col a {
+    display: block; color: var(--pearl-dim); text-decoration: none;
+    font-size: 13px; padding: 5px 0;
+    transition: color 0.15s ease;
+  }
+  .foot-col a:hover { color: var(--gold); }
+  .foot-bottom {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 22px;
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px; color: var(--muted);
+  }
+  .foot-bottom .tag { color: var(--gold); font-weight: 700; letter-spacing: 1px; }
+
+  /* ================ RESPONSIVE ================ */
+  @media (max-width: 980px) {
+    .hero { padding: 110px 0 60px; }
+    .hero-row { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { height: 460px; }
+    .strip-row { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
+    .features-grid, .how-grid, .test-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .modes-grid { grid-template-columns: 1fr; }
+    .pr-card.popular { transform: none; }
+    .pr-card.popular:hover { transform: translateY(-4px); }
+    .lead-form .field-row { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  @media print {
+    .nav, .hero-visual, .lead-section { display: none; }
+    body { background: white; color: black; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap nav-row">
+    <div class="nav-brand">
+      <div class="nav-logo">K</div>
+      <div class="nav-name">KkaloAI</div>
+    </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#modes">Modes</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact" class="nav-cta">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-row">
+    <div>
+      <div class="hero-eyebrow">Now in Open Beta · iOS + Android</div>
+      <h1>Stop guessing.<br/><span class="accent">Start knowing.</span></h1>
+      <p class="lede">The AI calorie tracker built for transparency, user control, and the health journeys other apps ignore. Snap, adjust, confirm — and finally trust your numbers.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Start 7-Day Free Trial →</a>
+        <a href="#how" class="btn btn-secondary">▸ See how it works</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item"><span class="check">✓</span> No credit card required</div>
+        <div class="trust-item"><span class="check">✓</span> 3M+ products in barcode DB</div>
+        <div class="trust-item"><span class="check">✓</span> Native Health Connect sync</div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="ph-greet">Good morning,</div>
+          <div class="ph-name">Alex 👋</div>
+          <div class="ph-card">
+            <div class="lab">Today</div>
+            <div class="num">1,340<span class="of"> / 2,000 kcal</span></div>
+            <div class="ph-bar"><div></div></div>
+          </div>
+          <div class="ph-meal">
+            <div class="ph-meal-img"></div>
+            <div class="ph-meal-info">
+              <div class="nm">Greek yogurt + berries</div>
+              <div class="kc">220 kcal · 18g protein</div>
+            </div>
+          </div>
+          <div class="ph-meal">
+            <div class="ph-meal-img"></div>
+            <div class="ph-meal-info">
+              <div class="nm">Chicken bowl</div>
+              <div class="kc">540 kcal · 42g protein</div>
+            </div>
+          </div>
+          <div class="ph-slider">
+            <div class="lab">Confirm portion · 1.2×</div>
+            <div class="track"><div class="knob"></div></div>
+            <div class="scale"><span>0.5×</span><span>1×</span><span>2.5×</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TRUST STRIP -->
+<div class="strip">
+  <div class="wrap strip-row">
+    <div class="strip-item"><div class="num">3M+</div><div class="lab">products in barcode DB</div></div>
+    <div class="strip-item"><div class="num">100+</div><div class="lab">tracked nutrients</div></div>
+    <div class="strip-item"><div class="num">4</div><div class="lab">specialty health modes</div></div>
+    <div class="strip-item"><div class="num">7 days</div><div class="lab">free, no card needed</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="lp" id="features">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">What makes KkaloAI different</div>
+      <h2 class="sec-title">Everything other trackers <span class="accent">should have shipped years ago.</span></h2>
+      <p class="sec-lede">Six features born from the #1 complaints in calorie-tracker reviews — fixed, not patched.</p>
+    </div>
+    <div class="features-grid">
+      <div class="f-card reveal"><div class="f-icon">🎚</div><h4>Confirm & Adjust</h4><p>AI estimates the portion. You fine-tune it with a 0.5×–2.5× slider before logging. No silent guesses, no broken trust.</p></div>
+      <div class="f-card reveal"><div class="f-icon">💎</div><h4>Transparent Pricing</h4><p>Three tiers, all visible from day one. No upsell traps, no hidden subscriptions. The trial really is free.</p></div>
+      <div class="f-card reveal"><div class="f-icon">🔄</div><h4>Native Health Connect</h4><p>Two-way sync with Android Health Connect (and Apple Health). Your ecosystem stays coherent — read and write.</p></div>
+      <div class="f-card reveal"><div class="f-icon">🧬</div><h4>Specialty Modes</h4><p>GLP-1, PCOS, Bulking, Weight Management — four dedicated tracking environments no incumbent ships.</p></div>
+      <div class="f-card reveal"><div class="f-icon">📦</div><h4>Total Health Hub</h4><p>Daily biofeedback, water tracker, barcode scanner (3M+ products), favorites, and a weekly AI report — all in v1.0.</p></div>
+      <div class="f-card reveal"><div class="f-icon">👻</div><h4>Anonymous Auth</h4><p>Try the app without an email or password. Convert to a real account anytime — your data follows you.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="lp" id="how" style="background: var(--graphite-2);">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">How it works</div>
+      <h2 class="sec-title">Four steps. <span class="accent">Thirty seconds.</span></h2>
+      <p class="sec-lede">From open-the-app to logged-and-confirmed faster than typing it manually.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-step reveal"><div class="how-num">1</div><h4>Snap</h4><p>Take a photo of your meal — single dish or full plate. Or scan a barcode. Or speak it out loud.</p></div>
+      <div class="how-step reveal"><div class="how-num">2</div><h4>Estimate</h4><p>AI identifies items, portions, and macros — typically in under 2 seconds.</p></div>
+      <div class="how-step reveal"><div class="how-num">3</div><h4>Adjust</h4><p>Drag the 0.5×–2.5× slider to match your real portion. Per-item override available.</p></div>
+      <div class="how-step reveal"><div class="how-num">4</div><h4>Confirm</h4><p>One tap to log. Macros sync to Health Connect. Your daily targets update live.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIALTY MODES -->
+<section class="lp" id="modes">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Specialty Health Modes</div>
+      <h2 class="sec-title">Tracking that <span class="accent">understands your context.</span></h2>
+      <p class="sec-lede">Four modes built for specific journeys. Switch between them anytime — your data stays consistent.</p>
+    </div>
+    <div class="modes-grid">
+
+      <div class="mode-card reveal">
+        <span class="mode-tag">Industry-first</span>
+        <h4>💉 GLP-1 Support Mode</h4>
+        <p>For users on Ozempic, Wegovy, Mounjaro, or Zepbound. Tracks the medication cycle, not just the food.</p>
+        <ul>
+          <li>Injection day tracker</li>
+          <li>Side-effect log (nausea, fatigue, fullness)</li>
+          <li>Protein-floor enforcement (preserve lean mass)</li>
+          <li>Hydration & electrolyte reminders</li>
+          <li>GLP-1-friendly meal suggestions</li>
+        </ul>
+      </div>
+
+      <div class="mode-card reveal">
+        <span class="mode-tag">Underserved niche</span>
+        <h4>♀ PCOS & Hormonal Balance</h4>
+        <p>Cycle-phase aware tracking with insulin-resistance friendly guidance. Built with PCOS users, not bolted on.</p>
+        <ul>
+          <li>4-phase cycle tracking</li>
+          <li>Carb-quality scoring</li>
+          <li>Hormonal-friendly meal filter</li>
+          <li>Inositol / Mg / Vit-D micronutrient watch</li>
+          <li>Mood + energy correlation</li>
+        </ul>
+      </div>
+
+      <div class="mode-card reveal">
+        <span class="mode-tag subtle">For lifters</span>
+        <h4>💪 Bulking / Muscle Gain</h4>
+        <p>Adaptive surplus driven by trend math. Lean, standard, or aggressive — your call.</p>
+        <ul>
+          <li>Adaptive surplus algorithm</li>
+          <li>Protein/kg target enforcement</li>
+          <li>Training-day vs rest-day calories</li>
+          <li>Body comp trend visualization</li>
+        </ul>
+      </div>
+
+      <div class="mode-card reveal">
+        <span class="mode-tag subtle">The classic goal</span>
+        <h4>⚖ Weight Management</h4>
+        <p>Adaptive deficit based on real weight trend, not the scale's daily noise. No punitive nudges.</p>
+        <ul>
+          <li>Trend-based deficit calculation</li>
+          <li>Plateau detection + re-feed suggestions</li>
+          <li>Maintenance switch when goal is hit</li>
+          <li>Gentle, non-shaming reminders</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="lp" id="pricing" style="background: var(--graphite-2);">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Plans & Pricing</div>
+      <h2 class="sec-title">Three tiers. <span class="accent">Zero surprises.</span></h2>
+      <p class="sec-lede">Pick what fits. Switch anytime. The trial is genuinely free — no card, no dark patterns.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="pr-card reveal">
+        <div class="pr-name">Free</div>
+        <div class="pr-price">$0</div>
+        <div class="pr-sub">Forever, no card</div>
+        <ul>
+          <li>Barcode scanner (3M+)</li>
+          <li>Favorite meals</li>
+          <li>Water tracker</li>
+          <li>Health Connect 2-way</li>
+          <li>Anonymous auth</li>
+          <li>Daily Win share cards</li>
+        </ul>
+        <button class="pr-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Download Free</button>
+      </div>
+
+      <div class="pr-card popular reveal">
+        <div class="pr-name">7-Day Trial</div>
+        <div class="pr-price">$0</div>
+        <div class="pr-sub">No payment info needed</div>
+        <ul>
+          <li>Everything in Free</li>
+          <li>AI Photo + Confirm & Adjust</li>
+          <li>All 4 Specialty Modes</li>
+          <li>Voice Log</li>
+          <li>Weekly AI Report</li>
+          <li>Meal Recommendations</li>
+        </ul>
+        <button class="pr-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start Free Trial</button>
+      </div>
+
+      <div class="pr-card reveal">
+        <div class="pr-name">Premium</div>
+        <div class="pr-price">$59.99<span class="per">/yr</span></div>
+        <div class="pr-sub">or $7.99/mo · cancel anytime</div>
+        <ul>
+          <li>Everything in Trial</li>
+          <li>3D Scan Export (Q3 2026)</li>
+          <li>Priority AI processing</li>
+          <li>Cloud backup & sync</li>
+          <li>Export full history</li>
+          <li>Support response < 24h</li>
+        </ul>
+        <button class="pr-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Go Premium</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="lp" id="testimonials">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Early Beta Voices</div>
+      <h2 class="sec-title">From the <span class="accent">first 1,000 testers.</span></h2>
+      <p class="sec-lede">What our beta users are saying about the slider, the modes, and the trust.</p>
+    </div>
+    <div class="test-grid">
+
+      <div class="test reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"The slider is the fix. Every other app forces me to accept the AI's guess. KkaloAI lets me say 'actually, that bowl was bigger' without re-typing the whole thing."</p>
+        <div class="test-author">
+          <div class="test-avatar">JM</div>
+          <div><div class="nm">J. Marquez</div><div class="ro">Beta tester · Houston, TX</div></div>
+        </div>
+      </div>
+
+      <div class="test reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"I'm on Wegovy and the GLP-1 mode is the first time I've felt like an app actually understands my week. Injection day, low-appetite days, the protein nudge — all of it."</p>
+        <div class="test-author">
+          <div class="test-avatar">SK</div>
+          <div><div class="nm">S. Kowalski</div><div class="ro">Beta tester · Toronto, CA</div></div>
+        </div>
+      </div>
+
+      <div class="test reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"Finally a PCOS tracker that doesn't pretend my cycle doesn't exist. Carb-quality scoring + the inositol watch are exactly what my dietitian asked for."</p>
+        <div class="test-author">
+          <div class="test-avatar">RP</div>
+          <div><div class="nm">R. Patel</div><div class="ro">Beta tester · Manchester, UK</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="test-placeholder">— Testimonials shown are placeholders for the production landing page; real beta quotes will be inserted before public launch. —</div>
+  </div>
+</section>
+
+<!-- LEAD FORM -->
+<section class="lp lead-section" id="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Get Early Access</div>
+      <h2 class="sec-title">Be among the <span class="accent">first to know.</span></h2>
+      <p class="sec-lede">Drop your email below — we'll send a download link the moment KkaloAI hits the stores in your country, plus a 7-day Premium trial code.</p>
+    </div>
+
+    <div class="lead-form reveal">
+      <form id="leadForm" onsubmit="handleLead(event)">
+        <div class="field">
+          <label for="lf-name">Your name</label>
+          <input id="lf-name" type="text" required placeholder="e.g. Alex Chen" />
+        </div>
+        <div class="field">
+          <label for="lf-email">Email</label>
+          <input id="lf-email" type="email" required placeholder="you@example.com" />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="lf-platform">Primary device</label>
+            <select id="lf-platform">
+              <option>Android</option>
+              <option>iOS</option>
+              <option>Both</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="lf-mode">Most interested mode</label>
+            <select id="lf-mode">
+              <option>GLP-1 Support</option>
+              <option>PCOS & Hormonal</option>
+              <option>Weight Management</option>
+              <option>Bulking / Muscle Gain</option>
+              <option>Just curious</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lf-note">What do you wish your current tracker did better? (optional)</label>
+          <textarea id="lf-note" placeholder="Brief is fine — even one word helps us prioritize."></textarea>
+        </div>
+        <button type="submit" class="lead-submit">Send me the download link →</button>
+        <div class="form-disclaimer">By submitting, you agree to receive a single launch notification. No newsletters. We'll never sell your data.</div>
+      </form>
+      <div class="lead-success" id="leadSuccess">
+        <div class="ok">✓</div>
+        <h4>You're on the list.</h4>
+        <p>We'll email you the moment KkaloAI is available in your country. Until then — stay curious.</p>
+      </div>
+    </div>
+
+    <div class="disclaimer-strip reveal">
+      <strong>Medical disclaimer.</strong> KkaloAI is a tracking and information tool, not a medical device. It does not diagnose, treat, or provide medical advice. Specialty modes (GLP-1, PCOS, Bulking, Weight Management) are designed to help you organize self-tracking around your personal health context — they do not replace consultation with a qualified healthcare professional. If you have a medical condition or take medication, please consult your doctor before changing your diet.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="nav-brand">
+          <div class="nav-logo">K</div>
+          <div class="nav-name">KkaloAI</div>
+        </div>
+        <p>The AI calorie tracker built for transparency, user control, and the health journeys other apps ignore.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#modes">Specialty modes</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#">About</a>
+        <a href="#">Press kit</a>
+        <a href="#">Partnerships</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Legal</h5>
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of service</a>
+        <a href="#">Medical disclaimer</a>
+        <a href="#">GDPR / CCPA</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 KkaloAI · All rights reserved</div>
+      <div class="tag">#KkaloAI · STOP GUESSING. START KNOWING.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Reveal-on-scroll
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+reveals.forEach(el => io.observe(el));
+
+// Lead form
+function handleLead(e) {
+  e.preventDefault();
+  document.getElementById('leadForm').style.display = 'none';
+  document.getElementById('leadSuccess').classList.add('shown');
+}
+</script>
+
+</body>
+</html>

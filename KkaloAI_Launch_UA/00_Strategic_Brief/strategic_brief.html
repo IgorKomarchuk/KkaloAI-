@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Стратегічний Brief</title>
+<style>
+  :root {
+    --graphite: #1a1a1a;
+    --graphite-2: #242424;
+    --graphite-3: #2f2f2f;
+    --gold: #D4AF37;
+    --gold-soft: #C9A961;
+    --gold-deep: #8C7A3F;
+    --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0;
+    --pearl-dim: #ECE9DF;
+    --muted: #9A9A9A;
+    --green: #5CB874;
+    --red: #E16A6A;
+    --amber: #E0A14C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--graphite);
+    color: var(--pearl);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 48px 28px 96px; }
+
+  header {
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo-mark {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite); display: grid; place-items: center;
+    font-weight: 800; font-size: 20px; letter-spacing: -0.5px;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.3);
+  }
+  .brand-text h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .brand-text small { color: var(--muted); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .meta { text-align: right; color: var(--muted); font-size: 13px; }
+  .meta strong { color: var(--gold); font-weight: 600; }
+
+  .hero { margin-bottom: 48px; }
+  .eyebrow {
+    color: var(--gold); font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 14px; font-weight: 700;
+  }
+  h2.page-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800; letter-spacing: -1.2px; line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  h2.page-title .accent { color: var(--gold); }
+  .lede {
+    font-size: 17px; color: var(--pearl-dim); max-width: 820px;
+  }
+
+  /* Section */
+  section { margin-bottom: 56px; }
+  .section-head {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(212,175,55,0.12);
+  }
+  .section-head .num {
+    color: var(--gold); font-size: 11px; letter-spacing: 2.5px;
+    text-transform: uppercase; font-weight: 800;
+    background: var(--gold-dim);
+    padding: 4px 10px; border-radius: 6px;
+  }
+  .section-head h3 {
+    font-size: 26px; font-weight: 700; letter-spacing: -0.4px;
+  }
+  .section-head h3::before {
+    content: ''; display: inline-block; width: 5px; height: 24px;
+    background: var(--gold); margin-right: 12px; vertical-align: middle; border-radius: 2px;
+  }
+
+  /* Alert box */
+  .alert {
+    background: linear-gradient(135deg, rgba(225,106,106,0.08), rgba(225,106,106,0.02));
+    border: 1px solid rgba(225,106,106,0.3);
+    border-left: 4px solid var(--red);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 32px;
+  }
+  .alert h4 {
+    color: var(--red); font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 800; margin-bottom: 8px;
+  }
+  .alert .big {
+    font-size: 22px; color: var(--pearl); font-weight: 700;
+    line-height: 1.3; margin-bottom: 8px;
+  }
+  .alert p { color: var(--pearl-dim); font-size: 14px; }
+  .alert strong { color: var(--gold); }
+
+  /* Card grid */
+  .grid-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+  }
+  .grid-3 {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+  .card {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .card.gold-border { border: 1px solid var(--gold); background: linear-gradient(180deg, rgba(212,175,55,0.06), var(--graphite-2) 60%); }
+  .card h4 {
+    font-size: 16px; color: var(--pearl); font-weight: 700;
+    margin-bottom: 12px; letter-spacing: -0.2px;
+  }
+  .card .tag {
+    display: inline-block;
+    font-size: 10px; letter-spacing: 1.5px; font-weight: 800;
+    background: var(--gold-dim); color: var(--gold);
+    padding: 3px 8px; border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .card p { font-size: 13.5px; color: var(--pearl-dim); margin-bottom: 8px; }
+  .card ul { list-style: none; padding: 0; }
+  .card ul li {
+    font-size: 13px; color: var(--pearl-dim);
+    padding: 5px 0 5px 20px; position: relative;
+  }
+  .card ul li::before {
+    content: '◆'; color: var(--gold);
+    position: absolute; left: 0; top: 6px; font-size: 8px;
+  }
+
+  /* Competitor table */
+  table.comp {
+    width: 100%; border-collapse: collapse;
+    background: var(--graphite-2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 12px;
+  }
+  table.comp th {
+    background: var(--graphite-3);
+    color: var(--gold);
+    text-align: left; padding: 12px 14px;
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;
+    border-bottom: 1px solid var(--gold-dim);
+  }
+  table.comp td {
+    padding: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+    color: var(--pearl-dim);
+    vertical-align: top;
+  }
+  table.comp tr:last-child td { border-bottom: none; }
+  table.comp .name { color: var(--pearl); font-weight: 600; }
+  table.comp .pain { color: var(--red); }
+  table.comp .opp { color: var(--green); }
+
+  /* Pricing tiers */
+  .tier-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    margin-top: 16px;
+  }
+  .tier {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .tier.popular { border: 1px solid var(--gold); background: linear-gradient(180deg, rgba(212,175,55,0.08), var(--graphite-2) 70%); }
+  .tier .geo-tag {
+    color: var(--gold); font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 700;
+  }
+  .tier h5 { font-size: 14px; color: var(--pearl); margin: 4px 0 10px; font-weight: 700; }
+  .tier .price { font-size: 26px; color: var(--pearl); font-weight: 800; letter-spacing: -1px; }
+  .tier .price .sub { color: var(--muted); font-size: 12px; font-weight: 500; margin-left: 4px; }
+  .tier ul { list-style: none; margin-top: 12px; padding: 0; }
+  .tier ul li {
+    font-size: 12.5px; color: var(--pearl-dim);
+    padding: 4px 0 4px 18px; position: relative;
+  }
+  .tier ul li::before {
+    content: '✓'; color: var(--gold); position: absolute; left: 0; font-weight: 700;
+  }
+
+  /* Action priority list */
+  .actions {
+    counter-reset: act;
+  }
+  .action {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 18px 22px 18px 56px;
+    margin-bottom: 14px;
+    position: relative;
+    counter-increment: act;
+  }
+  .action::before {
+    content: counter(act);
+    position: absolute; left: 14px; top: 18px;
+    width: 30px; height: 30px;
+    background: var(--gold); color: var(--graphite);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 14px;
+  }
+  .action h5 {
+    font-size: 15px; color: var(--pearl); font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .action p {
+    font-size: 13.5px; color: var(--pearl-dim);
+  }
+  .action .impact {
+    display: inline-block;
+    margin-top: 8px;
+    background: rgba(92,184,116,0.12);
+    color: var(--green);
+    font-size: 11px; padding: 3px 10px; border-radius: 999px;
+    font-weight: 700; letter-spacing: 0.5px;
+  }
+
+  /* Skill attribution */
+  .skill-source {
+    display: inline-block;
+    background: var(--graphite-3);
+    color: var(--gold-soft);
+    font-size: 10px; letter-spacing: 1.5px;
+    padding: 3px 8px; border-radius: 4px;
+    margin-left: 8px; font-weight: 600;
+  }
+
+  footer {
+    margin-top: 60px; text-align: center;
+    color: var(--muted); font-size: 12px;
+  }
+  footer .tag { color: var(--gold); font-weight: 600; letter-spacing: 1px; }
+
+  @media (max-width: 980px) {
+    .grid-2, .grid-3, .tier-grid { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    html, body { background: white; color: black; }
+    .wrap { max-width: 100%; padding: 16px; }
+    .card, .tier, .action, table.comp, .alert {
+      background: white !important; border: 1px solid #ccc !important;
+      page-break-inside: avoid;
+    }
+    h2.page-title, .brand-text h1, .section-head h3, .card h4, .alert .big, .tier .price, .action h5 { color: #1a1a1a !important; }
+    h2.page-title .accent, .eyebrow, .section-head .num, .alert h4, .alert strong, .card .tag, .geo-tag, .tier ul li::before, table.comp th { color: #8a6d1a !important; }
+    .lede, .card p, .card ul li, .tier ul li, .action p, table.comp td { color: #444 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo-mark">K</div>
+      <div class="brand-text">
+        <h1>KkaloAI</h1>
+        <small>Стратегічний Brief · UA</small>
+      </div>
+    </div>
+    <div class="meta">
+      Артефакт 0 з 6 · <strong>Стратегічна основа</strong><br/>
+      Квітень 2026 · Синтез 3 спеціалізованих скілів
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="eyebrow">Передумова всіх інших артефактів</div>
+    <h2 class="page-title">Стратегічна <span class="accent">основа KkaloAI</span> —<br/>конкурентний інтел + ціни + конверсія.</h2>
+    <p class="lede">Цей документ синтезує висновки трьох спеціалізованих скілів — <strong>competitor-spy-agent</strong>, <strong>monetization-strategy-agent</strong>, <strong>store-conversion-agent-v2</strong> — і застосовує їх до KkaloAI. Усі шість маркетингових артефактів (Steps 1–6) будуються на цих рішеннях.</p>
+  </div>
+
+  <!-- ALERT: Cal AI -->
+  <div class="alert">
+    <h4>🚨 Подія, що змінює правила гри</h4>
+    <div class="big">Cal AI було ВИДАЛЕНО з App Store 21 квітня 2026.</div>
+    <p>Apple вилучив додаток за <strong>обхід in-app purchase, оманливий білінг та неможливість скасувати trial</strong>. На момент видалення Cal AI домінував у TikTok-рекламі категорії та зростав найшвидше. <strong>Це створює короткотерміновий вакуум попиту</strong>, який KkaloAI може зайняти позиціонуванням як "trustworthy alternative". Не використовуй "Cal AI" в рекламі напряму (юридичний ризик), але побудуй увесь меседжинг навколо <strong>"AI, який не сховає від тебе ціну"</strong>.</p>
+  </div>
+
+  <!-- =========================
+       1. CONKURENTNYI INTEL
+       ========================= -->
+  <section>
+    <div class="section-head">
+      <div class="num">01</div>
+      <h3>Конкурентний інтел<span class="skill-source">competitor-spy-agent</span></h3>
+    </div>
+
+    <table class="comp">
+      <thead>
+        <tr>
+          <th>Гравець</th>
+          <th>Позиціонування</th>
+          <th>Ціни</th>
+          <th>Слабкість</th>
+          <th>Як обійти</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="name">Cal AI</span></td>
+          <td>TikTok-vir, photo-first AI</td>
+          <td>$71.99/yr · $5.99/mo</td>
+          <td class="pain">Видалений з App Store. 100% з 219K рев'ю мали скарги. Accuracy issues.</td>
+          <td class="opp">Зайняти "trust" нішу. "AI який ти контролюєш" — прямий контраст.</td>
+        </tr>
+        <tr>
+          <td><span class="name">MyFitnessPal</span></td>
+          <td>Mass-market incumbent</td>
+          <td>$79.99/yr · $19.99/mo</td>
+          <td class="pain">Barcode перенесли в Premium. Update пізно-2025 зламав core. Реклама в free.</td>
+          <td class="opp">"Безкоштовний barcode назавжди" як контр-meсідж. Це біль №1 у MFP-рев'ю.</td>
+        </tr>
+        <tr>
+          <td><span class="name">Foodvisor</span></td>
+          <td>AI photo + dietitian plans</td>
+          <td>$84/yr · $15/mo · 14d trial з карткою</td>
+          <td class="pain">Trial вимагає карту. AI портії незмінні. Дорого.</td>
+          <td class="opp">"7 днів без картки" + слайдер 0.5×–2.5× прямо вирішують ці болі.</td>
+        </tr>
+        <tr>
+          <td><span class="name">SnapCalorie</span></td>
+          <td>Free AI-first (ex-Google AI)</td>
+          <td>FREE</td>
+          <td class="pain">Sustainability ризик. iOS-first. Без spec-modes.</td>
+          <td class="opp">Не битися ціною. Спеціалізовані modes (GLP-1, PCOS) як defensible niche.</td>
+        </tr>
+        <tr>
+          <td><span class="name">Yazio</span></td>
+          <td>EU-strong, recipes + 20 fasting</td>
+          <td>$47.90/yr</td>
+          <td class="pain">Слабка AI. EU-focus, US/UK слабше.</td>
+          <td class="opp">AI accuracy + Health Connect 2-way як фокус для US/UK ринку.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 style="margin-top:32px; color:var(--gold); font-size:13px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700;">Gap analysis — ніші, які реально порожні</h4>
+    <div class="grid-3" style="margin-top:14px;">
+      <div class="card gold-border">
+        <span class="tag">Перша ніша</span>
+        <h4>GLP-1 Support</h4>
+        <p>24M+ американців на Ozempic/Wegovy до 2030. <strong style="color:var(--gold)">Жоден з топ-10 додатків не має dedicated mode</strong>. Особлива потреба — protein-floor, побічки, гідратація.</p>
+      </div>
+      <div class="card gold-border">
+        <span class="tag">Друга ніша</span>
+        <h4>PCOS / Hormonal</h4>
+        <p>1 з 10 жінок репродуктивного віку має PCOS. <strong style="color:var(--gold)">0 топ-10 додатків</strong> мають cycle-aware tracking з insulin-resistance focus.</p>
+      </div>
+      <div class="card gold-border">
+        <span class="tag">Третя ніша</span>
+        <h4>Trust-led pricing</h4>
+        <p>Cal AI видалили за оманливий білінг. MFP бойкотують за paywall. <strong style="color:var(--gold)">Жоден гравець не позиціонується відкрито на чесності цін</strong> як USP.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       2. PRICING STRATEGY
+       ========================= -->
+  <section>
+    <div class="section-head">
+      <div class="num">02</div>
+      <h3>Цінова стратегія<span class="skill-source">monetization-strategy-agent</span></h3>
+    </div>
+
+    <p style="color:var(--pearl-dim); margin-bottom:20px; font-size:15px;">Скіл орієнтований на ad-monetization (LevelPlay), але його ключові принципи — <strong>сегментація payer/non-payer, geo-tier стратегія, A/B-методологія</strong> — переносяться на subscription-модель KkaloAI.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>💰 Висновок щодо ціни</h4>
+        <p><strong style="color:var(--gold)">Залишаємо $59.99/yr</strong> — між MFP ($79.99) і Yazio ($47.90). Це створює "premium but reasonable" якір. Уникаємо $49 (виглядає як демпінг) і $79 (опинимось поруч з MFP, з яким б'ються вже 10 років).</p>
+        <p style="margin-top:10px;">Місячна $7.99/mo дає 33% margin над $59.99/12=$5.00 — стимулює річну підписку.</p>
+      </div>
+
+      <div class="card">
+        <h4>🧬 Specialty-mode add-ons: НЕ робимо</h4>
+        <p>Спокусливо продавати GLP-1 mode окремо за $2.50/mo. <strong style="color:var(--red)">Не варто</strong> — це знов "MFP-style" фрагментація, з якою воюємо. Усі 4 mode входять у базовий Premium → це частина "transparent pricing" обіцянки.</p>
+        <p style="margin-top:10px;">Винятки — Future Premium+ для B2B/clinics (Q4 2026).</p>
+      </div>
+
+      <div class="card">
+        <h4>👥 Сегментація користувачів</h4>
+        <p><strong>День 0–1:</strong> повний доступ через anonymous auth, ZERO friction. Не показуємо paywall.</p>
+        <p><strong>День 2–6:</strong> ненав'язливі trial-нагадування ("ще 5 днів повного доступу").</p>
+        <p><strong>День 7:</strong> ОДНЕ нагадування про підписку. Якщо ні — soft downgrade.</p>
+        <p><strong>День 30+ free:</strong> один win-back з 30% off на річну.</p>
+      </div>
+
+      <div class="card">
+        <h4>🌍 Geo-pricing: PPP tier</h4>
+        <p><strong>Tier 1</strong> (US/UK/CA/AU): $59.99/yr — без знижки</p>
+        <p><strong>Tier 2</strong> (DE/FR/ES/IT/JP): $49.99/yr (–17%)</p>
+        <p><strong>Tier 3</strong> (PL/UA/BR/MX/IN): $24.99/yr (–58%)</p>
+        <p style="margin-top:8px;">Apple/Google автоматично пропонують PPP tiers — використати їх все, не залишати дефолт.</p>
+      </div>
+
+      <div class="card">
+        <h4>🚪 Cal AI refugee campaign</h4>
+        <p>Окрема landing page <code style="background:var(--graphite-3); padding:2px 6px; border-radius:4px; color:var(--gold-soft); font-size:12px;">/calai-alternative</code> з прямим CTA "Switch to KkaloAI in 60 sec". Дають import old Cal AI data → 50% off перший місяць. Це <strong>switcher campaign</strong>, не вічна знижка.</p>
+        <p style="margin-top:10px; color:var(--amber); font-size:12.5px;">⚠ Юридично: не використовуй "Cal AI" в App Store metadata. Тільки на власному домені та paid ads.</p>
+      </div>
+
+      <div class="card">
+        <h4>💳 IAP vs Web subscription</h4>
+        <p>Платіжна архітектура: <strong>StoreKit/Play Billing primary</strong> (бо без них Apple/Google ban — урок Cal AI).</p>
+        <p><strong>Stripe-link з email</strong> для прямих conversions (–30% commission). Доступний з web landing, не в самому додатку → дотримуємось App Store guidelines.</p>
+      </div>
+    </div>
+
+    <h4 style="margin-top:32px; color:var(--gold); font-size:13px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700;">Recommended pricing structure</h4>
+    <div class="tier-grid">
+      <div class="tier">
+        <div class="geo-tag">FREE TIER</div>
+        <h5>Завжди безкоштовно</h5>
+        <div class="price">$0<span class="sub">forever</span></div>
+        <ul>
+          <li>Barcode (3M+ products)</li>
+          <li>Favorite meals</li>
+          <li>Water tracker</li>
+          <li>Health Connect 2-way</li>
+          <li>Anonymous auth</li>
+          <li>Daily Win share cards</li>
+        </ul>
+      </div>
+      <div class="tier popular">
+        <div class="geo-tag">7-DAY TRIAL</div>
+        <h5>Без картки. Без ризику.</h5>
+        <div class="price">$0<span class="sub">7 днів</span></div>
+        <ul>
+          <li>Все з Free</li>
+          <li>AI Photo + Confirm & Adjust</li>
+          <li>Усі 4 specialty modes</li>
+          <li>Voice Log</li>
+          <li>Weekly AI Report</li>
+          <li>Soft graceful downgrade</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="geo-tag">PREMIUM</div>
+        <h5>Tier 1 (US/UK/CA/AU)</h5>
+        <div class="price">$59.99<span class="sub">/рік</span></div>
+        <ul>
+          <li>Все з Trial</li>
+          <li>3D Scan Export (Q3 2026)</li>
+          <li>Cloud backup</li>
+          <li>Priority AI processing</li>
+          <li>Або $7.99/mo</li>
+          <li>Tier 2/3 — geo-pricing</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       3. LANDING CR STRATEGY
+       ========================= -->
+  <section>
+    <div class="section-head">
+      <div class="num">03</div>
+      <h3>Конверсійна стратегія для landing<span class="skill-source">store-conversion-agent-v2</span></h3>
+    </div>
+
+    <p style="color:var(--pearl-dim); margin-bottom:20px; font-size:15px;">Скіл оптимізує App Store CR, але принципи — <strong>first-impression, trust signals, lead form friction</strong> — повністю переносяться на marketing landing.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>🎯 Hero copy: вибраний angle</h4>
+        <p><strong style="color:var(--gold)">"AI який ти контролюєш"</strong> — переможець.</p>
+        <p>Чому не "Cal AI alternative" — юридичний ризик + знижує бренд до compare-grade.</p>
+        <p>Чому не "Stop guessing" — generic, не диференціює.</p>
+        <p style="margin-top:10px;"><strong>Hero EN:</strong> "AI calorie tracker that asks before it logs."<br/><strong>Hero UA:</strong> "AI-трекер калорій, який питає, перш ніж записати."</p>
+      </div>
+
+      <div class="card">
+        <h4>📐 Above-the-fold порядок</h4>
+        <ol style="padding-left:20px; color:var(--pearl-dim); font-size:13.5px;">
+          <li>Eyebrow: "Now in Open Beta · iOS + Android"</li>
+          <li>H1 з gradient-accent на ключовому слові</li>
+          <li>Lede 1-2 речення (USP за 3 секунди)</li>
+          <li>2 CTA: primary "Get Early Access" + secondary "See how it works"</li>
+          <li>Trust row: "No card · 3M+ products · Health Connect"</li>
+          <li>Phone mockup ПРАВОРУЧ (не повний background — менше distraction)</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h4>⭐ Pre-launch social proof</h4>
+        <p>Без реальних рев'ю — використовуємо <strong>3 типи placeholder-сигналів</strong>:</p>
+        <ul>
+          <li>"As featured in [tech blog logos]" — навіть планований coverage</li>
+          <li>Beta waitlist counter ("4,237 на черзі")</li>
+          <li>3 testimonial-картки з підписами beta-testers (явно позначені як placeholder для production-етапу)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>💸 Pricing block placement</h4>
+        <p>Розміщуємо <strong>після Features + Specialty Modes</strong>, але <strong>до Testimonials</strong>. Логіка: користувач спочатку бачить <em>цінність</em>, потім бачить <em>ціну</em>, потім <em>підтвердження інших</em>.</p>
+        <p style="margin-top:10px;">Стрімі переможці (Notion, Linear) тримають pricing на 60-70% scroll-depth — KkaloAI робить так само.</p>
+      </div>
+
+      <div class="card">
+        <h4>📝 Lead form: 1-step з segmentation</h4>
+        <p><strong>Поля:</strong> ім'я · email · platform (Android/iOS/both) · cіkavий mode (4 варіанти).</p>
+        <p>Чому НЕ тільки email — segmentation дає правильний welcome-email + дозволяє таргетити запуск по mode-priority.</p>
+        <p>Чому НЕ multi-step — для pre-launch waitlist додає friction без переваги.</p>
+      </div>
+
+      <div class="card">
+        <h4>🛡 Trust signals — пріоритет</h4>
+        <ol style="padding-left:20px; color:var(--pearl-dim); font-size:13.5px;">
+          <li><strong>"No credit card required"</strong> — №1 трирен Cal AI болю</li>
+          <li><strong>"Your data, your control"</strong> — anonymous auth + GDPR</li>
+          <li><strong>Medical disclaimer</strong> — обов'язково для health-apps, інакше Apple reject</li>
+          <li>"3M+ products" — конкретна цифра краще "extensive DB"</li>
+        </ol>
+      </div>
+    </div>
+
+    <h4 style="margin-top:32px; color:var(--gold); font-size:13px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700;">CTA copy: A/B-варіанти для тестування</h4>
+    <div class="grid-3">
+      <div class="card">
+        <span class="tag">PRIMARY</span>
+        <h4>"Get Early Access →"</h4>
+        <p>Найкраще для pre-launch. "Trial" передбачає що додаток вже доступний — користувач буде confused якщо додаток ще не в сторі.</p>
+      </div>
+      <div class="card">
+        <span class="tag">POST-LAUNCH</span>
+        <h4>"Start 7-Day Free Trial →"</h4>
+        <p>Після релізу. Підкреслює no-card політику. Страх скасування мінімізується copy "no card needed".</p>
+      </div>
+      <div class="card">
+        <span class="tag">EMERGENCY</span>
+        <h4>"Switch from Cal AI →"</h4>
+        <p>Окремий landing /calai-alternative. Direct switcher campaign на платний трафік. Не на головній.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       4. ACTION PLAN
+       ========================= -->
+  <section>
+    <div class="section-head">
+      <div class="num">04</div>
+      <h3>Action Plan — пріоритети на запуск</h3>
+    </div>
+
+    <div class="actions">
+      <div class="action">
+        <h5>Cal AI Refugee Campaign — окремий landing /calai-alternative</h5>
+        <p>Поки Cal AI відсутній в App Store, кожен їх потенційний користувач шукає альтернативу. Direct landing з "Switch to KkaloAI in 60 sec" + import old Cal AI data + 50% off перший місяць.</p>
+        <span class="impact">Очікуваний impact: +30-50% installs у перші 8 тижнів</span>
+      </div>
+
+      <div class="action">
+        <h5>"No card" як головний trust signal на головному landing</h5>
+        <p>Це біль №1 у скаргах на Cal AI. KkaloAI має це не як side-feature, а як основну hero-промісію. Великий "No credit card required" під CTA-кнопкою.</p>
+        <span class="impact">Очікуваний impact: +20-35% lead form conversion</span>
+      </div>
+
+      <div class="action">
+        <h5>Bo лідіруючий "barcode forever free" як контр-MFP меседж</h5>
+        <p>MFP перенесли barcode у Premium і користувачі бунтують. KkaloAI робить barcode завжди безкоштовним → це конкретна, перевіряема обіцянка.</p>
+        <span class="impact">Очікуваний impact: +10-20% Free→Premium conversion (trust)</span>
+      </div>
+
+      <div class="action">
+        <h5>GLP-1 + PCOS modes у hero-розділі landing</h5>
+        <p>Це 2 з 3 справжніх gap-niches у категорії. Якщо людина шукає "Ozempic calorie tracker" — KkaloAI має бути єдиним що з'являється з dedicated mode.</p>
+        <span class="impact">Очікуваний impact: SEO long-tail + niche communities</span>
+      </div>
+
+      <div class="action">
+        <h5>Geo-tier pricing з 1-го дня (не "потім додамо")</h5>
+        <p>Tier 2 (DE/FR) і Tier 3 (PL/UA/BR/IN) дають більше paying users ніж дисконт виглядає. Налаштувати в App Store Connect / Play Console до запуску, не після.</p>
+        <span class="impact">Очікуваний impact: +25-40% non-US conversion rate</span>
+      </div>
+
+      <div class="action">
+        <h5>Pre-launch waitlist з counter — почати рекламу за 6 тижнів</h5>
+        <p>Counter "4,237 на черзі" створює urgency + social proof одночасно. TikTok-organic + cheap Reels ads на early-access waitlist дешевше ніж паралель installs після запуску.</p>
+        <span class="impact">Очікуваний impact: 5-10K leads до launch day</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="tag">STOP GUESSING. START KNOWING.</div>
+    <div style="margin-top:8px;">© 2026 KkaloAI · Стратегічний Brief · Синтез competitor-spy + monetization + store-conversion</div>
+  </footer>
+
+</div>
+</body>
+</html>

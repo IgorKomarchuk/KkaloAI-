@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Launch Kit Index</title>
+<style>
+  :root {
+    --graphite: #0F0F0F;
+    --graphite-2: #1a1a1a;
+    --graphite-3: #242424;
+    --gold: #D4AF37;
+    --gold-soft: #C9A961;
+    --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0;
+    --pearl-dim: #ECE9DF;
+    --muted: #9A9A9A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--graphite);
+    color: var(--pearl);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+  body {
+    background-image: radial-gradient(circle at top, rgba(212,175,55,0.10) 0%, transparent 60%);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 56px 28px 96px; }
+
+  header {
+    display: flex; align-items: center; gap: 18px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--gold-dim);
+    margin-bottom: 40px;
+  }
+  .logo {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite); display: grid; place-items: center;
+    font-weight: 800; font-size: 26px; letter-spacing: -1px;
+    box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+  }
+  .brand h1 { font-size: 26px; letter-spacing: -0.5px; }
+  .brand small {
+    color: var(--gold); font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700;
+  }
+
+  .hero { margin-bottom: 48px; }
+  .hero .eyebrow {
+    color: var(--gold); font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 12px; font-weight: 700;
+  }
+  .hero h2 {
+    font-size: clamp(32px, 4.6vw, 48px);
+    font-weight: 800; letter-spacing: -1.2px; line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .hero h2 .accent { color: var(--gold); }
+  .hero p {
+    font-size: 16px; color: var(--pearl-dim); max-width: 760px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .card {
+    background: linear-gradient(180deg, var(--graphite-2) 0%, var(--graphite-3) 100%);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    display: flex; flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold-dim);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.4);
+  }
+  .card:hover::before { transform: scaleX(1); }
+  .card .step {
+    color: var(--gold); font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
+  }
+  .card h3 {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.4px;
+    color: var(--pearl); margin: 8px 0 10px;
+  }
+  .card p {
+    font-size: 13.5px; color: var(--pearl-dim);
+    line-height: 1.55;
+    flex-grow: 1; margin-bottom: 18px;
+  }
+  .card .actions {
+    display: flex; gap: 10px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 16px;
+  }
+  .card .btn {
+    flex: 1;
+    text-align: center;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.5px; text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-html {
+    background: var(--gold-dim);
+    color: var(--gold);
+    border: 1px solid rgba(212,175,55,0.3);
+  }
+  .btn-html:hover { background: var(--gold); color: var(--graphite); }
+  .btn-pdf {
+    background: var(--graphite-3);
+    color: var(--pearl-dim);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .btn-pdf:hover { border-color: var(--gold); color: var(--gold); }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(212,175,55,0.08);
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer .tag { color: var(--gold); font-weight: 700; letter-spacing: 1px; }
+
+  @media (max-width: 980px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">K</div>
+    <div class="brand">
+      <h1>KkaloAI</h1>
+      <small>Launch & Marketing Kit · April 2026</small>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="eyebrow">Index of all 6 artifacts</div>
+    <h2>Your <span class="accent">complete launch kit</span> — open any artifact below.</h2>
+    <p>Each artifact is shipped as both interactive HTML (open in browser) and printable PDF (open in any PDF reader). Click <strong>HTML</strong> to interact, <strong>PDF</strong> to print or share.</p>
+  </div>
+
+  <div class="grid">
+
+    <a href="01_Market_Research/market_research.html" class="card">
+      <div class="step">Step 1</div>
+      <h3>Market Research</h3>
+      <p>Interactive dashboard with TAM/CAGR forecasts, regional breakdowns, platform mix, and 6 strategic insights. Conservative ↔ Aggressive scenario toggle.</p>
+      <div class="actions">
+        <a href="01_Market_Research/market_research.html" class="btn btn-html">▸ HTML</a>
+        <a href="01_Market_Research/market_research.pdf" class="btn btn-pdf">PDF</a>
+      </div>
+    </a>
+
+    <a href="02_Competitor_Analysis/competitor_analysis.html" class="card">
+      <div class="step">Step 2</div>
+      <h3>Competitor Analysis</h3>
+      <p>Filterable & sortable table of 11 apps (MyFitnessPal, Lose It!, Cronometer, Foodvisor, SnapCalorie, Yazio, Noom, MacroFactor, Lifesum, Cal AI + KkaloAI). SWOT per row.</p>
+      <div class="actions">
+        <a href="02_Competitor_Analysis/competitor_analysis.html" class="btn btn-html">▸ HTML</a>
+        <a href="02_Competitor_Analysis/competitor_analysis.pdf" class="btn btn-pdf">PDF</a>
+      </div>
+    </a>
+
+    <a href="03_Service_Catalog/service_catalog.html" class="card">
+      <div class="step">Step 3</div>
+      <h3>Service Catalog</h3>
+      <p>18 features in 6 modules: Core Tracking · AI Power · Specialty Modes · Total Health Hub · Privacy & Access · Social & Viral. With USP banner and 3-tier pricing.</p>
+      <div class="actions">
+        <a href="03_Service_Catalog/service_catalog.html" class="btn btn-html">▸ HTML</a>
+        <a href="03_Service_Catalog/service_catalog.pdf" class="btn btn-pdf">PDF</a>
+      </div>
+    </a>
+
+    <a href="04_Price_Calculator/price_calculator.html" class="card">
+      <div class="step">Step 4</div>
+      <h3>Interactive Price Calculator</h3>
+      <p>Live cost estimator: pick your plan (Free / Trial / Premium), toggle modes & add-ons, switch monthly ↔ annual. Side-by-side comparison vs MFP, Yazio, Lifesum, Lose It!.</p>
+      <div class="actions">
+        <a href="04_Price_Calculator/price_calculator.html" class="btn btn-html">▸ HTML</a>
+        <a href="04_Price_Calculator/price_calculator.pdf" class="btn btn-pdf">PDF</a>
+      </div>
+    </a>
+
+    <a href="05_Commercial_Proposal/commercial_proposal.html" class="card">
+      <div class="step">Step 5</div>
+      <h3>Commercial Proposal</h3>
+      <p>One-page B2B / investor brief on premium pearl-white paper. Stats, catalog, pricing, 6 reasons "Why KkaloAI", audience segments, CTA contact block. Print-ready.</p>
+      <div class="actions">
+        <a href="05_Commercial_Proposal/commercial_proposal.html" class="btn btn-html">▸ HTML</a>
+        <a href="05_Commercial_Proposal/commercial_proposal.pdf" class="btn btn-pdf">PDF</a>
+      </div>
+    </a>
+
+    <a href="06_Landing_Page/landing_page.html" class="card">
+      <div class="step">Step 6</div>
+      <h3>Full Landing Page</h3>
+      <p>Production-style marketing site: animated hero with phone mock, features grid, how-it-works, specialty modes, pricing, testimonials (placeholders), lead form, footer.</p>
+      <div class="actions">
+        <a href="06_Landing_Page/landing_page.html" class="btn btn-html">▸ HTML</a>
+        <a href="06_Landing_Page/landing_page.pdf" class="btn btn-pdf">PDF</a>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>
+    <div class="tag">STOP GUESSING. START KNOWING.</div>
+    <div style="margin-top:8px;">© 2026 KkaloAI · Launch &amp; Marketing Kit · 6 artifacts · Built April 2026</div>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Каталог послуг</title>
+<style>
+  :root {
+    --graphite: #1a1a1a; --graphite-2: #242424; --graphite-3: #2f2f2f;
+    --gold: #D4AF37; --gold-soft: #C9A961; --gold-dim: rgba(212,175,55,0.18);
+    --pearl: #F8F6F0; --pearl-dim: #ECE9DF; --muted: #9A9A9A;
+    --green: #5CB874; --amber: #E0A14C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--graphite); color: var(--pearl); font-family: 'Segoe UI', sans-serif; line-height: 1.55; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 48px 28px 96px; }
+
+  header { border-bottom: 1px solid var(--gold-dim); padding-bottom: 28px; margin-bottom: 40px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo-mark { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--gold), var(--gold-soft)); color: var(--graphite); display: grid; place-items: center; font-weight: 800; font-size: 20px; box-shadow: 0 4px 14px rgba(212,175,55,0.3); }
+  .brand-text h1 { font-size: 22px; font-weight: 700; }
+  .brand-text small { color: var(--muted); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .meta { text-align: right; color: var(--muted); font-size: 13px; }
+  .meta strong { color: var(--gold); font-weight: 600; }
+
+  .hero { margin-bottom: 56px; }
+  .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; }
+  h2.page-title { font-size: clamp(34px, 5vw, 52px); font-weight: 700; letter-spacing: -1.2px; line-height: 1.05; margin-bottom: 18px; }
+  h2.page-title .accent { color: var(--gold); }
+  .lede { font-size: 17px; color: var(--pearl-dim); max-width: 820px; }
+
+  .usp-banner { margin: 48px 0 56px; background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(212,175,55,0.02)); border: 1px solid var(--gold-dim); border-radius: 20px; padding: 36px; position: relative; overflow: hidden; }
+  .usp-banner::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--gold), transparent); }
+  .usp-banner h3 { font-size: 12px; color: var(--gold); letter-spacing: 2.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 16px; }
+  .usp-banner .usp-line { font-size: 26px; font-weight: 700; color: var(--pearl); letter-spacing: -0.5px; line-height: 1.25; margin-bottom: 22px; }
+  .usp-banner .usp-line em { font-style: normal; color: var(--gold); }
+  .usp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .usp-pillar { background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.12); border-radius: 12px; padding: 16px 18px; }
+  .usp-pillar .num { color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; }
+  .usp-pillar .ttl { font-size: 15px; color: var(--pearl); font-weight: 600; margin: 6px 0 6px; }
+  .usp-pillar .body { font-size: 12.5px; color: var(--pearl-dim); }
+
+  .section-head { margin: 48px 0 24px; }
+  .section-head .label { color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .section-head h3 { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; }
+  .section-head h3::before { content: ''; display: inline-block; width: 5px; height: 24px; background: var(--gold); margin-right: 14px; vertical-align: middle; border-radius: 2px; }
+  .section-head p { color: var(--muted); font-size: 14px; margin-top: 6px; padding-left: 19px; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .card { background: linear-gradient(180deg, var(--graphite-2), var(--graphite-3)); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 26px 24px; position: relative; transition: transform 0.2s ease; display: flex; flex-direction: column; }
+  .card:hover { transform: translateY(-3px); border-color: var(--gold-dim); }
+  .card.featured { border: 1px solid var(--gold); box-shadow: 0 8px 30px rgba(212,175,55,0.12); }
+  .card.featured::before { content: 'ВИЗНАЧАЛЬНА'; position: absolute; top: -10px; right: 22px; background: var(--gold); color: var(--graphite); font-size: 10px; letter-spacing: 1.5px; font-weight: 800; padding: 4px 10px; border-radius: 999px; }
+  .card-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--gold-dim); color: var(--gold); display: grid; place-items: center; font-size: 22px; margin-bottom: 16px; font-weight: 700; }
+  .card.featured .card-icon { background: linear-gradient(135deg, var(--gold), var(--gold-soft)); color: var(--graphite); }
+  .card h4 { font-size: 18px; font-weight: 700; color: var(--pearl); margin-bottom: 6px; letter-spacing: -0.3px; }
+  .card .card-tag { color: var(--gold); font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 600; margin-bottom: 12px; display: block; }
+  .card .card-desc { color: var(--pearl-dim); font-size: 13.5px; margin-bottom: 18px; }
+  .card-included { list-style: none; padding: 0; margin: 0 0 22px; flex-grow: 1; }
+  .card-included li { font-size: 13px; color: var(--pearl-dim); padding: 5px 0 5px 22px; position: relative; }
+  .card-included li::before { content: '◆'; color: var(--gold); position: absolute; left: 0; top: 6px; font-size: 9px; }
+  .card-footer { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .price-pill { padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; }
+  .pp-free { background: rgba(92,184,116,0.15); color: var(--green); }
+  .pp-trial { background: rgba(212,175,55,0.15); color: var(--gold); }
+  .pp-premium { background: rgba(224,161,76,0.15); color: var(--amber); }
+  .availability { font-size: 11px; color: var(--muted); }
+
+  .pricing { margin: 64px 0 48px; background: var(--graphite-2); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 36px; }
+  .pricing h3 { color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .pricing h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 14px; color: var(--pearl); }
+  .pricing .geo-note { color: var(--gold-soft); font-size: 13px; margin-bottom: 26px; }
+  .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .plan { background: var(--graphite-3); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 28px 24px; position: relative; }
+  .plan.popular { border: 1px solid var(--gold); background: linear-gradient(180deg, rgba(212,175,55,0.08), var(--graphite-3) 60%); box-shadow: 0 8px 30px rgba(212,175,55,0.12); transform: scale(1.02); }
+  .plan.popular::before { content: 'НАЙКРАЩА ЦІННІСТЬ'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--graphite); font-size: 10px; letter-spacing: 1.5px; font-weight: 800; padding: 4px 12px; border-radius: 999px; }
+  .plan-name { font-size: 14px; color: var(--gold); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .plan-price .num { font-size: 42px; font-weight: 800; letter-spacing: -1.5px; color: var(--pearl); }
+  .plan-price .per { color: var(--muted); font-size: 14px; margin-left: 4px; }
+  .plan-sub { color: var(--muted); font-size: 13px; margin-bottom: 22px; min-height: 18px; }
+  .plan ul { list-style: none; }
+  .plan ul li { font-size: 13px; color: var(--pearl-dim); padding: 7px 0 7px 22px; position: relative; }
+  .plan ul li::before { content: '✓'; color: var(--gold); position: absolute; left: 0; font-weight: 700; }
+  .plan ul li.muted::before { content: '–'; color: var(--muted); }
+  .plan ul li.muted { color: var(--muted); }
+
+  .disclaimer { margin-top: 48px; padding: 18px 22px; background: rgba(225,106,106,0.06); border: 1px solid rgba(225,106,106,0.18); border-radius: 12px; color: var(--pearl-dim); font-size: 12.5px; line-height: 1.55; }
+  .disclaimer strong { color: var(--pearl); }
+
+  footer { margin-top: 60px; text-align: center; color: var(--muted); font-size: 12px; }
+  footer .tag { color: var(--gold); font-weight: 600; letter-spacing: 1px; }
+
+  @media (max-width: 980px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .price-grid { grid-template-columns: 1fr; }
+    .plan.popular { transform: none; }
+    .usp-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    html, body { background: white; color: black; }
+    .wrap { max-width: 100%; padding: 12px; }
+    .card, .usp-banner, .pricing, .plan, .usp-pillar { background: white !important; border: 1px solid #ccc !important; color: black !important; page-break-inside: avoid; }
+    .card { transform: none !important; }
+    .plan.popular { transform: none !important; box-shadow: 0 0 0 2px #D4AF37 !important; }
+    .card.featured { box-shadow: 0 0 0 2px #D4AF37 !important; }
+    h2.page-title, .brand-text h1, h4, .pricing h2, .usp-banner .usp-line, .plan-price .num, .usp-pillar .ttl { color: #1a1a1a !important; }
+    h2.page-title .accent, .eyebrow, .card-tag, .pricing h3, .plan-name, .usp-banner h3, .usp-banner .usp-line em, .usp-pillar .num, .geo-note { color: #8a6d1a !important; }
+    .lede, .card-desc, .card-included li, .plan ul li, .plan-sub, .meta, .availability, .usp-pillar .body { color: #444 !important; }
+    .card-icon { background: #f4ecd2 !important; color: #8a6d1a !important; }
+    .pp-free { background: #e6f5e9 !important; color: #2c7a3e !important; }
+    .pp-trial { background: #faf2d8 !important; color: #8a6d1a !important; }
+    .pp-premium { background: #fbf1de !important; color: #8a5a14 !important; }
+    .disclaimer { background: #fef0f0 !important; border-color: #f0a8a8 !important; color: #444 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo-mark">K</div>
+      <div class="brand-text">
+        <h1>KkaloAI</h1>
+        <small>Каталог Послуг</small>
+      </div>
+    </div>
+    <div class="meta">
+      Артефакт 3 з 6 · <strong>Каталог фіч і пакетів</strong><br/>
+      Огляд продукту · Квітень 2026
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="eyebrow">Усе, що робить KkaloAI, на одній сторінці</div>
+    <h2 class="page-title">Повна <span class="accent">AI-платформа nutrition</span> —<br/>побудована на прозорості, контролі та результаті.</h2>
+    <p class="lede">KkaloAI структурований як каталог послуг: 18 фіч у 6 модулях з чіткими тарифами — Free, 7-Day Trial, Premium. Без прихованих up-sell. Без агресивних paywalls. Без медичних порад. Лише інструменти для трекінгу, корекції та дій.</p>
+  </div>
+
+  <div class="usp-banner">
+    <h3>Унікальна торгова пропозиція</h3>
+    <p class="usp-line">Єдиний AI-трекер калорій, який <em>питає, перш ніж записати</em> —<br/>зі здоровими modes, які incumbents не shipping.</p>
+    <div class="usp-grid">
+      <div class="usp-pillar">
+        <div class="num">01</div>
+        <div class="ttl">Confirm & Adjust</div>
+        <div class="body">Слайдер 0.5×–2.5× дозволяє точно налаштувати AI-портію перед записом. Без silent guesses.</div>
+      </div>
+      <div class="usp-pillar">
+        <div class="num">02</div>
+        <div class="ttl">Спец. health modes</div>
+        <div class="body">Окремі режими для GLP-1, PCOS, bulking та weight management. Усі 4 — у Premium, не дроблено.</div>
+      </div>
+      <div class="usp-pillar">
+        <div class="num">03</div>
+        <div class="ttl">Прозорі ціни</div>
+        <div class="body">7 днів trial без даних карти. Один Premium-tier з geo-pricing. Без surprise charges.</div>
+      </div>
+      <div class="usp-pillar">
+        <div class="num">04</div>
+        <div class="ttl">Native Health Connect</div>
+        <div class="body">Двосторонній sync з Android Health Connect — first-class integration, не afterthought-export.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module 1: Core Tracking -->
+  <div class="section-head">
+    <div class="label">Модуль 01</div>
+    <h3>Core Tracking</h3>
+    <p>Щоденний food log — швидко, точно і безкоштовно назавжди.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card featured">
+      <div class="card-icon">📷</div>
+      <span class="card-tag">Визначальна фіча</span>
+      <h4>AI Photo + Confirm & Adjust</h4>
+      <p class="card-desc">Зніми фото. AI ідентифікує блюдо й оцінює порцію. Слайдер 0.5×–2.5× дозволяє точно налаштувати перед підтвердженням — щоб лог відображав реальність, не здогадку.</p>
+      <ul class="card-included">
+        <li>Розпізнавання багатокомпонентних блюд</li>
+        <li>Слайдер порції (0.5× – 2.5×)</li>
+        <li>Manual override на елемент</li>
+        <li>Re-scan якщо невпевнений</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-trial">Trial → Premium</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <span class="card-tag">Завжди безкоштовно</span>
+      <h4>Barcode сканер</h4>
+      <p class="card-desc">Скануй упаковані продукти проти бази 3M+ товарів. Миттєві macros та порції, з offline-кешем для повторюваних items. <strong style="color:var(--gold)">Завжди безкоштовно</strong> — на відміну від MFP, який переніс це у Premium.</p>
+      <ul class="card-included">
+        <li>3M+ продуктів (Open Food Facts + USDA)</li>
+        <li>Offline-кеш</li>
+        <li>Кастомні розміри порцій</li>
+        <li>Додай відсутні продукти за 10 секунд</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-free">Завжди безкоштовно</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">⭐</div>
+      <span class="card-tag">Завжди безкоштовно</span>
+      <h4>Улюблені страви</h4>
+      <p class="card-desc">Зберігай будь-яку страву як улюблену в один тап. Re-log наступного дня за дві секунди. Ідеально для сніданків, meal-prep і пост-тренувальних шейків.</p>
+      <ul class="card-included">
+        <li>Необмежені улюблені</li>
+        <li>Групування по папках</li>
+        <li>Quick-log з widget</li>
+        <li>Поділись улюбленим з друзями</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-free">Завжди безкоштовно</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module 2: AI Power -->
+  <div class="section-head">
+    <div class="label">Модуль 02</div>
+    <h3>AI Power Features</h3>
+    <p>Де AI переходить від "оцінки" до "інсайту".</p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🎤</div>
+      <span class="card-tag">Voice-first</span>
+      <h4>Voice Log</h4>
+      <p class="card-desc">"Я з'їв два шматки тосту з sourdough та капучино." AI парсить речення, оцінює macros і додає в лог — підтверджується тим самим слайдером.</p>
+      <ul class="card-included">
+        <li>Розуміння природньої мови</li>
+        <li>Кілька items з однієї фрази</li>
+        <li>Працює EN, ES, FR, DE, UA</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-trial">Trial → Premium</span>
+        <span class="availability">Q2 2026</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">📈</div>
+      <span class="card-tag">Тижневий інсайт-engine</span>
+      <h4>Weekly AI Report</h4>
+      <p class="card-desc">Кожної неділі — персоналізований summary patterns, які AI помітив (білкові розриви, цукрові сплески, тренди гідратації) з однією конкретною рекомендацією для наступного тижня.</p>
+      <ul class="card-included">
+        <li>Тренди macros & мікронутрієнтів</li>
+        <li>Pattern detection (напр. weekend overeating)</li>
+        <li>Один actionable nudge на report</li>
+        <li>Shareable PDF</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-premium">Premium</span>
+        <span class="availability">День 1 · Лише Premium</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">💡</div>
+      <span class="card-tag">Smart suggestions</span>
+      <h4>Рекомендації страв</h4>
+      <p class="card-desc">На основі того що з'їв сьогодні + denних targets, KkaloAI пропонує 3 страви для закриття gap — фільтровані за твоїм specialty mode (GLP-1-friendly, PCOS-aligned тощо).</p>
+      <ul class="card-included">
+        <li>Goal-aware suggestions</li>
+        <li>Mode-aware фільтр</li>
+        <li>Збережи як улюблене</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-premium">Premium</span>
+        <span class="availability">Q2 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module 3: Specialty Modes -->
+  <div class="section-head">
+    <div class="label">Модуль 03</div>
+    <h3>Спеціалізовані health modes</h3>
+    <p>Чотири окремі tracking-середовища. Перемикайся між ними коли треба. <strong style="color:var(--gold)">Усі 4 в Premium — не дроблено в add-ons</strong> (на відміну від конкурентів).</p>
+  </div>
+  <div class="card-grid">
+    <div class="card featured">
+      <div class="card-icon">💉</div>
+      <span class="card-tag">Перший у галузі</span>
+      <h4>GLP-1 Support Mode</h4>
+      <p class="card-desc">Розроблено для користувачів Ozempic, Wegovy, Mounjaro або Zepbound. Tracking injection day, побічних ефектів, гідратації, protein floor + м'які re-feed нагадування узгоджені з циклом препарату.</p>
+      <ul class="card-included">
+        <li>Трекер injection day</li>
+        <li>Лог побічних ефектів (нудота, втома...)</li>
+        <li>Protein-floor enforcement (зберегти м'язи)</li>
+        <li>Hydration & electrolyte нагадування</li>
+        <li>Mode-aware рекомендації страв</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-premium">Premium</span>
+        <span class="availability">День 1 · Лише Premium</span>
+      </div>
+    </div>
+
+    <div class="card featured">
+      <div class="card-icon">♀</div>
+      <span class="card-tag">Underserved niche</span>
+      <h4>PCOS & Гормональний баланс</h4>
+      <p class="card-desc">Tracking з усвідомленням фази циклу + insulin-resistance friendly страви. Carb-quality scoring, glycemic-index підказки + watch інозитол/Mg/Vit-D мікронутрієнтів.</p>
+      <ul class="card-included">
+        <li>Tracking фаз циклу (4 фази)</li>
+        <li>Carb-quality scoring</li>
+        <li>Hormonal-friendly meal filter</li>
+        <li>Watch мікронутр. (інозитол, Mg, D)</li>
+        <li>Лог настрою + енергії</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-premium">Premium</span>
+        <span class="availability">День 1 · Лише Premium</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">💪</div>
+      <span class="card-tag">Lean & dirty bulks</span>
+      <h4>Bulking / м'язовий приріст</h4>
+      <p class="card-desc">Збудовано для атлетів і lifters. Адаптивний caloric surplus на основі weight trend, protein-per-kg targets та налаштування агресивності surplus (lean / standard / aggressive).</p>
+      <ul class="card-included">
+        <li>Adaptive surplus algorithm</li>
+        <li>Protein/kg target enforcement</li>
+        <li>Surplus aggressiveness setting</li>
+        <li>Тренувальний vs відпочинок калорії</li>
+        <li>Body comp trend</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-premium">Premium</span>
+        <span class="availability">День 1 · Лише Premium</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">⚖</div>
+      <span class="card-tag">Класична мета</span>
+      <h4>Weight Management</h4>
+      <p class="card-desc">Адаптивний deficit на основі реального weight trend (не daily noise ваги). Plateau detection і м'яка re-calibration без punitive nudges.</p>
+      <ul class="card-included">
+        <li>Adaptive deficit (на основі trend)</li>
+        <li>Plateau detection</li>
+        <li>Re-feed day suggestions</li>
+        <li>Maintenance switch коли мета досягнута</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-premium">Premium</span>
+        <span class="availability">День 1 · Лише Premium</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module 4: Health Hub -->
+  <div class="section-head">
+    <div class="label">Модуль 04</div>
+    <h3>Total Health Hub v1.0</h3>
+    <p>Щоденний biofeedback, який контекстуалізує food log.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🌡</div>
+      <span class="card-tag">Daily check-in</span>
+      <h4>Biofeedback Tracker</h4>
+      <p class="card-desc">30-секундний денний check-in: сон, стрес, енергія, настрій, травлення. Cross-referenced з food log щоб виявити patterns ("low energy days correlate with low protein breakfasts").</p>
+      <ul class="card-included">
+        <li>5 dimensions, 30 секунд</li>
+        <li>Cross-correlation з macros</li>
+        <li>Pattern surfacing у weekly report</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-trial">Trial → Premium</span>
+        <span class="availability">Q2 2026</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">💧</div>
+      <span class="card-tag">Завжди безкоштовно</span>
+      <h4>Water Tracker</h4>
+      <p class="card-desc">Goal розраховується від ваги тіла + активності + клімату. Quick-add кнопки, widget на home screen.</p>
+      <ul class="card-included">
+        <li>Smart розрахунок цілі</li>
+        <li>One-tap quick add</li>
+        <li>Home-screen widget</li>
+        <li>Розклад нагадувань</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-free">Завжди безкоштовно</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <span class="card-tag">Native sync</span>
+      <h4>Health Connect 2-Way</h4>
+      <p class="card-desc">First-class двосторонній sync з Android Health Connect (і Apple Health на iOS). Pulls вагу, активність, сон — pushes калорії, воду, macros — тримає вашу екосистему coherent.</p>
+      <ul class="card-included">
+        <li>Двосторонній sync (read + write)</li>
+        <li>Health Connect (Android) native</li>
+        <li>Apple Health (iOS) native</li>
+        <li>Granular контроль дозволів</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-free">Завжди безкоштовно</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module 5: Privacy -->
+  <div class="section-head">
+    <div class="label">Модуль 05</div>
+    <h3>Приватність & доступ</h3>
+    <p>Спробуй спочатку, виріши потім. Завжди opt-in, ніколи не paywall на дверях.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">👻</div>
+      <span class="card-tag">Спробуй без commitment</span>
+      <h4>Анонімна авторизація</h4>
+      <p class="card-desc">Відкрий додаток, тапни "Try anonymously" — і ти всередині. Використовуй усі Free + Trial фічі без email чи пароля. Перетвори на real account будь-коли — твої дані пройдуть з тобою.</p>
+      <ul class="card-included">
+        <li>Без email при install</li>
+        <li>Без оплати за trial</li>
+        <li>Migrate до account будь-коли</li>
+        <li>Local-first зберігання даних</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-free">Завжди безкоштовно</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+
+    <div class="card featured">
+      <div class="card-icon">🎁</div>
+      <span class="card-tag">Frictionless</span>
+      <h4>7-денний безкоштовний Trial</h4>
+      <p class="card-desc">Усі Premium-фічі розблоковано на 7 днів. <strong>БЕЗ кредитної картки.</strong> На день 7 додаток gracefully повертається до Free, якщо не upgrade. Без dark patterns. <strong style="color:var(--gold)">Прямий counter до Cal AI</strong>, який забанили саме за оманливий trial-білінг.</p>
+      <ul class="card-included">
+        <li>Повний Premium на 7 днів</li>
+        <li>Без даних картки</li>
+        <li>М'який graceful downgrade</li>
+        <li>Одне нагадування, не п'ять</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-trial">Trial</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <span class="card-tag">Privacy-first</span>
+      <h4>Контроль даних</h4>
+      <p class="card-desc">Експортуй повну історію як JSON або CSV будь-коли. Видали account і всі дані одним тапом. GDPR + CCPA compliant.</p>
+      <ul class="card-included">
+        <li>Експорт у JSON / CSV</li>
+        <li>One-tap видалення account</li>
+        <li>GDPR + CCPA compliant</li>
+        <li>Дані не продаються, ніколи</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-free">Завжди безкоштовно</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module 6: Social -->
+  <div class="section-head">
+    <div class="label">Модуль 06</div>
+    <h3>Social & Viral Share</h3>
+    <p>Вбудовані growth loops, спроєктовані для TikTok і Reels.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🎬</div>
+      <span class="card-tag">Viral-ready</span>
+      <h4>Daily Win Cards</h4>
+      <p class="card-desc">Коли ти досягаєш цілі по білку, воді чи калоріях — KkaloAI генерує красиву share-картку. Один тап до TikTok, Instagram або X з #KkaloAI.</p>
+      <ul class="card-included">
+        <li>Auto-generated при досягненні цілі</li>
+        <li>Branded але з смаком</li>
+        <li>One-tap share на 4 платформи</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-free">Завжди безкоштовно</span>
+        <span class="availability">День 1 · iOS + Android</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🧊</div>
+      <span class="card-tag">Body comp візуалізація</span>
+      <h4>3D Scan Export</h4>
+      <p class="card-desc">Місячний 3D scan тіла, рендеринг як rotating GIF або video — ідеально для TikTok-progress постів. Privacy: рендеринг локально, ніколи не uploadиться.</p>
+      <ul class="card-included">
+        <li>Місячний 3D scan тіла</li>
+        <li>Експорт GIF + MP4</li>
+        <li>Лише локальний рендер</li>
+        <li>Compare з минулими scans</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-premium">Premium</span>
+        <span class="availability">Q3 2026</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🤝</div>
+      <span class="card-tag">Squad accountability</span>
+      <h4>Friend Pods</h4>
+      <p class="card-desc">Запроси до 5 друзів у приватний pod. Поділися weekly summaries (вибираєш що), радій win'ам один одного. Без публічних leaderboards, без shame.</p>
+      <ul class="card-included">
+        <li>До 5 друзів на pod</li>
+        <li>Granular контроль того, що поділишся</li>
+        <li>Weekly digest only (без spam)</li>
+      </ul>
+      <div class="card-footer">
+        <span class="price-pill pp-free">Завжди безкоштовно</span>
+        <span class="availability">Q3 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="pricing">
+    <h3>Тарифи та ціни</h3>
+    <h2>Три tiers. Нуль сюрпризів.</h2>
+    <div class="geo-note">💡 Geo-pricing: Tier 1 (US/UK/CA/AU) показано нижче. Tier 2 (DE/FR/JP) — $49.99/yr. Tier 3 (PL/UA/BR/IN) — $24.99/yr.</div>
+    <div class="price-grid">
+      <div class="plan">
+        <div class="plan-name">Free</div>
+        <div class="plan-price"><span class="num">$0</span></div>
+        <div class="plan-sub">Назавжди, без картки</div>
+        <ul>
+          <li>Barcode сканер (3M+)</li>
+          <li>Улюблені страви</li>
+          <li>Water tracker</li>
+          <li>Health Connect 2-way</li>
+          <li>Анонімна авторизація</li>
+          <li>Daily Win Cards</li>
+          <li>Friend Pods</li>
+          <li class="muted">Без AI photo</li>
+          <li class="muted">Без spec modes</li>
+          <li class="muted">Без weekly AI report</li>
+        </ul>
+      </div>
+
+      <div class="plan popular">
+        <div class="plan-name">7-Day Trial</div>
+        <div class="plan-price"><span class="num">$0</span></div>
+        <div class="plan-sub">Без даних картки</div>
+        <ul>
+          <li>Усе з Free</li>
+          <li>AI Photo Recognition</li>
+          <li>Confirm & Adjust slider</li>
+          <li>Voice Log</li>
+          <li>Усі 4 spec modes</li>
+          <li>Weekly AI Report</li>
+          <li>Рекомендації страв</li>
+          <li>Biofeedback Tracker</li>
+          <li>М'який downgrade</li>
+          <li>Одне нагадування</li>
+        </ul>
+      </div>
+
+      <div class="plan">
+        <div class="plan-name">Premium</div>
+        <div class="plan-price"><span class="num">$59.99</span><span class="per">/yr</span></div>
+        <div class="plan-sub">або $7.99/mo · скасуй будь-коли</div>
+        <ul>
+          <li>Усе з Trial</li>
+          <li>3D Scan Export (Q3 2026)</li>
+          <li>Необмежені weekly reports</li>
+          <li>Priority AI processing</li>
+          <li>Cloud backup & sync</li>
+          <li>Експорт історії (JSON/CSV)</li>
+          <li>Early access до нових modes</li>
+          <li>Підтримка < 24h</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Медичне застереження.</strong> KkaloAI — інструмент для трекінгу та інформації, не медичний пристрій. Не діагностує, не лікує, не дає медичних порад. Спеціалізовані modes (GLP-1, PCOS, Bulking, Weight Management) розроблені, щоб допомогти користувачам організувати self-tracking навколо їх особистого health-context — вони НЕ замінюють консультацію кваліфікованого медика.
+  </div>
+
+  <footer>
+    <div class="tag">STOP GUESSING. START KNOWING.</div>
+    <div style="margin-top:8px;">© 2026 KkaloAI · Каталог послуг · Артефакт 3 з 6</div>
+  </footer>
+</div>
+</body>
+</html>

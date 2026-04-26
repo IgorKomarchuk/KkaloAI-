@@ -1,0 +1,171 @@
+KkaloAI — Повний огляд функціоналу
+?? Основне сканування (5)
+AI Food Photo Scanner — Gemini 2.5 Flash Vision + cooking method detection (oil sheen/charring)
+Confirm & Adjust slider — 0.5x–2.5x коригування порції ? диференціатор
+Barcode Scanner — GMS Code Scanner + OpenFoodFacts (3M+ продуктів)
+Voice Logging — Android SpeechRecognizer > Gemini text parse
+AR 3D Volume Scanner — Sceneform 1.23, передає об'єм як hint у основний промпт
+?? Трекінг (6)
+Daily Calorie Log (Room + Firestore sync)
+Macro Breakdown (P/C/F з прогрес-барами)
+Water Tracker (+250/500/750 мл + HC sync)
+Body Weight > Health Connect write
+Favorite Meals (long-press, "Log again")
+Daily Biofeedback Check-in (Energy 1-5, Mood, GLP-1 симптоми)
+?? AI фічі (4)
+Адаптивний Gemini — промпт змінюється від HealthGoal + GLP-1 + PCOS
+Weekly AI Report — WorkManager + push, отримує meals+biofeedback+context
+AI Meal Planner Chat — Gemini startChat, JSON extraction > Planned meals
+Personalized recipes (у Weekly Report)
+?? Health modes (4)
+GLP-1 (Ozempic/Wegovy) — protein focus + symptom tracking
+Bulking — "celebrate whole-food calories"
+PCOS / Hormonal — glycemic load focus
+Loss/Maintain/Bulk goal
+?? Platform (6)
+Health Connect 2-way (Nutrition/Hydration/Weight + Steps/Burned read)
+Firebase Auth anonymous
+Firestore cloud sync
+Analytics + Crashlytics
+Viral Share button (TikTok/Reels/Shorts)
+Streaks (fire icon)
+?? Монетизація (3)
+7-day free trial Hard paywall
+Google Play Billing 7.x ($2.49/mo, $19.99/yr)
+Transparent Pricing до реєстрації ? диференціатор
+?? Settings (4)
+10 мов (en/uk/pl/de/es/pt/fr/ru/it/hi)
+Imperial/Metric toggle
+Calorie goal editor
+Privacy Policy
+?? Що треба для $1M/міс — чесний аналіз
+Математика: $1M MRR @ $3 ARPU (blended) = ~330K платних підписників. Cal AI зробив $8M ARR за 8 міс = $666K MRR. Досяжно, але з поточним MVP ти впрешся в стелю $50K/міс максимум.
+
+?? TIER 1 — блокери росту (без цього $1M нереально)
+1. iOS версія — ?? найбільший важіль
+Android = лише 35-40% revenue в H&F категорії
+Без iOS стеля = ~$400K/міс theoretical max
+Action: Kotlin Multiplatform або нативний Swift, ~2-3 міс для MVP-паритету
+2. Referral / Invite система — Cal AI flywheel
+У бізнес-плані ти писав про creator referral codes, але в коді 0 імплементації
+Треба: referral_code у UserPreferences, deep links через Firebase Dynamic Links, екран "Invite friend > обоє отримують 1 місяць безкоштовно"
+Impact: k-factor 0.3-0.5 = органічний ріст без UA витрат
+3. Smart Notifications / Reminders — retention killer
+Зараз 0 локальних notifications крім weekly report
+H&F retention D30 median 40% > без reminders впадеш до 20%
+Треба: "Log breakfast?" в 9:00, "Hydrate!" кожні 2 год, "Don't lose your 14-day streak!" ввечері
+Action: AlarmManager + Settings toggle "Reminders on/off"
+4. Personalized Calorie Reveal в онбордингу
+Cal AI онбординг = 10+ кроків з age/sex/height/weight/activity > "Your personalized plan: 1,847 kcal/day" великим шрифтом = dopamine hit перед paywall
+Твій онбординг 5 сторінок без цього моменту
+Impact: +20-30% trial-to-paid conversion
+?? TIER 2 — ARPU боост (х2-3 revenue без нових юзерів)
+5. Premium+ тариф ($9.99/мо)
+AI Coach — unlimited chat (зараз planner обмежень немає але не позиціонується як преміум)
+Custom meal plans PDF
+Advanced analytics (weight trend, macro history, plateau detection)
+Impact: 15-20% юзерів апгрейдяться = +50% ARPU
+6. Progress Charts (тижневі/місячні)
+Графіки ваги, середніх калорій, макро-розподілу
+Зараз цього немає взагалі — Weekly Report дає текст але не візуалізацію
+Без цього юзер не бачить прогресу = churn
+7. Achievements + Daily Missions
+"First scan", "7-day streak", "10L water logged"
+"Today's mission: hit protein goal"
+Gamification = +25% daily actives
+8. Family plan ($14.99/мо на 4 акки) + Lifetime ($59 one-time)
+Конвертує "не хочу щомісячну підписку" юзерів
+Lifetime особливо добре для TikTok трафіку
+?? TIER 3 — moat / диференціація (на пізніше)
+9. Recipe Scanner — фото рецепту > макроси на порцію (план має, код 0%)
+10. Restaurant Menu Scanner — фото меню > калорії кожної страви
+11. Fridge Scanner — "що приготувати з цим?"
+12. Weekly AI Meal Plans — 7-денний план, printable PDF
+13. In-app Recipe Library — з AI-генерацією по макросах
+?? Технічні gaps до $1M scale
+14. Gemini cost control
+При 300K DAU ? 3 скани/день = 900K API calls/день ? $0.0011 = $1,000/день = $30K/міс тільки на Gemini
+Треба: image hash cache (однакові barcodes > Firestore cache), server-side proxy через Cloud Functions щоб контролювати rate
+15. Firebase Blaze plan + Firestore композитні індекси
+Spark plan ламається на 50K DAU
+16. Server-side Weekly Report (Cloud Functions) замість WorkManager
+Battery optimization на Android 12+ вбиває WorkManager > 30% юзерів не отримають звіт
+17. Onboarding A/B test framework (Firebase Remote Config)
+Без A/B тестів ти не оптимізуєш conversion. Cal AI ганяє 50+ експериментів паралельно
+?? Реалістична дорожня карта до $1M/міс
+Тайм	Action	Impact
+M1-3	MVP launch (готово ?) + Smart reminders + Referral + Personalized reveal	$50K/міс
+M4-6	iOS launch (KMP), Premium+ tier, Progress charts	$150K/міс
+M7-9	Recipe Scanner, Menu Scanner, Achievements, Family plan	$400K/міс
+M10-12	AI Meal Plans, Weekly challenges, server-side cost control	$700K/міс
+M13-18	B2B corporate wellness deals, insurance partnerships	$1M+/міс
+?? Моя ?? порада
+Додаток зараз технічно на рівні Cal AI + кілька унікальних фіч (AR, GLP-1 інтеграція, адаптивний AI). Але продукт ? бізнес.
+
+Твої реальні 3 топ-пріоритети на наступний місяць:
+
+?? Почати iOS (без цього не грай)
+?? Referral система (TikTok creators без цього = злив грошей)
+?? Smart reminders (без retention всі acquisition = мимо каси)
+Хочеш щоб я добив одне з Tier 1 зараз? Можу зробити Smart Reminders + Referral за один прохід — це ~2 години роботи в коді.
+
+Monitor закрито (білд уже завершився успішно раніше). Чекаю на твою відповідь щодо наступних кроків — почати з Smart Reminders + Referral?
+
+Напиши повний список що ти можешь зробити ?
+з того що ти зпропонував!
+Ось чесний список. Розбив на те що я повністю закодю в цьому проекті vs де потрібна твоя участь.
+
+? МОЖУ ЗРОБИТИ ПОВНІСТЮ (код + UI + integration)
+Tier 1 — retention/growth блокери
+#	Фіча	Обсяг	Блокер
+A	Smart Reminders	AlarmManager + NotificationChannels, screen в Settings "Reminders" з тогглами та time pickers (breakfast/lunch/dinner log, water кожні 2 год, evening streak reminder, missed check-in)	нема
+B	Referral / Invite система	Referral code gen, екран "Invite friends", Firebase Dynamic Links для deep-link onboarding, attribution в Analytics, "обоє отримують 1 міс free" логіка	Потрібно від тебе: увімкнути Firebase Dynamic Links у Console (1 клік)
+C	Personalized Calorie Reveal onboarding	Розширити онбординг на 10 кроків (age/sex/height/weight/activity/rate of change) > Mifflin-St Jeor TDEE > великий reveal екран з персональною ціллю > передача в UserPreferences.calorieGoal автоматично	нема
+Tier 2 — ARPU
+#	Фіча	Обсяг	Блокер
+D	Progress Charts	3 графіки (weight trend, daily calorie avg 30d, macro distribution) на окремому екрані Stats. Compose Canvas без libs	нема
+E	Achievements + Daily Missions	AchievementEntry Room entity, 15+ achievements ("First scan", "7-day streak", "10k ml water"), Dashboard card "Today's mission", unlock toasts	нема
+F	Premium+ tier (UI + gating)	Новий $9.99 plan на Paywall, feature gating: AI Planner chat locked for base tier, advanced analytics locked, "Upgrade" banners	Тобі: створити snapcal_premium_monthly в Play Console
+G	Family plan + Lifetime	UI на Paywall (3-4 plans grid) + Play Billing handling	Тобі: створити продукти в Play Console
+Tier 3 — moat
+#	Фіча	Обсяг	Блокер
+H	Recipe Scanner	Окремий mode на ScannerScreen, Gemini prompt: "parse this recipe photo > calories per serving + ingredients", інтеграція з MealDao	нема
+I	Restaurant Menu Scanner	Mode "Menu" — фото меню > Gemini повертає list страв з калоріями > вибір який з'їв	нема
+J	Fridge Scanner	Mode "Fridge" > Gemini повертає 3 рецепти з того що бачить, з макро	нема
+K	Weekly AI Meal Plans	Окремий екран "Meal Plan", Gemini генерує 7-денний план адаптований під HealthGoal + GLP-1, збереження як isPlanned=true meals, export у PDF (iText або native PdfDocument)	нема
+L	In-app Recipe Library	Екран "Recipes", 50 preset + AI generation по macros, збереження favorites	нема
+Tech / scale
+#	Фіча	Обсяг	Блокер
+M	Gemini image cache	Hash image > Firestore lookup > скан тільки якщо miss. Для barcode — кешувати за barcode string. Знижує API cost 40-60%	нема
+N	Onboarding A/B framework	Firebase Remote Config інтеграція + feature flags для paywall/onboarding variants	Тобі: налаштувати перші эксперименти в Firebase Console
+O	Deep feature gating	FeatureGates util, центральна логіка "is user premium / premium+" з BillingManager	нема
+P	Planned meal "eaten" notifications	Якщо юзер планував обід на 13:00 — push о 13:30 "Did you eat Chicken Salad?" кнопки Yes/No	нема
+?? МОЖУ ЧАСТКОВО (потрібна твоя дія)
+#	Фіча	Що я зроблю	Що зробиш ти
+Q	Server-side Weekly Report (Cloud Functions)	Напишу Functions код на TypeScript, перенесу Gemini виклик з клієнта на сервер	Deploy через firebase deploy --only functions, апгрейд на Blaze plan
+R	Localized paywall pricing	Код для форматування з Play Billing локальної ціни	нема (Play Billing робить сам)
+? НЕ МОЖУ В ЦЬОМУ ПРОЕКТІ
+#	Фіча	Причина
+iOS нативна версія	Потребує Xcode + macOS + Swift проект з нуля. Можу тільки запропонувати KMP (Kotlin Multiplatform) міграцію — велика переробка (~2-3 тижні), окремий проект	
+Web dashboard	Окремий проект React/Next.js — можу зробити, але це 2-3 дні роботи в окремому repo	
+Google Play продукти	Тільки ти маєш доступ до Play Console	
+Firebase Blaze upgrade	Тільки ти (платіжна інформація)	
+Реклама / TikTok акаунт	Маркетинг, не код	
+App Store Optimization assets (screenshots, icon)	Потрібен графічний дизайн — я можу тільки описати композицію	
+?? Моя пропозиція на найближчу сесію
+Оптимальний порядок (максимум impact/година):
+
+Пакет 1 (2-3 год, 0 блокерів): A + B + C — Smart Reminders + Referral + Personalized Onboarding
+> Це Tier 1. Без них ти не утримаєш юзерів після установки. Працює автономно.
+
+Пакет 2 (2-3 год): D + E + O + P — Progress Charts + Achievements + Feature Gates + Planned push
+> Retention + gamification layer.
+
+Пакет 3 (4-5 год): H + I + J + K — Recipe/Menu/Fridge Scanner + Weekly Meal Plans
+> 4 нові AI фічі = 4 причини для юзера відкрити app щодня.
+
+Пакет 4 (2-3 год): F + G + M — Premium+ tier + Family/Lifetime + Gemini cache
+> ARPU boost + cost control.
+
+Пакет 5 (3-4 год): N + Q + R — A/B framework + Cloud Functions + localized pricing
+> Для масштабу.

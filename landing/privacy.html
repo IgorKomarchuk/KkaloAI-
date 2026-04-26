@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <title>Privacy Policy – KkaloAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10B981;
+            --bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #F9FAFB;
+            --text-muted: #9CA3AF;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 100px 24px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 40px;
+            transition: transform 0.2s;
+        }
+        .back-link:hover { transform: translateX(-5px); }
+
+        h1 { font-size: 48px; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
+        .date { color: var(--text-muted); font-size: 14px; margin-bottom: 60px; }
+
+        .content-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 40px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 { font-size: 24px; font-weight: 700; margin-top: 40px; color: var(--primary); }
+        h2:first-of-type { margin-top: 0; }
+        
+        p { margin-bottom: 20px; color: #D1D5DB; }
+        strong { color: #fff; }
+        
+        ul { margin-bottom: 20px; padding-left: 20px; }
+        li { margin-bottom: 10px; color: #D1D5DB; }
+
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to KkaloAI</a>
+    
+    <h1>Privacy Policy</h1>
+    <p class="date">Last updated: April 19, 2026</p>
+
+    <div class="content-card">
+        <h2>1. Overview</h2>
+        <p>KkaloAI ("we", "our", or "us") provides AI-powered nutritional tracking services. This policy outlines how we handle your data in compliance with Google Play Policies, GDPR, and CCPA.</p>
+
+        <h2>2. Data Collection & AI Analysis</h2>
+        <p>We collect only the data necessary to provide personalized nutrition insights:</p>
+        <ul>
+            <li><strong>AI Photo Analysis:</strong> Food photos are processed in real-time by Google's Gemini and Groq API (using Meta Llama models). <strong>Photos are NOT stored on our servers</strong> and are discarded immediately after calories are calculated.</li>
+            <li><strong>Nutritional Logs:</strong> Your meal history, calorie counts, and macro data are stored locally on your device or in our secure cloud if you use synchronization.</li>
+            <li><strong>GLP-1 Companion Data:</strong> If enabled, optional symptom tracking (e.g., appetite, energy levels) is stored locally to provide personalized nutritional coaching. This data is NEVER shared with insurance companies or pharmaceutical third parties.</li>
+        </ul>
+
+        <h2>3. Health Connect Integration</h2>
+        <p>KkaloAI participates in Android Health Connect. If you grant permission, we write and/or read nutrition data to help you maintain a holistic health profile. This data is handled according to the <a href="https://developers.google.com/health-connect/policy">Google Play Health Connect Permissions Policy</a>.</p>
+
+        <h2>4. Data Minimization & Security</h2>
+        <p>We use industry-standard TLS encryption for all data in transit. We prioritize <strong>local processing</strong> to keep your personal lifestyle choices private. We do not sell your data to advertisers.</p>
+
+        <h2>5. Your Rights (GDPR & CCPA)</h2>
+        <p>You have the right to access, export, or delete your data at any time. You can clear your meal history directly within the app settings. For a full account deletion and metadata removal, please use the "Delete Account" button in settings or contact us.</p>
+
+        <h2>6. Medical Disclaimer</h2>
+        <p>KkaloAI is a nutritional information tool and is NOT a medical device. Our AI Coach and GLP-1 Companion provide general wellness information based on your logs. Always seek the advice of a qualified healthcare provider for any medical condition.</p>
+
+        <h2>7. Contact Us</h2>
+        <p>For any privacy inquiries or data requests, please contact:<br>
+        📧 <a href="mailto:isktrend@gmail.com">isktrend@gmail.com</a></p>
+    </div>
+
+    <footer>
+        &copy; 2026 KkaloAI. All rights reserved.
+    </footer>
+</body>
+</html>

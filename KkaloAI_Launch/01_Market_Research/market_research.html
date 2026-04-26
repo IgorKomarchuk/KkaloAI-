@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Market Research Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --graphite: #1a1a1a;
+    --graphite-2: #242424;
+    --graphite-3: #2f2f2f;
+    --gold: #D4AF37;
+    --gold-soft: #C9A961;
+    --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0;
+    --pearl-dim: #ECE9DF;
+    --muted: #9A9A9A;
+    --shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--graphite);
+    color: var(--pearl);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 48px 32px 96px; }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo-mark {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+    color: var(--graphite);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 20px;
+    letter-spacing: -0.5px;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.3);
+  }
+  .brand-text h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .brand-text small {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .meta {
+    text-align: right;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .meta strong { color: var(--gold); font-weight: 600; }
+
+  /* Title */
+  .title-block { margin-bottom: 40px; }
+  .eyebrow {
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  h2.page-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  h2.page-title .accent { color: var(--gold); }
+  .lede {
+    font-size: 17px;
+    color: var(--pearl-dim);
+    max-width: 780px;
+  }
+
+  /* KPI grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 48px;
+  }
+  .kpi {
+    background: linear-gradient(180deg, var(--graphite-2) 0%, var(--graphite-3) 100%);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 22px 22px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+  }
+  .kpi-label {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .kpi-value {
+    font-size: 34px;
+    font-weight: 700;
+    margin-top: 12px;
+    color: var(--pearl);
+    letter-spacing: -1px;
+  }
+  .kpi-value .unit { color: var(--gold); font-size: 22px; margin-left: 4px; }
+  .kpi-sub {
+    margin-top: 6px;
+    color: var(--gold-soft);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .kpi-trend { color: var(--muted); font-size: 12px; margin-top: 10px; }
+
+  /* Section */
+  section { margin-bottom: 48px; }
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .section-head h3 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .section-head h3::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 22px;
+    background: var(--gold);
+    margin-right: 12px;
+    vertical-align: middle;
+    border-radius: 2px;
+  }
+
+  /* Chart layout */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .card {
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pearl);
+    margin-bottom: 4px;
+  }
+  .card .desc {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 18px;
+  }
+  .chart-wrap { position: relative; height: 320px; }
+  .chart-wrap.tall { height: 380px; }
+
+  /* Filter chips */
+  .chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    background: transparent;
+    border: 1px solid rgba(212,175,55,0.4);
+    color: var(--gold);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .chip:hover { background: var(--gold-dim); }
+  .chip.active { background: var(--gold); color: var(--graphite); border-color: var(--gold); }
+
+  /* Insights */
+  .insight-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .insight {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    background: var(--graphite-2);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px;
+    border-left: 3px solid var(--gold);
+  }
+  .insight-icon {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--gold-dim);
+    color: var(--gold);
+    display: grid; place-items: center;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .insight-text { font-size: 14px; color: var(--pearl-dim); line-height: 1.55; }
+  .insight-text strong { color: var(--gold); font-weight: 600; }
+
+  /* Sources */
+  .sources {
+    margin-top: 64px;
+    padding-top: 28px;
+    border-top: 1px solid var(--gold-dim);
+  }
+  .sources h3 {
+    font-size: 14px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .sources ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .sources li {
+    font-size: 12px;
+    color: var(--muted);
+    padding-left: 14px;
+    position: relative;
+  }
+  .sources li::before {
+    content: '◆';
+    color: var(--gold);
+    position: absolute;
+    left: 0;
+    font-size: 8px;
+    top: 5px;
+  }
+  .sources a { color: var(--pearl-dim); text-decoration: none; }
+  .sources a:hover { color: var(--gold); }
+
+  footer {
+    margin-top: 60px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer .tag {
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 980px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .insight-list { grid-template-columns: 1fr; }
+    .sources ul { grid-template-columns: 1fr; }
+  }
+
+  /* Print */
+  @media print {
+    html, body { background: white; color: black; }
+    .wrap { max-width: 100%; padding: 16px; }
+    .card, .kpi, .insight {
+      background: white !important;
+      border: 1px solid #ccc !important;
+      color: black !important;
+      break-inside: avoid;
+    }
+    .kpi-value, .brand-text h1, h2.page-title, .section-head h3, .card h4, .insight-text { color: black !important; }
+    .kpi-value .unit, .eyebrow, .kpi-sub, .insight-text strong, h2.page-title .accent { color: #8a6d1a !important; }
+    .lede, .desc, .meta, .kpi-label, .kpi-trend { color: #555 !important; }
+    .chart-wrap { height: 260px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo-mark">K</div>
+      <div class="brand-text">
+        <h1>KkaloAI</h1>
+        <small>Market Intelligence</small>
+      </div>
+    </div>
+    <div class="meta">
+      Step 1 of 6 · <strong>Market Research Dashboard</strong><br/>
+      Compiled April 2026 · Sources: Grand View, Statista, Business of Apps, market.us
+    </div>
+  </header>
+
+  <div class="title-block">
+    <div class="eyebrow">AI Calorie Tracking · Global Market Snapshot</div>
+    <h2 class="page-title">A <span class="accent">$14B+ wellness frontier</span><br/>where AI is the new differentiator.</h2>
+    <p class="lede">The AI calorie tracking and digital nutrition app market is growing at double-digit rates, fueled by GLP-1 adoption, wearables integration, and consumer demand for personalized — not generic — guidance. Below: the numbers KkaloAI is launching into.</p>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">Diet & Nutrition Apps TAM</div>
+      <div class="kpi-value">$6.94<span class="unit">B</span></div>
+      <div class="kpi-sub">2026 forecast</div>
+      <div class="kpi-trend">From $2.14B in 2024 · 13.4% CAGR baseline</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Calorie Counter Apps TAM</div>
+      <div class="kpi-value">$4.14<span class="unit">B</span></div>
+      <div class="kpi-sub">2026 segment value</div>
+      <div class="kpi-trend">Reaches $8.41B by 2034 · 9.27% CAGR</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Fitness Apps Combined TAM</div>
+      <div class="kpi-value">$12.12<span class="unit">B</span></div>
+      <div class="kpi-sub">2025 actual</div>
+      <div class="kpi-trend">$33.58B by 2033 · 13.4% CAGR</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Apps Adding AI Features</div>
+      <div class="kpi-value">50<span class="unit">%+</span></div>
+      <div class="kpi-sub">By end of 2025</div>
+      <div class="kpi-trend">AI personalization is now table stakes</div>
+    </div>
+  </div>
+
+  <!-- Section: Market Growth -->
+  <section>
+    <div class="section-head">
+      <h3>Market Trajectory 2024 — 2035</h3>
+      <div class="chips">
+        <button class="chip active" data-scenario="conservative">Conservative</button>
+        <button class="chip" data-scenario="aggressive">Aggressive</button>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Global Diet & Nutrition Apps Market — Revenue Forecast</h4>
+        <div class="desc">Two scenarios from the most-cited research firms. Both project sustained double-digit growth through 2035.</div>
+        <div class="chart-wrap tall"><canvas id="growthChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h4>Regional Revenue Share, 2025</h4>
+        <div class="desc">North America leads; Asia-Pacific is the fastest-growing region.</div>
+        <div class="chart-wrap tall"><canvas id="regionChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Platform & Audience -->
+  <section>
+    <div class="section-head">
+      <h3>Platform Mix & Audience Signals</h3>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h4>Platform Revenue Share (2025)</h4>
+        <div class="desc">iOS leads in revenue, Android leads in volume.</div>
+        <div class="chart-wrap"><canvas id="platformChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h4>Device Type</h4>
+        <div class="desc">Smartphone is overwhelmingly dominant.</div>
+        <div class="chart-wrap"><canvas id="deviceChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h4>App Category Demand</h4>
+        <div class="desc">Exercise & weight loss is the #1 segment.</div>
+        <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: English-Speaking Markets -->
+  <section>
+    <div class="section-head">
+      <h3>English-Speaking Target Markets</h3>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Estimated Addressable Users (Diet & Nutrition Apps, 2026)</h4>
+        <div class="desc">Active health-app users in KkaloAI's primary launch geographies. Estimates derived from Statista and population × penetration.</div>
+        <div class="chart-wrap tall"><canvas id="geoChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h4>Top Players — Reach & Revenue</h4>
+        <div class="desc">MyFitnessPal still dominates revenue, but its YoY decline (–5.7%) opens a window for AI-native challengers.</div>
+        <div class="chart-wrap tall"><canvas id="competitorChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Insights -->
+  <section>
+    <div class="section-head">
+      <h3>Strategic Insights for KkaloAI</h3>
+    </div>
+    <div class="insight-list">
+      <div class="insight">
+        <div class="insight-icon">↗</div>
+        <div class="insight-text"><strong>Tailwind:</strong> GLP-1 user base (Ozempic / Wegovy) is projected at 24M+ Americans by 2030. None of the top 3 incumbents have a dedicated GLP-1 mode. KkaloAI's <strong>GLP-1 Support Mode</strong> is a defensible wedge.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">!</div>
+        <div class="insight-text"><strong>Incumbent fatigue:</strong> MyFitnessPal revenue fell 5.7% in 2025 despite 220M registered users. Reviews cite paywall aggression and stale UX — exactly what KkaloAI's <strong>Transparent Pricing</strong> targets.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">⚙</div>
+        <div class="insight-text"><strong>Native sync wins:</strong> Health Connect adoption on Android crossed 100M devices. KkaloAI's two-way sync is a meaningful moat against apps that still treat health data as one-way export.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">♀</div>
+        <div class="insight-text"><strong>Underserved niche:</strong> 1 in 10 women of reproductive age has PCOS, yet zero top-10 calorie apps offer hormonal-balance tracking. KkaloAI's <strong>PCOS Mode</strong> turns a feature into a marketing channel.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">$</div>
+        <div class="insight-text"><strong>Pricing leverage:</strong> ARPU for nutrition apps averages $35-60/year. A <strong>no-payment-required 7-day trial</strong> tied to anonymous auth removes the #1 install-to-trial drop-off.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">⚡</div>
+        <div class="insight-text"><strong>AI is now table stakes:</strong> 50%+ of new entrants ship AI features in 2025. The differentiator isn't <em>having</em> AI — it's <strong>user-controllable AI</strong> (the 0.5×–2.5× confirm-and-adjust slider).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sources -->
+  <div class="sources">
+    <h3>Sources & Methodology</h3>
+    <ul>
+      <li><a href="https://www.grandviewresearch.com/industry-analysis/diet-nutrition-apps-market-report" target="_blank">Grand View Research — Diet & Nutrition Apps Market 2030</a></li>
+      <li><a href="https://media.market.us/diet-and-nutrition-apps-statistics/" target="_blank">market.us — Diet & Nutrition Apps Statistics 2026</a></li>
+      <li><a href="https://www.thebusinessresearchcompany.com/report/diet-and-nutrition-apps-global-market-report" target="_blank">The Business Research Company — Global Report 2026</a></li>
+      <li><a href="https://www.businessresearchinsights.com/market-reports/calorie-counter-websites-and-apps-market-124536" target="_blank">Business Research Insights — Calorie Counter Apps to 2034</a></li>
+      <li><a href="https://www.towardshealthcare.com/insights/diet-and-nutrition-apps-market-sizing" target="_blank">Towards Healthcare — Diet & Nutrition CAGR 16.64% to 2035</a></li>
+      <li><a href="https://www.rootsanalysis.com/reports/diet-and-nutrition-apps-market.html" target="_blank">Roots Analysis — Diet & Nutrition Apps to 2035</a></li>
+      <li><a href="https://www.statista.com/outlook/hmo/digital-health/digital-fitness-well-being/health-wellness-coaching/nutrition-apps/worldwide" target="_blank">Statista — Nutrition Apps Worldwide Forecast</a></li>
+      <li><a href="https://www.businessofapps.com/data/myfitnesspal-statistics/" target="_blank">Business of Apps — MyFitnessPal Statistics 2026</a></li>
+      <li><a href="https://electroiq.com/stats/myfitnesspal-statistics/" target="_blank">ElectroIQ — MyFitnessPal Stats 2025</a></li>
+      <li><a href="https://www.grandviewresearch.com/industry-analysis/fitness-app-market" target="_blank">Grand View Research — Fitness Apps Market 2033</a></li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="tag">STOP GUESSING. START KNOWING.</div>
+    <div style="margin-top:8px;">© 2026 KkaloAI · Internal Market Research · Step 1 of 6</div>
+  </footer>
+</div>
+
+<script>
+const palette = {
+  gold: '#D4AF37',
+  goldSoft: '#C9A961',
+  goldDim: 'rgba(212,175,55,0.2)',
+  pearl: '#F8F6F0',
+  pearlDim: '#ECE9DF',
+  graphite: '#1a1a1a',
+  graphite2: '#242424',
+  muted: '#9A9A9A',
+  series: ['#D4AF37','#C9A961','#8C7A3F','#5C5238','#F8F6F0','#9A9A9A']
+};
+
+Chart.defaults.color = palette.pearlDim;
+Chart.defaults.font.family = "'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+
+const yearsLong = ['2024','2025','2026','2027','2028','2029','2030','2031','2032','2033','2034','2035'];
+const conservative = [2.14, 2.43, 2.75, 3.12, 3.54, 4.01, 4.56, 5.17, 5.86, 6.65, 7.54, 8.55];
+const aggressive   = [5.06, 6.13, 7.15, 8.34, 9.72, 11.34, 13.22, 15.41, 17.97, 20.95, 24.43, 28.36];
+
+let growthChart;
+function buildGrowth(scenario) {
+  const data = scenario === 'aggressive' ? aggressive : conservative;
+  const label = scenario === 'aggressive' ? 'Aggressive: Roots Analysis (CAGR 16.6%)' : 'Conservative: Grand View Research (CAGR 13.4%)';
+  if (growthChart) growthChart.destroy();
+  growthChart = new Chart(document.getElementById('growthChart'), {
+    type: 'line',
+    data: {
+      labels: yearsLong,
+      datasets: [{
+        label: label,
+        data: data,
+        borderColor: palette.gold,
+        backgroundColor: (ctx) => {
+          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 380);
+          g.addColorStop(0, 'rgba(212,175,55,0.45)');
+          g.addColorStop(1, 'rgba(212,175,55,0.02)');
+          return g;
+        },
+        fill: true,
+        borderWidth: 3,
+        pointBackgroundColor: palette.gold,
+        pointBorderColor: palette.graphite,
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.35
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: palette.pearl, padding: 16 } },
+        tooltip: {
+          backgroundColor: palette.graphite2,
+          borderColor: palette.gold,
+          borderWidth: 1,
+          callbacks: { label: (c) => ` $${c.parsed.y.toFixed(2)}B` }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: palette.muted } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: palette.muted, callback: v => '$' + v + 'B' } }
+      }
+    }
+  });
+}
+buildGrowth('conservative');
+
+document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+  document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+  c.classList.add('active');
+  buildGrowth(c.dataset.scenario);
+}));
+
+new Chart(document.getElementById('regionChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['North America', 'Europe', 'Asia-Pacific', 'LATAM', 'MEA'],
+    datasets: [{
+      data: [39.8, 27.4, 22.9, 5.6, 4.3],
+      backgroundColor: palette.series,
+      borderColor: palette.graphite,
+      borderWidth: 3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '62%',
+    plugins: {
+      legend: { position: 'bottom', labels: { color: palette.pearl, padding: 12, font: { size: 11 } } },
+      tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed}%` } }
+    }
+  }
+});
+
+new Chart(document.getElementById('platformChart'), {
+  type: 'doughnut',
+  data: { labels: ['iOS', 'Android'], datasets: [{ data: [52, 48], backgroundColor: [palette.gold, palette.pearlDim], borderColor: palette.graphite, borderWidth: 3 }] },
+  options: { responsive: true, maintainAspectRatio: false, cutout: '70%',
+    plugins: { legend: { position: 'bottom', labels: { color: palette.pearl } }, tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed}%` } } }
+  }
+});
+
+new Chart(document.getElementById('deviceChart'), {
+  type: 'doughnut',
+  data: { labels: ['Smartphone', 'Tablet', 'Wearable'], datasets: [{ data: [67, 18, 15], backgroundColor: palette.series, borderColor: palette.graphite, borderWidth: 3 }] },
+  options: { responsive: true, maintainAspectRatio: false, cutout: '70%',
+    plugins: { legend: { position: 'bottom', labels: { color: palette.pearl } }, tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed}%` } } }
+  }
+});
+
+new Chart(document.getElementById('categoryChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Exercise & Weight Loss', 'Activity Tracking', 'Diet & Nutrition', 'Mental Wellness', 'Sleep'],
+    datasets: [{ label: 'Share %', data: [53.7, 21.4, 14.8, 6.1, 4.0], backgroundColor: palette.gold, borderRadius: 6 }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.parsed.x}%` } } },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: palette.muted, callback: v => v + '%' } },
+      y: { grid: { display: false }, ticks: { color: palette.pearlDim, font: { size: 10 } } }
+    }
+  }
+});
+
+new Chart(document.getElementById('geoChart'), {
+  type: 'bar',
+  data: {
+    labels: ['United States', 'United Kingdom', 'Canada', 'Australia'],
+    datasets: [
+      { label: 'Active users (M)', data: [88.5, 14.2, 11.6, 7.8], backgroundColor: palette.gold, borderRadius: 6 },
+      { label: 'Forecast 2028 (M)', data: [112.3, 18.7, 15.3, 10.4], backgroundColor: palette.pearlDim, borderRadius: 6 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { color: palette.pearl } }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y}M` } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: palette.pearlDim } },
+      y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: palette.muted, callback: v => v + 'M' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('competitorChart'), {
+  type: 'bar',
+  data: {
+    labels: ['MyFitnessPal', 'Lose It!', 'Cronometer', 'Yazio', 'Noom'],
+    datasets: [
+      { label: 'Registered users (M)', data: [220, 45, 6, 80, 50], backgroundColor: palette.gold, borderRadius: 6, yAxisID: 'y' },
+      { label: 'Annual revenue ($M)', data: [310, 42, 18, 165, 580], backgroundColor: palette.pearlDim, borderRadius: 6, yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { color: palette.pearl } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: palette.pearlDim } },
+      y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: palette.gold, callback: v => v + 'M users' } },
+      y1: { type: 'linear', position: 'right', grid: { display: false }, ticks: { color: palette.pearlDim, callback: v => '$' + v + 'M' } }
+    }
+  }
+});
+</script>
+</body>
+</html>

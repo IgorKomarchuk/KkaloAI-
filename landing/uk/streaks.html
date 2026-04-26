@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Щоденні серії | Gamified Calorie Tracking | KkaloAI</title>
+    <meta name="description" content="Stay motivated with KkaloAI streaks. Our gamified nutrition platform helps you build discipline, keep your fire burning, and achieve consistent results.">
+    <link rel="stylesheet" href="../index.css">
+    <script src="../language.js"></script>
+    <style>
+        .feature-details { padding: 100px 20px; max-width: 1000px; margin: 0 auto; line-height: 1.6; }
+        .feature-hero { text-align: center; margin-bottom: 60px; }
+        .feature-hero h1 { font-size: 48px; border-bottom: 4px solid #e67e22; display: inline-block; padding-bottom: 10px; }
+        .feature-hero img { width: 100%; max-width: 800px; border-radius: 24px; margin-top: 30px; box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
+        .feature-content { background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
+        .streak-fire { font-size: 80px; margin: 20px 0; display: block; filter: drop-shadow(0 0 20px rgba(230, 126, 34, 0.5)); }
+        
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(16px); border-bottom: 1px solid var(--card-border); background: rgba(3, 7, 18, 0.7); }
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: -1px; color: var(--primary); text-decoration: none; }
+        .logo span { color: #fff; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">Kkalo<span>AI</span></a>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <select onchange="window.setKkaloLanguage(this.value);" style="background: rgba(17, 24, 39, 0.9); color: var(--text-main); border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; font-family: 'Outfit'; font-weight: 600; cursor: pointer; outline: none;">
+                <option value="en">🇬🇧 EN</option>
+                <option value="uk" selected>🇺🇦 UK</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="feature-details">
+        <a href="index.html#features" class="back-link">← Назад до функцій</a>
+        <div class="feature-hero">
+            <span class="streak-fire">🔥</span>
+            <h1>Щоденні серії та дисципліна</h1>
+            <p style="font-size: 20px; margin-top: 20px;">Послідовність — єдиний секрет трансформації тіла.</p>
+            <img src="../streaks.png" loading="lazy" alt="KkaloAI Streaks Feature">
+        </div>
+
+        <div class="feature-content">
+            <h2>Психологія серій</h2>
+            <p>Дослідження показують, що користувачі, які фіксують їжу 21 день поспіль, <strong>У 3,5 рази більше шансів</strong> досягти цільової ваги, ніж ті, хто веде журнал нерегулярно. KkaloAI створений для захисту вашої послідовності.</p>
+            
+            <h2 style="margin-top: 30px; color: var(--primary);">Залишайтеся в полум'ї</h2>
+            <p>We’ve integrated discipline-first gamification that actually works:</p>
+
+            <ul style="margin-top: 20px; list-style-type: none; padding: 0;">
+                <li style="margin-bottom: 15px;">🔥 <strong>Індекс жару:</strong> Your fire icon changes color and intensity as your streak grows from 7 to 100+ days.</li>
+                <li style="margin-bottom: 15px;">🛡️ <strong>Захисники серій:</strong> Earn "Freeze Days" for hitting your protein goals, so a single bad day doesn't ruin your momentum.</li>
+                <li style="margin-bottom: 15px;">🏆 <strong>Таблиці лідерів:</strong> Join weekly challenges with the global KkaloAI community to see who has the most disciplined diet.</li>
+            </ul>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="#download" class="btn">Почати серію сьогодні</a>
+            </div>
+        </div>
+
+        <div class="seo-section" style="margin-top: 50px;">
+            <h3>Дисципліна понад мотивацію</h3>
+            <p>Motivation gets you started, but discipline keeps you going. By gamifying the most tedious part of weight loss (data entry), KkaloAI transforms a chore into a daily win. Build a habit that lasts a lifetime and watch your body mirror your discipline.</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 KkaloAI. Дисципліна переосмислена.</p>
+    </footer>
+</body>
+</html>
