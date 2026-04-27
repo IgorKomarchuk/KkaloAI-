@@ -10,9 +10,9 @@
       "firebase.json",
       "**/.git/**",
       "**/node_modules/**",
+      "**/__pycache__/**",
       "**/*.py",
-      "audit.py",
-      "feature_translations.py"
+      "**/*.pyc"
     ],
     "headers": [
       {
