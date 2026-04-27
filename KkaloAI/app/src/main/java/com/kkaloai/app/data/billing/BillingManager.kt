@@ -84,24 +84,32 @@ class BillingManager @Inject constructor(
     }
 
     private fun queryProducts() {
+        // MVP launches with 2-plan paywall (Annual + Monthly). Premium+/Family/Lifetime
+        // SKUs are infrastructure-ready in code but disabled here until corresponding SKUs
+        // exist in Play Console — otherwise Billing logs OFFER_UNAVAILABLE on each query.
         val subsList = listOf(
             "kkaloai_monthly",
-            "kkaloai_annual",
-            "kkaloai_premium_plus_monthly",
-            "kkaloai_premium_plus_annual",
-            "kkaloai_family_monthly"
+            "kkaloai_annual"
+            // TODO(premium-plus): create SKUs $9.99/mo + $69.99/yr in Play Console, then uncomment.
+            // , "kkaloai_premium_plus_monthly"
+            // , "kkaloai_premium_plus_annual"
+            // TODO(family): re-enable post-MVP after validating demand (M3 review).
+            //  SKU + Play Console toggle "Family sharing eligibility" must exist before uncomment.
+            // , "kkaloai_family_monthly"
         ).map {
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId(it)
                 .setProductType(BillingClient.ProductType.SUBS)
                 .build()
         }
-        val inappList = listOf("kkaloai_lifetime").map {
-            QueryProductDetailsParams.Product.newBuilder()
-                .setProductId(it)
-                .setProductType(BillingClient.ProductType.INAPP)
-                .build()
-        }
+        // TODO(lifetime): create kkaloai_lifetime $59 INAPP in Play Console, then uncomment list below.
+        val inappList = emptyList<QueryProductDetailsParams.Product>()
+        // val inappList = listOf("kkaloai_lifetime").map {
+        //     QueryProductDetailsParams.Product.newBuilder()
+        //         .setProductId(it)
+        //         .setProductType(BillingClient.ProductType.INAPP)
+        //         .build()
+        // }
 
         billingClient.queryProductDetailsAsync(
             QueryProductDetailsParams.newBuilder().setProductList(subsList).build()
@@ -110,12 +118,14 @@ class BillingManager @Inject constructor(
                 _products.value = (_products.value + list).distinctBy { it.productId }
             } else FileLogger.e("BillingManager", "queryProducts SUBS failed: ${result.responseCode}")
         }
-        billingClient.queryProductDetailsAsync(
-            QueryProductDetailsParams.newBuilder().setProductList(inappList).build()
-        ) { result, list ->
-            if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                _products.value = (_products.value + list).distinctBy { it.productId }
-            } else FileLogger.e("BillingManager", "queryProducts INAPP failed: ${result.responseCode}")
+        if (inappList.isNotEmpty()) {
+            billingClient.queryProductDetailsAsync(
+                QueryProductDetailsParams.newBuilder().setProductList(inappList).build()
+            ) { result, list ->
+                if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                    _products.value = (_products.value + list).distinctBy { it.productId }
+                } else FileLogger.e("BillingManager", "queryProducts INAPP failed: ${result.responseCode}")
+            }
         }
     }
 

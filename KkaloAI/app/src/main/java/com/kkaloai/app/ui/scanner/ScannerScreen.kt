@@ -15,7 +15,10 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
@@ -246,8 +249,8 @@ private fun MenuResultSheet(
         onDismissRequest = onDismiss,
         title = { Text("Menu (${response.items.size} dishes)") },
         text = {
-            androidx.compose.foundation.lazy.LazyColumn {
-                androidx.compose.foundation.lazy.items(response.items) { item ->
+            LazyColumn {
+                items(response.items) { item ->
                     val color = when {
                         item.healthScore >= 8 -> Color(0xFF2ECC71)
                         item.healthScore >= 5 -> Color(0xFFF1C40F)
@@ -284,8 +287,8 @@ private fun FridgeResultSheet(
         onDismissRequest = onDismiss,
         title = { Text("Fridge (${response.suggestions.size} ideas)") },
         text = {
-            androidx.compose.foundation.lazy.LazyColumn {
-                androidx.compose.foundation.lazy.items(response.suggestions) { s ->
+            LazyColumn {
+                items(response.suggestions) { s ->
                     androidx.compose.foundation.layout.Column(Modifier.padding(vertical = 6.dp)) {
                         Text(s.name, style = MaterialTheme.typography.titleSmall)
                         Text("${s.estimatedKcalPerServing} kcal · ${s.whyGoodForUser}", style = MaterialTheme.typography.labelSmall)
