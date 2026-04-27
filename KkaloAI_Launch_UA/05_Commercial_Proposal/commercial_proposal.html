@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Комерційна пропозиція</title>
+<style>
+  :root {
+    --graphite: #1a1a1a; --graphite-2: #242424; --graphite-3: #2f2f2f;
+    --gold: #D4AF37; --gold-soft: #C9A961; --gold-deep: #8C7A3F;
+    --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0; --pearl-dim: #ECE9DF; --muted: #9A9A9A;
+    --green: #5CB874; --red: #E16A6A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--graphite); color: var(--pearl); font-family: 'Segoe UI', sans-serif; line-height: 1.55; }
+  .page { max-width: 1100px; margin: 24px auto; background: var(--pearl); color: var(--graphite); padding: 56px 64px; border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+
+  .top-strip { display: flex; justify-content: space-between; align-items: center; padding-bottom: 24px; border-bottom: 2px solid var(--graphite); margin-bottom: 36px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo-mark { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--graphite), var(--graphite-3)); color: var(--gold); display: grid; place-items: center; font-weight: 800; font-size: 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .brand-text h1 { font-size: 22px; color: var(--graphite); font-weight: 800; letter-spacing: -0.4px; }
+  .brand-text small { color: var(--gold-deep); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+  .doc-meta { text-align: right; font-size: 12px; color: #555; }
+  .doc-meta strong { color: var(--graphite); display: block; font-size: 13px; }
+  .doc-meta .ref { color: var(--gold-deep); font-weight: 700; letter-spacing: 1px; }
+
+  .hero { margin-bottom: 36px; padding-bottom: 30px; border-bottom: 1px solid #ddd; }
+  .eyebrow { color: var(--gold-deep); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 14px; }
+  h2.title { font-size: 40px; color: var(--graphite); font-weight: 800; letter-spacing: -1.2px; line-height: 1.05; margin-bottom: 14px; }
+  h2.title .accent { color: var(--gold-deep); }
+  .lede { font-size: 16px; color: #444; max-width: 800px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; margin-bottom: 36px; }
+
+  .section { margin-bottom: 36px; }
+  .section-label { display: inline-block; background: var(--graphite); color: var(--gold); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; }
+  .section h3 { font-size: 22px; color: var(--graphite); font-weight: 700; letter-spacing: -0.4px; margin-bottom: 14px; }
+  .section p { color: #444; font-size: 14px; margin-bottom: 12px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 36px; padding: 24px; background: var(--graphite); color: var(--pearl); border-radius: 8px; }
+  .stat .num { font-size: 28px; font-weight: 800; color: var(--gold); letter-spacing: -1px; line-height: 1; }
+  .stat .lab { font-size: 11px; color: var(--pearl-dim); margin-top: 6px; letter-spacing: 0.5px; }
+
+  .alert { background: #fef0f0; border: 1px solid #f0a8a8; border-left: 4px solid var(--red); border-radius: 6px; padding: 16px 20px; margin-bottom: 28px; font-size: 13.5px; color: #555; line-height: 1.5; }
+  .alert strong { color: var(--graphite); }
+  .alert em { color: var(--gold-deep); font-style: normal; font-weight: 600; }
+
+  .catalog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .cat-item { padding: 14px 16px; background: #f5f0e0; border-left: 3px solid var(--gold); border-radius: 4px; }
+  .cat-item .ttl { font-size: 13px; font-weight: 700; color: var(--graphite); margin-bottom: 3px; }
+  .cat-item .desc { font-size: 12px; color: #555; line-height: 1.5; }
+  .cat-item .tag { display: inline-block; font-size: 9px; letter-spacing: 1px; background: var(--gold); color: var(--graphite); padding: 2px 6px; border-radius: 3px; margin-left: 6px; font-weight: 800; vertical-align: middle; }
+
+  .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .tier { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 20px 18px; position: relative; }
+  .tier.popular { border: 2px solid var(--gold); background: linear-gradient(180deg, #fffaeb 0%, white 80%); }
+  .tier.popular::before { content: 'НАЙКРАЩА ЦІННІСТЬ'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--graphite); font-size: 9px; padding: 3px 10px; border-radius: 999px; font-weight: 800; letter-spacing: 1px; }
+  .tier-name { font-size: 11px; color: var(--gold-deep); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+  .tier-price { font-size: 30px; font-weight: 800; color: var(--graphite); letter-spacing: -1px; margin: 8px 0 4px; }
+  .tier-price .per { font-size: 12px; color: #888; font-weight: 500; margin-left: 2px; }
+  .tier-sub { font-size: 11px; color: #888; margin-bottom: 12px; }
+  .tier ul { list-style: none; }
+  .tier ul li { font-size: 12px; color: #444; padding: 4px 0 4px 16px; position: relative; }
+  .tier ul li::before { content: '✓'; position: absolute; left: 0; color: var(--gold-deep); font-weight: 700; }
+
+  .why-block { background: linear-gradient(135deg, #fffaeb, #ffffff); border-left: 4px solid var(--gold); border-radius: 4px; padding: 24px 28px; margin-bottom: 28px; }
+  .why-block h3 { color: var(--gold-deep); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 16px; }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; counter-reset: why-counter; }
+  .why-item { padding-left: 32px; position: relative; }
+  .why-item::before { content: counter(why-counter); counter-increment: why-counter; position: absolute; left: 0; top: 0; width: 24px; height: 24px; background: var(--graphite); color: var(--gold); border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; }
+  .why-item .ttl { font-size: 14px; font-weight: 700; color: var(--graphite); margin-bottom: 4px; }
+  .why-item .body { font-size: 12.5px; color: #444; line-height: 1.5; }
+
+  .audience-strip { background: var(--graphite); color: var(--pearl); border-radius: 8px; padding: 24px 28px; margin-bottom: 32px; }
+  .audience-strip h3 { color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 16px; }
+  .audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .aud { padding: 12px 14px; background: rgba(255,255,255,0.04); border-radius: 6px; border-top: 2px solid var(--gold); }
+  .aud .ttl { font-size: 13px; color: var(--pearl); font-weight: 700; margin-bottom: 4px; }
+  .aud .body { font-size: 11.5px; color: var(--pearl-dim); line-height: 1.45; }
+
+  .cta-block { margin-top: 24px; padding: 32px; background: var(--graphite); border-radius: 10px; color: var(--pearl); text-align: center; }
+  .cta-block h3 { color: var(--gold); font-size: 22px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 8px; }
+  .cta-block p { color: var(--pearl-dim); font-size: 14px; max-width: 580px; margin: 0 auto 18px; }
+  .cta-row { display: flex; justify-content: center; gap: 32px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(212,175,55,0.18); flex-wrap: wrap; }
+  .cta-contact { text-align: left; }
+  .cta-contact .lab { font-size: 10px; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
+  .cta-contact .val { font-size: 14px; color: var(--pearl); margin-top: 4px; font-weight: 600; }
+
+  .doc-footer { margin-top: 32px; padding-top: 18px; border-top: 1px solid #ddd; display: flex; justify-content: space-between; font-size: 10px; color: #888; }
+  .doc-footer .tag { color: var(--gold-deep); font-weight: 700; letter-spacing: 1.5px; }
+
+  .disclaimer { margin-top: 16px; padding: 14px 18px; background: #faf3e0; border: 1px solid #e6d6a8; border-radius: 6px; font-size: 11px; color: #555; line-height: 1.5; }
+  .disclaimer strong { color: var(--graphite); }
+
+  @media (max-width: 980px) {
+    .page { padding: 32px 24px; }
+    .grid-2, .why-grid, .audience-grid, .tier-grid, .stats { grid-template-columns: 1fr; }
+    .catalog { grid-template-columns: 1fr; }
+    h2.title { font-size: 30px; }
+  }
+  @media print {
+    body { background: white; }
+    .page { max-width: 100%; margin: 0; padding: 24px 28px; box-shadow: none; border-radius: 0; }
+    h2.title { font-size: 30px; }
+    .stats, .audience-strip, .cta-block { color: white; }
+    .stats .num, .audience-strip h3, .cta-block h3 { color: var(--gold); }
+    .stats .lab, .audience-strip .aud .body, .cta-block p { color: var(--pearl-dim); }
+    .grid-2, .tier-grid, .why-grid, .audience-grid, .stats { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="top-strip">
+    <div class="brand">
+      <div class="logo-mark">K</div>
+      <div class="brand-text">
+        <h1>KkaloAI</h1>
+        <small>Комерційна пропозиція</small>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <strong>Партнерство & Інвестиційний Brief</strong>
+      <div class="ref">REF · KKL-2026-04 · ONE-PAGER</div>
+      <div>Квітень 2026 · v1.0 · UA</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow">B2B Партнерство · Інвестиції · Wellness Programs</div>
+    <h2 class="title">Новий стандарт <span class="accent">AI nutrition tracking</span><br/>побудований на прозорості, не на paywalls.</h2>
+    <p class="lede">KkaloAI запускається у $14B+ категорію, де домінують aging incumbents та поверхневі AI-клони. Наша ставка — на протилежне: user-controlled AI, прозорі ціни та чотири спеціалізовані health modes, яких ніхто не shipping. Цей brief окреслює пропозицію для клінік, дієтологів, wellness-роботодавців та early-stage інвесторів.</p>
+  </div>
+
+  <div class="alert">
+    <strong>Конкурентний вакуум:</strong> Cal AI було <em>видалено з App Store 21 квітня 2026</em> за обхід IAP та оманливий білінг. На момент видалення Cal AI домінував у TikTok-рекламі категорії. Це створює унікальне launch-вікно для "trustworthy alternative" позиціонування.
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">$14B+</div><div class="lab">Health & nutrition apps TAM до 2026</div></div>
+    <div class="stat"><div class="num">220M</div><div class="lab">MFP users — але доходи –5.7% YoY</div></div>
+    <div class="stat"><div class="num">24M+</div><div class="lab">GLP-1 users у US до 2030 (0 додатків)</div></div>
+    <div class="stat"><div class="num">50%+</div><div class="lab">Funnel drop-off на email/payment gate</div></div>
+  </div>
+
+  <div class="grid-2">
+
+    <div class="section">
+      <span class="section-label">01 · Компанія</span>
+      <h3>Хто ми</h3>
+      <p><strong>KkaloAI</strong> — мобільна AI nutrition платформа, заснована у 2026, з операціями у Східній Європі. Побудована indie product team з track record у мобільному growth, продукт спроєктований навколо одного принципу: <em>користувач завжди підтверджує.</em></p>
+      <p>Де конкуренти приховують ціни за onboarding, KkaloAI ставить кожен tier на головну. Де вони shipping одноразові AI-оцінки, KkaloAI має adjustable slider. Де вони ігнорують underserved health journeys, KkaloAI робить їх first-class modes.</p>
+      <p>Запуск iOS + Android одночасно з native Health Connect інтеграцією. Побудовано як calorie tracker, до якого <em>defect</em> користувачі MyFitnessPal.</p>
+    </div>
+
+    <div class="section">
+      <span class="section-label">02 · Каталог фіч</span>
+      <h3>Що ми пропонуємо</h3>
+      <div class="catalog">
+        <div class="cat-item">
+          <div class="ttl">AI Photo + Confirm & Adjust <span class="tag">SIGNATURE</span></div>
+          <div class="desc">Зніми meal, налаштуй портію (0.5×–2.5× слайдер), потім підтверди.</div>
+        </div>
+        <div class="cat-item">
+          <div class="ttl">GLP-1 Support Mode <span class="tag">FIRST</span></div>
+          <div class="desc">Injection day, побічки, protein floor, hydration cycle — для Ozempic/Wegovy users.</div>
+        </div>
+        <div class="cat-item">
+          <div class="ttl">PCOS & Гормональний баланс <span class="tag">FIRST</span></div>
+          <div class="desc">Cycle-phase aware, carb-quality scoring, micronutrient watch (інозитол, Mg, D).</div>
+        </div>
+        <div class="cat-item">
+          <div class="ttl">Bulking & Weight modes</div>
+          <div class="desc">Adaptive surplus/deficit driven by trend math, not daily scale noise.</div>
+        </div>
+        <div class="cat-item">
+          <div class="ttl">Health Connect 2-Way</div>
+          <div class="desc">Native Android Health Connect & Apple Health sync — read & write.</div>
+        </div>
+        <div class="cat-item">
+          <div class="ttl">Anonymous Auth + 7-Day Trial</div>
+          <div class="desc">Спробуй повний Premium без email чи картки. Day-7 graceful downgrade.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-label">03 · Ціни</span>
+    <h3>Прості, прозорі, без сюрпризів · Geo-pricing</h3>
+    <div class="tier-grid">
+      <div class="tier">
+        <div class="tier-name">Free</div>
+        <div class="tier-price">$0</div>
+        <div class="tier-sub">Назавжди, без картки</div>
+        <ul>
+          <li>Barcode сканер (3M+)</li>
+          <li>Улюблені страви</li>
+          <li>Water tracker</li>
+          <li>Health Connect 2-way</li>
+          <li>Daily Win share cards</li>
+        </ul>
+      </div>
+      <div class="tier popular">
+        <div class="tier-name">7-Day Trial</div>
+        <div class="tier-price">$0</div>
+        <div class="tier-sub">Без даних картки</div>
+        <ul>
+          <li>Усе з Free</li>
+          <li>AI Photo + Slider</li>
+          <li>Усі 4 spec modes</li>
+          <li>Weekly AI Report</li>
+          <li>Voice Log + Suggestions</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-name">Premium</div>
+        <div class="tier-price">$59.99<span class="per">/yr</span></div>
+        <div class="tier-sub">або $7.99/mo · скасуй будь-коли</div>
+        <ul>
+          <li>Усе з Trial</li>
+          <li>3D Scan Export (Q3 2026)</li>
+          <li>Cloud backup</li>
+          <li>Priority AI processing</li>
+          <li>Tier 2/3 geo-pricing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="why-block">
+    <h3>Чому KkaloAI · 6 причин підтримати запуск</h3>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="ttl">Пуста lane у переповненій категорії</div>
+        <div class="body">Нуль з топ-10 додатків ship dedicated GLP-1 або PCOS modes. Дві underserved ніші з мільйонами потенційних users.</div>
+      </div>
+      <div class="why-item">
+        <div class="ttl">Trust-led pricing (Cal AI moment)</div>
+        <div class="body">Без даних картки для trial. Без dark-pattern paywalls. Cal AI забанили саме за це — KkaloAI робить навпаки.</div>
+      </div>
+      <div class="why-item">
+        <div class="ttl">User-controlled AI</div>
+        <div class="body">Слайдер 0.5×–2.5× прямо вирішує "AI got it wrong" — провідну причину uninstall у nutrition-додатках.</div>
+      </div>
+      <div class="why-item">
+        <div class="ttl">Native ecosystem fit</div>
+        <div class="body">First-class двосторонній Health Connect на Android — moat проти додатків з one-way експортом.</div>
+      </div>
+      <div class="why-item">
+        <div class="ttl">Built-in viral loop</div>
+        <div class="body">Daily-win cards + 3D scan exports перетворюють users на TikTok-led CAC channel.</div>
+      </div>
+      <div class="why-item">
+        <div class="ttl">Lean economics</div>
+        <div class="body">Solo-founder operation, low fixed cost, mobile-first stack. Шлях до прибутковості без venture treadmill.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="audience-strip">
+    <h3>Для кого ця пропозиція</h3>
+    <div class="audience-grid">
+      <div class="aud">
+        <div class="ttl">Дієтологи & Клініки</div>
+        <div class="body">B2B портал: assign KkaloAI клієнтам, перегляд їх логів (з consent), скорочення in-session intake часу. White-label option Q4 2026.</div>
+      </div>
+      <div class="aud">
+        <div class="ttl">Wellness Programs</div>
+        <div class="body">Employer & insurer bundles: bulk Premium licenses з aggregated, anonymized engagement reporting.</div>
+      </div>
+      <div class="aud">
+        <div class="ttl">Інвестори & Angels</div>
+        <div class="body">Pre-seed / seed розмова. Lean burn, indie ethos, defensible niche entry, чіткий monetization шлях.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-block">
+    <h3>Поговоримо</h3>
+    <p>Незалежно чи ви клініка, що шукає client-facing tracker, чи employer, що будує wellness benefit, чи investor scouting indie momentum — є 30-хвилинна розмова, яка варта вашого часу.</p>
+    <div class="cta-row">
+      <div class="cta-contact"><div class="lab">Засновник</div><div class="val">Ігор Комарчук</div></div>
+      <div class="cta-contact"><div class="lab">Email</div><div class="val">partnerships@kkaloai.app</div></div>
+      <div class="cta-contact"><div class="lab">Web</div><div class="val">kkaloai.app</div></div>
+      <div class="cta-contact"><div class="lab">Запуск</div><div class="val">Q3 2026 · iOS + Android</div></div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Медичне застереження.</strong> KkaloAI — інструмент для трекінгу та інформації, не медичний пристрій. Не діагностує, не лікує, не дає медичних порад. Спеціалізовані modes розроблені для організації self-tracking навколо особистого health-context — вони НЕ замінюють консультацію кваліфікованого медика. <strong>Forward-looking statements.</strong> Ринкові цифри взято з Grand View Research, Statista, market.us, Business of Apps (2024–2026). Прогнози — оцінки, не гарантії майбутнього performance.
+  </div>
+
+  <div class="doc-footer">
+    <div>© 2026 KkaloAI · Усі права захищено · KKL-2026-04</div>
+    <div class="tag">STOP GUESSING. START KNOWING.</div>
+  </div>
+
+</div>
+
+</body>
+</html>

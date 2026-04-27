@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Stop Guessing. Start Knowing.</title>
+<style>
+  :root {
+    --graphite: #0F0F0F; --graphite-2: #1a1a1a; --graphite-3: #242424; --graphite-4: #2f2f2f;
+    --gold: #D4AF37; --gold-soft: #C9A961; --gold-deep: #8C7A3F;
+    --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0; --pearl-dim: #ECE9DF; --muted: #9A9A9A;
+    --green: #5CB874; --red: #E16A6A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--graphite); color: var(--pearl); font-family: 'Segoe UI', sans-serif; line-height: 1.55; overflow-x: hidden; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 0; background: rgba(15,15,15,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(212,175,55,0.08); }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; }
+  .nav-logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--gold), var(--gold-soft)); color: var(--graphite); display: grid; place-items: center; font-weight: 800; font-size: 17px; box-shadow: 0 4px 14px rgba(212,175,55,0.3); }
+  .nav-name { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--pearl-dim); text-decoration: none; font-size: 13px; font-weight: 500; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta { background: var(--gold); color: var(--graphite); padding: 9px 18px; border-radius: 999px; font-size: 13px; font-weight: 700; text-decoration: none; }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
+  @media (max-width: 768px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  .hero { padding: 140px 0 100px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 65%); pointer-events: none; }
+  .hero-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: center; position: relative; }
+  .hero-eyebrow { display: inline-block; color: var(--gold); font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 20px; padding: 6px 14px; background: var(--gold-dim); border-radius: 999px; border: 1px solid rgba(212,175,55,0.25); animation: fadeInUp 0.6s ease both; }
+  .hero h1 { font-size: clamp(42px, 6vw, 72px); font-weight: 800; line-height: 1.02; letter-spacing: -2px; margin-bottom: 24px; animation: fadeInUp 0.7s 0.1s ease both; }
+  .hero h1 .accent { background: linear-gradient(135deg, var(--gold), var(--gold-soft)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.lede { font-size: 18px; color: var(--pearl-dim); max-width: 540px; margin-bottom: 36px; animation: fadeInUp 0.7s 0.2s ease both; }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 32px; animation: fadeInUp 0.7s 0.3s ease both; }
+  .btn { padding: 16px 28px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; letter-spacing: 0.4px; display: inline-flex; align-items: center; gap: 10px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-soft)); color: var(--graphite); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(212,175,55,0.45); }
+  .btn-secondary { background: transparent; color: var(--pearl); border: 1px solid rgba(255,255,255,0.18); }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-trust { display: flex; gap: 24px; flex-wrap: wrap; animation: fadeInUp 0.7s 0.4s ease both; }
+  .trust-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  .trust-item .check { color: var(--gold); font-weight: 700; }
+
+  .hero-visual { position: relative; height: 540px; display: flex; align-items: center; justify-content: center; animation: fadeInRight 0.9s 0.2s ease both; }
+  .phone { width: 280px; height: 540px; background: linear-gradient(180deg, var(--graphite-3), var(--graphite-2)); border: 1px solid rgba(255,255,255,0.08); border-radius: 38px; padding: 14px; box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 8px var(--graphite-2), 0 0 0 9px rgba(255,255,255,0.04), 0 0 60px rgba(212,175,55,0.12); position: relative; transform: rotate(-2deg); transition: transform 0.4s ease; }
+  .phone:hover { transform: rotate(0deg) scale(1.02); }
+  .phone-screen { background: var(--graphite); width: 100%; height: 100%; border-radius: 26px; padding: 32px 18px 20px; overflow: hidden; position: relative; }
+  .phone-notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 100px; height: 22px; background: var(--graphite); border-radius: 0 0 16px 16px; z-index: 2; }
+  .ph-greet { font-size: 11px; color: var(--muted); }
+  .ph-name { font-size: 18px; color: var(--pearl); font-weight: 700; margin: 2px 0 16px; }
+  .ph-card { background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.04)); border: 1px solid rgba(212,175,55,0.25); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+  .ph-card .lab { font-size: 9px; color: var(--gold); letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; }
+  .ph-card .num { font-size: 24px; color: var(--pearl); font-weight: 800; letter-spacing: -1px; margin: 2px 0; }
+  .ph-card .num .of { color: var(--muted); font-size: 13px; font-weight: 500; }
+  .ph-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+  .ph-bar > div { height: 100%; width: 67%; background: linear-gradient(90deg, var(--gold), var(--gold-soft)); border-radius: 999px; animation: barFill 1.4s 0.6s ease both; }
+  .ph-meal { display: flex; align-items: center; gap: 10px; background: var(--graphite-2); border-radius: 10px; padding: 10px; margin-bottom: 6px; }
+  .ph-meal-img { width: 36px; height: 36px; background: linear-gradient(135deg, var(--gold-deep), var(--gold-soft)); border-radius: 8px; flex-shrink: 0; }
+  .ph-meal-info .nm { font-size: 11px; color: var(--pearl); font-weight: 600; }
+  .ph-meal-info .kc { font-size: 9px; color: var(--muted); }
+  .ph-slider { margin-top: 14px; background: var(--graphite-2); padding: 12px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.18); }
+  .ph-slider .lab { font-size: 9px; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .ph-slider .track { height: 4px; background: rgba(255,255,255,0.08); border-radius: 999px; position: relative; margin: 14px 0 6px; }
+  .ph-slider .knob { position: absolute; left: 60%; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 0 4px rgba(212,175,55,0.2); animation: knobPulse 2.4s ease infinite; }
+  .ph-slider .scale { display: flex; justify-content: space-between; font-size: 8px; color: var(--muted); }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes barFill { from { width: 0; } to { width: 67%; } }
+  @keyframes knobPulse { 0%, 100% { box-shadow: 0 0 0 4px rgba(212,175,55,0.2); } 50% { box-shadow: 0 0 0 8px rgba(212,175,55,0.35); } }
+
+  .strip { background: var(--graphite-2); padding: 28px 0; border-top: 1px solid rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .strip-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; text-align: center; }
+  .strip-item .num { font-size: 28px; color: var(--gold); font-weight: 800; letter-spacing: -1px; }
+  .strip-item .lab { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  section.lp { padding: 100px 0; position: relative; }
+  .sec-eyebrow { color: var(--gold); font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 700; text-align: center; margin-bottom: 14px; }
+  .sec-title { font-size: clamp(30px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; text-align: center; margin-bottom: 16px; }
+  .sec-title .accent { color: var(--gold); }
+  .sec-lede { font-size: 16px; color: var(--pearl-dim); text-align: center; max-width: 720px; margin: 0 auto 56px; }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .f-card { background: linear-gradient(180deg, var(--graphite-2), var(--graphite-3)); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 28px; transition: transform 0.25s ease, border-color 0.25s ease; }
+  .f-card:hover { transform: translateY(-4px); border-color: var(--gold-dim); }
+  .f-icon { width: 52px; height: 52px; border-radius: 14px; background: var(--gold-dim); color: var(--gold); display: grid; place-items: center; font-size: 24px; margin-bottom: 18px; }
+  .f-card h4 { font-size: 18px; color: var(--pearl); font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
+  .f-card p { font-size: 14px; color: var(--pearl-dim); line-height: 1.6; }
+
+  .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .how-step { background: var(--graphite-2); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 28px 24px; text-align: center; }
+  .how-num { width: 44px; height: 44px; margin: 0 auto 16px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-soft)); color: var(--graphite); display: grid; place-items: center; font-size: 18px; font-weight: 800; box-shadow: 0 6px 18px rgba(212,175,55,0.25); }
+  .how-step h4 { font-size: 16px; color: var(--pearl); font-weight: 700; margin-bottom: 8px; }
+  .how-step p { font-size: 13px; color: var(--pearl-dim); line-height: 1.55; }
+
+  .modes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .mode-card { background: linear-gradient(135deg, var(--graphite-2), var(--graphite-3)); border: 1px solid rgba(212,175,55,0.15); border-radius: 20px; padding: 32px; position: relative; overflow: hidden; transition: transform 0.25s ease; }
+  .mode-card:hover { transform: translateY(-4px); }
+  .mode-card::before { content: ''; position: absolute; top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle, rgba(212,175,55,0.10) 0%, transparent 60%); pointer-events: none; }
+  .mode-tag { display: inline-block; background: var(--gold); color: var(--graphite); font-size: 10px; letter-spacing: 1.5px; font-weight: 800; padding: 3px 8px; border-radius: 4px; margin-bottom: 14px; }
+  .mode-tag.subtle { background: var(--gold-dim); color: var(--gold); }
+  .mode-card h4 { font-size: 22px; color: var(--pearl); font-weight: 700; letter-spacing: -0.4px; margin-bottom: 10px; }
+  .mode-card p { font-size: 14px; color: var(--pearl-dim); margin-bottom: 16px; line-height: 1.55; }
+  .mode-card ul { list-style: none; padding: 0; }
+  .mode-card ul li { font-size: 13px; color: var(--pearl-dim); padding: 4px 0 4px 18px; position: relative; }
+  .mode-card ul li::before { content: '◆'; color: var(--gold); position: absolute; left: 0; font-size: 8px; top: 6px; }
+
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .pr-card { background: var(--graphite-2); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 32px 28px; position: relative; transition: transform 0.25s ease; }
+  .pr-card:hover { transform: translateY(-4px); }
+  .pr-card.popular { border: 1px solid var(--gold); background: linear-gradient(180deg, rgba(212,175,55,0.08), var(--graphite-2) 60%); box-shadow: 0 12px 40px rgba(212,175,55,0.15); transform: scale(1.03); }
+  .pr-card.popular:hover { transform: scale(1.03) translateY(-4px); }
+  .pr-card.popular::before { content: 'НАЙКРАЩА ЦІННІСТЬ'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--graphite); font-size: 10px; padding: 4px 12px; border-radius: 999px; font-weight: 800; letter-spacing: 1.5px; }
+  .pr-name { font-size: 12px; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+  .pr-price { font-size: 48px; color: var(--pearl); font-weight: 800; letter-spacing: -2px; line-height: 1; }
+  .pr-price .per { font-size: 14px; color: var(--muted); font-weight: 500; margin-left: 4px; }
+  .pr-sub { color: var(--muted); font-size: 13px; margin: 8px 0 22px; }
+  .pr-card ul { list-style: none; }
+  .pr-card ul li { font-size: 13px; color: var(--pearl-dim); padding: 7px 0 7px 22px; position: relative; }
+  .pr-card ul li::before { content: '✓'; color: var(--gold); position: absolute; left: 0; font-weight: 700; }
+  .pr-cta { margin-top: 24px; width: 100%; padding: 13px; background: var(--graphite-3); border: 1px solid rgba(212,175,55,0.2); color: var(--gold); border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .pr-cta:hover { background: var(--gold-dim); }
+  .pr-card.popular .pr-cta { background: var(--gold); color: var(--graphite); border-color: var(--gold); }
+  .pr-card.popular .pr-cta:hover { background: var(--gold-soft); }
+
+  .test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .test { background: var(--graphite-2); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; position: relative; }
+  .test::before { content: '"'; position: absolute; top: 14px; right: 18px; font-size: 60px; color: var(--gold); opacity: 0.25; line-height: 1; font-family: Georgia, serif; }
+  .test-stars { color: var(--gold); font-size: 14px; margin-bottom: 12px; letter-spacing: 2px; }
+  .test-text { font-size: 14px; color: var(--pearl-dim); line-height: 1.6; margin-bottom: 18px; }
+  .test-author { display: flex; align-items: center; gap: 12px; }
+  .test-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-deep), var(--gold-soft)); color: var(--graphite); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+  .test-author .nm { font-size: 13px; color: var(--pearl); font-weight: 600; }
+  .test-author .ro { font-size: 11px; color: var(--muted); }
+  .test-placeholder { text-align: center; margin-top: 24px; color: var(--muted); font-size: 12px; font-style: italic; }
+
+  .lead-section { background: linear-gradient(180deg, var(--graphite-2) 0%, var(--graphite) 100%); position: relative; overflow: hidden; }
+  .lead-section::before { content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: 700px; height: 700px; background: radial-gradient(circle, rgba(212,175,55,0.10) 0%, transparent 65%); pointer-events: none; }
+  .lead-form { max-width: 580px; margin: 0 auto; background: rgba(0,0,0,0.4); border: 1px solid var(--gold-dim); border-radius: 20px; padding: 36px; position: relative; backdrop-filter: blur(10px); }
+  .lead-form .field { margin-bottom: 16px; }
+  .lead-form label { display: block; font-size: 11px; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; }
+  .lead-form input, .lead-form select, .lead-form textarea { width: 100%; background: var(--graphite-3); color: var(--pearl); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px; font-size: 14px; font-family: inherit; outline: none; }
+  .lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus { border-color: var(--gold); }
+  .lead-form textarea { resize: vertical; min-height: 90px; }
+  .lead-form .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .lead-submit { width: 100%; margin-top: 8px; padding: 16px; background: linear-gradient(135deg, var(--gold), var(--gold-soft)); color: var(--graphite); border: none; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 800; letter-spacing: 0.5px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .lead-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(212,175,55,0.4); }
+  .lead-success { display: none; text-align: center; padding: 30px; }
+  .lead-success.shown { display: block; }
+  .lead-success .ok { width: 60px; height: 60px; margin: 0 auto 18px; border-radius: 50%; background: var(--gold-dim); color: var(--gold); display: grid; place-items: center; font-size: 28px; font-weight: 800; }
+  .lead-success h4 { color: var(--pearl); font-size: 22px; margin-bottom: 8px; }
+  .lead-success p { color: var(--pearl-dim); font-size: 14px; }
+  .form-disclaimer { margin-top: 18px; font-size: 11px; color: var(--muted); line-height: 1.5; text-align: center; }
+  .waitlist-counter { text-align: center; color: var(--gold); font-size: 13px; margin-bottom: 20px; font-weight: 600; }
+  .waitlist-counter .num { font-size: 18px; font-weight: 800; }
+
+  .disclaimer-strip { margin-top: 48px; padding: 22px 28px; background: rgba(225,106,106,0.06); border: 1px solid rgba(225,106,106,0.18); border-radius: 14px; color: var(--pearl-dim); font-size: 13px; line-height: 1.6; max-width: 880px; margin-left: auto; margin-right: auto; }
+  .disclaimer-strip strong { color: var(--pearl); }
+
+  footer.site { background: var(--graphite-2); padding: 60px 0 32px; border-top: 1px solid rgba(212,175,55,0.08); }
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 36px; }
+  .foot-brand p { font-size: 13px; color: var(--muted); max-width: 320px; margin-top: 12px; line-height: 1.6; }
+  .foot-col h5 { font-size: 11px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 14px; }
+  .foot-col a { display: block; color: var(--pearl-dim); text-decoration: none; font-size: 13px; padding: 5px 0; }
+  .foot-col a:hover { color: var(--gold); }
+  .foot-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 22px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); }
+  .foot-bottom .tag { color: var(--gold); font-weight: 700; letter-spacing: 1px; }
+
+  @media (max-width: 980px) {
+    .hero { padding: 110px 0 60px; }
+    .hero-row { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { height: 460px; }
+    .strip-row { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
+    .features-grid, .how-grid, .test-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .modes-grid { grid-template-columns: 1fr; }
+    .pr-card.popular { transform: none; }
+    .pr-card.popular:hover { transform: translateY(-4px); }
+    .lead-form .field-row { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+  @media print { .nav, .hero-visual, .lead-section { display: none; } body { background: white; color: black; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-row">
+    <div class="nav-brand">
+      <div class="nav-logo">K</div>
+      <div class="nav-name">KkaloAI</div>
+    </div>
+    <div class="nav-links">
+      <a href="#features">Фічі</a>
+      <a href="#how">Як працює</a>
+      <a href="#modes">Modes</a>
+      <a href="#pricing">Ціни</a>
+      <a href="#contact" class="nav-cta">Early access</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-row">
+    <div>
+      <div class="hero-eyebrow">Open Beta · iOS + Android</div>
+      <h1>AI-трекер калорій,<br/><span class="accent">який ти контролюєш.</span></h1>
+      <p class="lede">Єдиний AI-трекер, який <strong>питає, перш ніж записати</strong>. Точно налаштуй портію слайдером, обери mode для свого health-context — і нарешті довіряй своїм цифрам.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Get Early Access →</a>
+        <a href="#how" class="btn btn-secondary">▸ Як це працює</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item"><span class="check">✓</span> Без даних картки</div>
+        <div class="trust-item"><span class="check">✓</span> 3M+ продуктів у barcode</div>
+        <div class="trust-item"><span class="check">✓</span> Native Health Connect</div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="ph-greet">Доброго ранку,</div>
+          <div class="ph-name">Олекс 👋</div>
+          <div class="ph-card">
+            <div class="lab">Сьогодні</div>
+            <div class="num">1,340<span class="of"> / 2,000 ккал</span></div>
+            <div class="ph-bar"><div></div></div>
+          </div>
+          <div class="ph-meal">
+            <div class="ph-meal-img"></div>
+            <div class="ph-meal-info">
+              <div class="nm">Грецький йогурт + ягоди</div>
+              <div class="kc">220 ккал · 18г білка</div>
+            </div>
+          </div>
+          <div class="ph-meal">
+            <div class="ph-meal-img"></div>
+            <div class="ph-meal-info">
+              <div class="nm">Курячий боул</div>
+              <div class="kc">540 ккал · 42г білка</div>
+            </div>
+          </div>
+          <div class="ph-slider">
+            <div class="lab">Підтверди порцію · 1.2×</div>
+            <div class="track"><div class="knob"></div></div>
+            <div class="scale"><span>0.5×</span><span>1×</span><span>2.5×</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="wrap strip-row">
+    <div class="strip-item"><div class="num">3M+</div><div class="lab">продуктів у barcode БД</div></div>
+    <div class="strip-item"><div class="num">100+</div><div class="lab">tracked нутрієнтів</div></div>
+    <div class="strip-item"><div class="num">4</div><div class="lab">spec health modes</div></div>
+    <div class="strip-item"><div class="num">7 днів</div><div class="lab">безкоштовно, без картки</div></div>
+  </div>
+</div>
+
+<section class="lp" id="features">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Що робить KkaloAI іншим</div>
+      <h2 class="sec-title">Усе, що інші трекери <span class="accent">мали shipping ще роки тому.</span></h2>
+      <p class="sec-lede">Шість фіч, що народилися з топ-скарг у calorie-tracker рев'ю — fixed, not patched.</p>
+    </div>
+    <div class="features-grid">
+      <div class="f-card reveal"><div class="f-icon">🎚</div><h4>Confirm & Adjust</h4><p>AI оцінює порцію. Ти точно налаштовуєш слайдером 0.5×–2.5× перед записом. Без silent guesses, без зламаної довіри.</p></div>
+      <div class="f-card reveal"><div class="f-icon">💎</div><h4>Прозорі ціни</h4><p>Три tiers, усі видно з першого дня. Без upsell traps, без прихованих підписок. Trial реально безкоштовний.</p></div>
+      <div class="f-card reveal"><div class="f-icon">🔄</div><h4>Native Health Connect</h4><p>Двосторонній sync з Android Health Connect (і Apple Health). Твоя екосистема coherent — read & write.</p></div>
+      <div class="f-card reveal"><div class="f-icon">🧬</div><h4>Spec modes</h4><p>GLP-1, PCOS, Bulking, Weight Management — чотири dedicated tracking-середовища, які incumbents не shipping.</p></div>
+      <div class="f-card reveal"><div class="f-icon">📦</div><h4>Total Health Hub</h4><p>Daily biofeedback, water tracker, barcode (3M+ products), favorites, та weekly AI report — усе в v1.0.</p></div>
+      <div class="f-card reveal"><div class="f-icon">👻</div><h4>Анонімна авторизація</h4><p>Спробуй без email чи пароля. Перетвори на real account будь-коли — твої дані пройдуть з тобою.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="lp" id="how" style="background: var(--graphite-2);">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Як це працює</div>
+      <h2 class="sec-title">Чотири кроки. <span class="accent">Тридцять секунд.</span></h2>
+      <p class="sec-lede">Від відкриття додатку до logged-and-confirmed швидше ніж typing manually.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-step reveal"><div class="how-num">1</div><h4>Зніми</h4><p>Зроби фото meal — single dish або повна тарілка. Або скануй barcode. Або скажи вголос.</p></div>
+      <div class="how-step reveal"><div class="how-num">2</div><h4>Оцінка</h4><p>AI ідентифікує items, портії та macros — типово менше ніж за 2 секунди.</p></div>
+      <div class="how-step reveal"><div class="how-num">3</div><h4>Налаштуй</h4><p>Перетягни слайдер 0.5×–2.5×, щоб співпасти з реальною порцією. Per-item override доступний.</p></div>
+      <div class="how-step reveal"><div class="how-num">4</div><h4>Підтверди</h4><p>Один тап, щоб зберегти. Macros sync до Health Connect. Денні targets оновлюються живо.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="lp" id="modes">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Спеціалізовані health modes</div>
+      <h2 class="sec-title">Tracking, який <span class="accent">розуміє твій контекст.</span></h2>
+      <p class="sec-lede">Чотири modes, побудовані для конкретних journeys. Перемикайся коли треба — твої дані залишаються consistent.</p>
+    </div>
+    <div class="modes-grid">
+
+      <div class="mode-card reveal">
+        <span class="mode-tag">Перший у галузі</span>
+        <h4>💉 GLP-1 Support Mode</h4>
+        <p>Для користувачів Ozempic, Wegovy, Mounjaro або Zepbound. Tracks medication cycle, не лише food.</p>
+        <ul>
+          <li>Трекер injection day</li>
+          <li>Лог побічних ефектів (нудота, втома, ситість)</li>
+          <li>Protein-floor enforcement (зберегти м'язи)</li>
+          <li>Hydration & electrolyte нагадування</li>
+          <li>GLP-1-friendly meal suggestions</li>
+        </ul>
+      </div>
+
+      <div class="mode-card reveal">
+        <span class="mode-tag">Underserved niche</span>
+        <h4>♀ PCOS & Гормональний баланс</h4>
+        <p>Cycle-phase aware tracking з insulin-resistance friendly guidance. Побудовано з PCOS-користувачами, не "приклеєно".</p>
+        <ul>
+          <li>Tracking фаз циклу (4 фази)</li>
+          <li>Carb-quality scoring</li>
+          <li>Hormonal-friendly meal filter</li>
+          <li>Watch інозитол/Mg/Vit-D мікронутр.</li>
+          <li>Mood + energy correlation</li>
+        </ul>
+      </div>
+
+      <div class="mode-card reveal">
+        <span class="mode-tag subtle">Для атлетів</span>
+        <h4>💪 Bulking / м'язовий приріст</h4>
+        <p>Adaptive surplus driven by trend math. Lean, standard або aggressive — твій вибір.</p>
+        <ul>
+          <li>Adaptive surplus algorithm</li>
+          <li>Protein/kg target enforcement</li>
+          <li>Тренувальний vs відпочинок калорії</li>
+          <li>Body comp trend visualization</li>
+        </ul>
+      </div>
+
+      <div class="mode-card reveal">
+        <span class="mode-tag subtle">Класична мета</span>
+        <h4>⚖ Weight Management</h4>
+        <p>Adaptive deficit на основі реального weight trend, не daily noise ваги. Без punitive nudges.</p>
+        <ul>
+          <li>Trend-based deficit calculation</li>
+          <li>Plateau detection + re-feed suggestions</li>
+          <li>Maintenance switch коли мета досягнута</li>
+          <li>М'які, non-shaming нагадування</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lp" id="pricing" style="background: var(--graphite-2);">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Тарифи та ціни</div>
+      <h2 class="sec-title">Три tiers. <span class="accent">Нуль сюрпризів.</span></h2>
+      <p class="sec-lede">Обери що підходить. Перемикай будь-коли. Trial справді безкоштовний — без картки, без dark patterns. <em style="color:var(--gold-soft)">Ціни Tier 1 (US/UK/CA/AU). Геолокації Tier 2/3 з знижками автоматично.</em></p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="pr-card reveal">
+        <div class="pr-name">Free</div>
+        <div class="pr-price">$0</div>
+        <div class="pr-sub">Назавжди, без картки</div>
+        <ul>
+          <li>Barcode сканер (3M+)</li>
+          <li>Улюблені страви</li>
+          <li>Water tracker</li>
+          <li>Health Connect 2-way</li>
+          <li>Анонімна авторизація</li>
+          <li>Daily Win share cards</li>
+        </ul>
+        <button class="pr-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Завантажити Free</button>
+      </div>
+
+      <div class="pr-card popular reveal">
+        <div class="pr-name">7-Day Trial</div>
+        <div class="pr-price">$0</div>
+        <div class="pr-sub">Без даних картки</div>
+        <ul>
+          <li>Усе з Free</li>
+          <li>AI Photo + Confirm & Adjust</li>
+          <li>Усі 4 spec modes</li>
+          <li>Voice Log</li>
+          <li>Weekly AI Report</li>
+          <li>Рекомендації страв</li>
+        </ul>
+        <button class="pr-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Почати Trial</button>
+      </div>
+
+      <div class="pr-card reveal">
+        <div class="pr-name">Premium</div>
+        <div class="pr-price">$59.99<span class="per">/yr</span></div>
+        <div class="pr-sub">або $7.99/mo · скасуй будь-коли</div>
+        <ul>
+          <li>Усе з Trial</li>
+          <li>3D Scan Export (Q3 2026)</li>
+          <li>Priority AI processing</li>
+          <li>Cloud backup & sync</li>
+          <li>Експорт історії</li>
+          <li>Підтримка < 24h</li>
+        </ul>
+        <button class="pr-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Go Premium</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lp" id="testimonials">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Голоси early beta</div>
+      <h2 class="sec-title">Від <span class="accent">перших 1,000 testers.</span></h2>
+      <p class="sec-lede">Що говорять beta-користувачі про слайдер, modes та довіру.</p>
+    </div>
+    <div class="test-grid">
+
+      <div class="test reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"Слайдер — це fix. Кожен інший додаток змушує прийняти AI guess. KkaloAI дозволяє сказати 'насправді цей боул був більший' без re-typing цілої страви."</p>
+        <div class="test-author">
+          <div class="test-avatar">JM</div>
+          <div><div class="nm">J. Marquez</div><div class="ro">Beta tester · Houston, TX</div></div>
+        </div>
+      </div>
+
+      <div class="test reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"Я на Wegovy, і GLP-1 mode — перший раз я відчуваю що додаток справді розуміє мій тиждень. Injection day, low-appetite дні, protein nudge — усе."</p>
+        <div class="test-author">
+          <div class="test-avatar">SK</div>
+          <div><div class="nm">S. Kowalski</div><div class="ro">Beta tester · Toronto, CA</div></div>
+        </div>
+      </div>
+
+      <div class="test reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"Нарешті PCOS-трекер, який не вдає, що мого циклу не існує. Carb-quality scoring + інозитол watch — саме те, що просила мій дієтолог."</p>
+        <div class="test-author">
+          <div class="test-avatar">RP</div>
+          <div><div class="nm">R. Patel</div><div class="ro">Beta tester · Manchester, UK</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="test-placeholder">— Testimonials є плейсхолдерами для production landing; реальні beta-цитати буде вставлено перед публічним запуском. —</div>
+  </div>
+</section>
+
+<section class="lp lead-section" id="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow">Get Early Access</div>
+      <h2 class="sec-title">Будь серед <span class="accent">перших, хто дізнається.</span></h2>
+      <p class="sec-lede">Залиш email — ми пришлемо download-link тільки-но KkaloAI з'явиться у твоїй країні, плюс 7-day Premium код.</p>
+    </div>
+
+    <div class="lead-form reveal">
+      <div class="waitlist-counter"><span class="num" id="waitNum">4,237</span> вже у waitlist</div>
+      <form id="leadForm" onsubmit="handleLead(event)">
+        <div class="field">
+          <label for="lf-name">Твоє ім'я</label>
+          <input id="lf-name" type="text" required placeholder="напр. Олекс Шевченко" />
+        </div>
+        <div class="field">
+          <label for="lf-email">Email</label>
+          <input id="lf-email" type="email" required placeholder="ti@example.com" />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="lf-platform">Основний пристрій</label>
+            <select id="lf-platform">
+              <option>Android</option>
+              <option>iOS</option>
+              <option>Обидва</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="lf-mode">Найцікавіший mode</label>
+            <select id="lf-mode">
+              <option>GLP-1 Support</option>
+              <option>PCOS & Гормональний</option>
+              <option>Weight Management</option>
+              <option>Bulking / М'язи</option>
+              <option>Просто цікаво</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lf-note">Що твій поточний трекер не робить добре? (необов'язково)</label>
+          <textarea id="lf-note" placeholder="Коротко достатньо — навіть одне слово допомагає нам пріоритизувати."></textarea>
+        </div>
+        <button type="submit" class="lead-submit">Надіслати мені download-link →</button>
+        <div class="form-disclaimer">Залишаючи email, ти погоджуєшся отримати один launch-нотіфікешн. Без розсилки. Дані не продаємо.</div>
+      </form>
+      <div class="lead-success" id="leadSuccess">
+        <div class="ok">✓</div>
+        <h4>Ти у списку.</h4>
+        <p>Ми пришлемо email тільки-но KkaloAI з'явиться у твоїй країні. До того — залишайся curious.</p>
+      </div>
+    </div>
+
+    <div class="disclaimer-strip reveal">
+      <strong>Медичне застереження.</strong> KkaloAI — інструмент для трекінгу та інформації, не медичний пристрій. Не діагностує, не лікує, не дає медичних порад. Спеціалізовані modes (GLP-1, PCOS, Bulking, Weight Management) розроблені, щоб допомогти організувати self-tracking навколо твого особистого health-context — вони НЕ замінюють консультацію кваліфікованого медика. Якщо у тебе є медичний стан або приймаєш ліки, проконсультуйся з лікарем перед зміною дієти.
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="nav-brand">
+          <div class="nav-logo">K</div>
+          <div class="nav-name">KkaloAI</div>
+        </div>
+        <p>AI-трекер калорій, побудований на прозорості, контролі користувача та health-journeys, які інші додатки ігнорують.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Продукт</h5>
+        <a href="#features">Фічі</a>
+        <a href="#how">Як працює</a>
+        <a href="#modes">Spec modes</a>
+        <a href="#pricing">Ціни</a>
+      </div>
+      <div class="foot-col">
+        <h5>Компанія</h5>
+        <a href="#">Про нас</a>
+        <a href="#">Press kit</a>
+        <a href="#">Партнерства</a>
+        <a href="#">Контакти</a>
+      </div>
+      <div class="foot-col">
+        <h5>Юридичне</h5>
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of service</a>
+        <a href="#">Медичний disclaimer</a>
+        <a href="#">GDPR / CCPA</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 KkaloAI · Усі права захищено</div>
+      <div class="tag">#KkaloAI · STOP GUESSING. START KNOWING.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+reveals.forEach(el => io.observe(el));
+
+function handleLead(e) {
+  e.preventDefault();
+  document.getElementById('leadForm').style.display = 'none';
+  document.getElementById('leadSuccess').classList.add('shown');
+}
+
+// Live waitlist counter (cosmetic — для соц. proof)
+let counter = 4237;
+setInterval(() => {
+  if (Math.random() < 0.3) {
+    counter++;
+    document.getElementById('waitNum').textContent = counter.toLocaleString('uk-UA');
+  }
+}, 4500);
+</script>
+</body>
+</html>

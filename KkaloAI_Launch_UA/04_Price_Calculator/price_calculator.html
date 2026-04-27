@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KkaloAI — Інтерактивний прайс-калькулятор</title>
+<style>
+  :root {
+    --graphite: #1a1a1a; --graphite-2: #242424; --graphite-3: #2f2f2f; --graphite-4: #383838;
+    --gold: #D4AF37; --gold-soft: #C9A961; --gold-dim: rgba(212, 175, 55, 0.18);
+    --pearl: #F8F6F0; --pearl-dim: #ECE9DF; --muted: #9A9A9A;
+    --green: #5CB874; --amber: #E0A14C; --red: #E16A6A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--graphite); color: var(--pearl); font-family: 'Segoe UI', sans-serif; line-height: 1.55; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 48px 28px 96px; }
+
+  header { border-bottom: 1px solid var(--gold-dim); padding-bottom: 28px; margin-bottom: 40px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo-mark { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--gold), var(--gold-soft)); color: var(--graphite); display: grid; place-items: center; font-weight: 800; font-size: 20px; box-shadow: 0 4px 14px rgba(212,175,55,0.3); }
+  .brand-text h1 { font-size: 22px; font-weight: 700; }
+  .brand-text small { color: var(--muted); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .meta { text-align: right; color: var(--muted); font-size: 13px; }
+  .meta strong { color: var(--gold); font-weight: 600; }
+
+  .hero { margin-bottom: 40px; }
+  .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
+  h2.page-title { font-size: clamp(32px, 4.6vw, 46px); font-weight: 700; letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px; }
+  h2.page-title .accent { color: var(--gold); }
+  .lede { font-size: 16px; color: var(--pearl-dim); max-width: 800px; }
+
+  .calc-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
+  .selector-panel { background: var(--graphite-2); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 28px; }
+
+  .plan-switcher { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: var(--graphite-3); padding: 6px; border-radius: 14px; margin-bottom: 20px; }
+  .plan-switcher button { background: transparent; color: var(--pearl-dim); border: none; padding: 12px 14px; border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.18s ease; }
+  .plan-switcher button:hover { color: var(--pearl); }
+  .plan-switcher button.active { background: var(--gold); color: var(--graphite); box-shadow: 0 4px 14px rgba(212,175,55,0.25); }
+  .plan-switcher .sub { display: block; font-size: 10px; opacity: 0.7; margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+
+  .toggle-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 28px; }
+  .billing-toggle, .geo-toggle { display: flex; background: var(--graphite-3); padding: 4px; border-radius: 999px; }
+  .billing-toggle button, .geo-toggle button { background: transparent; color: var(--pearl-dim); border: none; padding: 8px 14px; border-radius: 999px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; letter-spacing: 0.5px; }
+  .billing-toggle button.active, .geo-toggle button.active { background: var(--gold); color: var(--graphite); }
+  .billing-toggle button .save, .geo-toggle button .save { background: rgba(26,26,26,0.18); color: var(--graphite); padding: 1px 6px; border-radius: 4px; font-size: 10px; margin-left: 4px; font-weight: 800; }
+
+  .group-head { color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin: 28px 0 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(212,175,55,0.12); }
+  .group-head:first-of-type { margin-top: 0; }
+
+  .feature-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); gap: 12px; }
+  .feature-row:last-child { border-bottom: none; }
+  .feature-row .info { flex-grow: 1; }
+  .feature-row .ttl { font-size: 14px; font-weight: 600; color: var(--pearl); margin-bottom: 2px; display: flex; align-items: center; gap: 8px; }
+  .feature-row .ttl .badge { background: var(--gold-dim); color: var(--gold); font-size: 9px; letter-spacing: 1px; font-weight: 800; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; }
+  .feature-row .desc { font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .feature-row .ctrl { flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+  .feature-row .price-tag { font-size: 12px; color: var(--gold); font-weight: 600; min-width: 64px; text-align: right; }
+  .feature-row .price-tag.included { color: var(--green); }
+  .feature-row .price-tag.locked { color: var(--muted); }
+
+  .switch { position: relative; display: inline-block; width: 42px; height: 24px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--graphite-4); border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; transition: 0.2s; }
+  .slider::before { content: ''; position: absolute; height: 18px; width: 18px; left: 2px; top: 2px; background: var(--pearl-dim); border-radius: 50%; transition: 0.2s; }
+  input:checked + .slider { background: var(--gold); border-color: var(--gold); }
+  input:checked + .slider::before { transform: translateX(18px); background: var(--graphite); }
+  input:disabled + .slider { cursor: not-allowed; opacity: 0.45; }
+
+  .summary-panel { background: linear-gradient(180deg, var(--graphite-2), var(--graphite-3)); border: 1px solid var(--gold-dim); border-radius: 18px; padding: 30px 28px; position: sticky; top: 24px; height: fit-content; }
+  .summary-panel .label { color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+  .summary-panel h3 { font-size: 24px; color: var(--pearl); font-weight: 700; letter-spacing: -0.3px; margin: 6px 0 22px; }
+
+  .total-block { background: rgba(0,0,0,0.25); border: 1px solid rgba(212,175,55,0.18); border-radius: 14px; padding: 22px; margin-bottom: 22px; }
+  .total-block .total-label { color: var(--muted); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }
+  .total-block .total-amount { font-size: 52px; font-weight: 800; letter-spacing: -2px; color: var(--pearl); margin: 6px 0 4px; line-height: 1; }
+  .total-block .total-amount .sym { color: var(--gold); font-size: 28px; vertical-align: top; margin-right: 2px; }
+  .total-block .total-amount .per { color: var(--muted); font-size: 16px; font-weight: 500; margin-left: 6px; letter-spacing: 0; }
+  .total-block .total-sub { font-size: 12px; color: var(--gold-soft); margin-top: 8px; }
+  .total-block .savings { display: inline-block; margin-top: 10px; background: rgba(92,184,116,0.12); color: var(--green); font-size: 11px; padding: 4px 10px; border-radius: 999px; font-weight: 700; letter-spacing: 0.5px; }
+
+  .breakdown { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 18px; }
+  .breakdown h4 { color: var(--muted); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; margin-bottom: 12px; }
+  .br-item { display: flex; justify-content: space-between; padding: 7px 0; font-size: 13px; }
+  .br-item .name { color: var(--pearl-dim); }
+  .br-item .val { color: var(--gold); font-weight: 600; }
+  .br-item.empty .name { color: var(--muted); font-style: italic; }
+  .br-item.empty .val { color: var(--muted); }
+
+  .cta-block { margin-top: 22px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.05); }
+  .cta-btn { display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, var(--gold), var(--gold-soft)); color: var(--graphite); border: none; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; cursor: pointer; text-align: center; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
+  .cta-note { text-align: center; color: var(--muted); font-size: 11px; margin-top: 10px; }
+
+  .compare-strip { margin-top: 36px; background: var(--graphite-2); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 22px 26px; }
+  .compare-strip h4 { color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+  .compare-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; align-items: center; }
+  .compare-item { text-align: center; padding: 10px 8px; border-radius: 10px; background: var(--graphite-3); }
+  .compare-item.you { background: var(--gold-dim); border: 1px solid var(--gold); }
+  .compare-item .ci-name { font-size: 11px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+  .compare-item.you .ci-name { color: var(--gold); }
+  .compare-item .ci-price { font-size: 17px; font-weight: 700; color: var(--pearl); }
+  .compare-item.you .ci-price { color: var(--gold); }
+  .compare-item.banned { background: rgba(225,106,106,0.10); border: 1px solid rgba(225,106,106,0.3); }
+  .compare-item.banned .ci-name { color: var(--red); }
+  .compare-item.banned .ci-price { color: var(--red); text-decoration: line-through; }
+
+  footer { margin-top: 60px; text-align: center; color: var(--muted); font-size: 12px; }
+  footer .tag { color: var(--gold); font-weight: 600; letter-spacing: 1px; }
+
+  @media (max-width: 980px) {
+    .calc-layout { grid-template-columns: 1fr; }
+    .summary-panel { position: relative; top: 0; }
+    .compare-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    html, body { background: white; color: black; }
+    .wrap { max-width: 100%; padding: 12px; }
+    .selector-panel, .summary-panel, .compare-strip, .total-block { background: white !important; border: 1px solid #ccc !important; }
+    .summary-panel { position: relative; top: 0; }
+    h2.page-title, .brand-text h1, .summary-panel h3, .total-block .total-amount, .feature-row .ttl, .compare-item .ci-price { color: #1a1a1a !important; }
+    h2.page-title .accent, .eyebrow, .label, .group-head, .total-block .total-amount .sym, .br-item .val, .compare-strip h4 { color: #8a6d1a !important; }
+    .lede, .feature-row .desc, .total-block .total-label, .total-block .total-sub, .br-item .name, .compare-item .ci-name, .meta { color: #444 !important; }
+    .plan-switcher, .billing-toggle, .geo-toggle, .cta-block, .switch { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo-mark">K</div>
+      <div class="brand-text">
+        <h1>KkaloAI</h1>
+        <small>Прайс-калькулятор</small>
+      </div>
+    </div>
+    <div class="meta">
+      Артефакт 4 з 6 · <strong>Інтерактивний калькулятор</strong><br/>
+      Збери свій KkaloAI · Квітень 2026
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="eyebrow">Вибери що треба · Побач ціну живо</div>
+    <h2 class="page-title">Обери <span class="accent">spec modes</span> та фічі.<br/>Ми порахуємо.</h2>
+    <p class="lede">Перемикай модулі on/off, обирай між monthly/annual + geo-tier, і дивись як total оновлюється миттєво. Без прихованих fees, без сюрпризів — кожен tier і add-on на цій сторінці.</p>
+  </div>
+
+  <div class="calc-layout">
+    <div class="selector-panel">
+
+      <div class="plan-switcher" id="planSwitcher">
+        <button data-plan="free" class="active">Free<span class="sub">$0 назавжди</span></button>
+        <button data-plan="trial">Trial<span class="sub">7 днів · без картки</span></button>
+        <button data-plan="premium">Premium<span class="sub">Повний доступ</span></button>
+      </div>
+
+      <div class="toggle-row">
+        <div class="billing-toggle" id="billingToggle">
+          <button data-bill="monthly" class="active">Місяць</button>
+          <button data-bill="annual">Рік <span class="save">–38%</span></button>
+        </div>
+        <div class="geo-toggle" id="geoToggle">
+          <button data-geo="t1" class="active">Tier 1 · US/UK/CA/AU</button>
+          <button data-geo="t2">Tier 2 · DE/FR/JP <span class="save">–17%</span></button>
+          <button data-geo="t3">Tier 3 · PL/UA/BR/IN <span class="save">–58%</span></button>
+        </div>
+      </div>
+
+      <div class="group-head">Спеціалізовані health modes</div>
+      <div class="feature-row" data-cat="mode" data-id="glp1" data-price="2.50">
+        <div class="info">
+          <div class="ttl">GLP-1 Support Mode <span class="badge">Перший</span></div>
+          <div class="desc">Для користувачів Ozempic, Wegovy, Mounjaro або Zepbound — injection day, побічки, protein floor.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="mode" data-id="pcos" data-price="2.50">
+        <div class="info">
+          <div class="ttl">PCOS & Гормональний баланс <span class="badge">Перший</span></div>
+          <div class="desc">Cycle-phase aware tracking, carb-quality scoring, hormonal-friendly meal filter.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="mode" data-id="bulk" data-price="2.00">
+        <div class="info">
+          <div class="ttl">Bulking / м'язовий приріст</div>
+          <div class="desc">Adaptive surplus, protein/kg targets, training-day vs rest-day calories.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="mode" data-id="weight" data-price="2.00">
+        <div class="info">
+          <div class="ttl">Weight Management</div>
+          <div class="desc">Adaptive deficit на основі real weight trend, plateau detection, refeed suggestions.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="group-head">AI Power фічі</div>
+      <div class="feature-row" data-cat="ai" data-id="photo" data-price="3.00">
+        <div class="info">
+          <div class="ttl">AI Photo + Confirm & Adjust <span class="badge">Визначальна</span></div>
+          <div class="desc">Зніми фото, точно налаштуй портію через 0.5×–2.5× слайдер перед записом.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$3.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="ai" data-id="voice" data-price="1.50">
+        <div class="info">
+          <div class="ttl">Voice Log</div>
+          <div class="desc">Скажи свою їжу природньою мовою. AI парсить, оцінює і додає в лог.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$1.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="ai" data-id="report" data-price="2.00">
+        <div class="info">
+          <div class="ttl">Weekly AI Report</div>
+          <div class="desc">Недільний персоналізований summary з patterns та actionable nudge на наступний тиждень.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="ai" data-id="suggest" data-price="1.50">
+        <div class="info">
+          <div class="ttl">Рекомендації страв</div>
+          <div class="desc">3 mode-aware пропозиції на день для закриття залишкових macro-цілей.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$1.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="group-head">Total Health Hub</div>
+      <div class="feature-row" data-cat="hub" data-id="bio" data-price="1.00">
+        <div class="info">
+          <div class="ttl">Biofeedback Tracker</div>
+          <div class="desc">30-секундний денний check-in: сон, стрес, енергія, настрій, травлення.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$1.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="hub" data-id="water" data-price="0">
+        <div class="info">
+          <div class="ttl">Water Tracker</div>
+          <div class="desc">Smart goal, quick-add кнопки, home-screen widget.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag included">Free</span>
+          <label class="switch"><input type="checkbox" disabled checked /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="hub" data-id="hc" data-price="0">
+        <div class="info">
+          <div class="ttl">Health Connect 2-Way Sync</div>
+          <div class="desc">Native Android Health Connect / Apple Health двосторонній sync.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag included">Free</span>
+          <label class="switch"><input type="checkbox" disabled checked /><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="group-head">Premium add-ons</div>
+      <div class="feature-row" data-cat="addon" data-id="3d" data-price="2.00">
+        <div class="info">
+          <div class="ttl">3D Scan Export <span class="badge">Q3 2026</span></div>
+          <div class="desc">Місячний 3D scan тіла, рендер як GIF/MP4 — viral-ready progress пости.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$2.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="addon" data-id="cloud" data-price="0.50">
+        <div class="info">
+          <div class="ttl">Cloud Backup & Sync</div>
+          <div class="desc">Encrypted cloud backup, multi-device sync, повний експорт у JSON/CSV.</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$0.50/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="feature-row" data-cat="addon" data-id="priority" data-price="1.00">
+        <div class="info">
+          <div class="ttl">Priority AI processing</div>
+          <div class="desc">Skip the queue в peak hours. Швидше photo recognition (під 2 сек).</div>
+        </div>
+        <div class="ctrl">
+          <span class="price-tag">+$1.00/mo</span>
+          <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-panel">
+      <div class="label">Твій estimate</div>
+      <h3 id="planTitle">Free Plan</h3>
+
+      <div class="total-block">
+        <div class="total-label" id="totalLabel">Місячна ціна</div>
+        <div class="total-amount">
+          <span class="sym">$</span><span id="totalAmount">0.00</span><span class="per" id="totalPer">/mo</span>
+        </div>
+        <div class="total-sub" id="totalSub">Безкоштовно назавжди — без картки.</div>
+        <span class="savings" id="savingsTag" style="display:none">Save $0/yr</span>
+      </div>
+
+      <div class="breakdown">
+        <h4>Що включено</h4>
+        <div id="breakdownList">
+          <div class="br-item empty"><span class="name">Жодних платних фіч ще не вибрано</span><span class="val">—</span></div>
+        </div>
+      </div>
+
+      <div class="cta-block">
+        <button class="cta-btn" id="ctaBtn">Почати 7-денний trial</button>
+        <div class="cta-note">Без картки · Скасуй будь-коли · М'який graceful downgrade</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-strip">
+    <h4>Як твоя збірка проти incumbents (річна, поточний geo-tier)</h4>
+    <div class="compare-grid">
+      <div class="compare-item you"><div class="ci-name">Твій KkaloAI</div><div class="ci-price" id="cmpYou">$0</div></div>
+      <div class="compare-item banned"><div class="ci-name">Cal AI (видалений)</div><div class="ci-price">$71.99</div></div>
+      <div class="compare-item"><div class="ci-name">Yazio PRO</div><div class="ci-price">$47.90</div></div>
+      <div class="compare-item"><div class="ci-name">MyFitnessPal Premium</div><div class="ci-price">$79.99</div></div>
+      <div class="compare-item"><div class="ci-name">Lifesum Premium</div><div class="ci-price">$99.99</div></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="tag">STOP GUESSING. START KNOWING.</div>
+    <div style="margin-top:8px;">© 2026 KkaloAI · Інтерактивний прайс-калькулятор · Артефакт 4 з 6</div>
+  </footer>
+</div>
+
+<script>
+const PLAN_BASE = { free: 0, trial: 0, premium: 4.99 };
+const ANNUAL_DISCOUNT = 0.62;
+const GEO_MULT = { t1: 1.0, t2: 0.83, t3: 0.42 };
+const GEO_LABEL = { t1: 'Tier 1 (US/UK/CA/AU)', t2: 'Tier 2 (DE/FR/JP)', t3: 'Tier 3 (PL/UA/BR/IN)' };
+
+let plan = 'free';
+let billing = 'monthly';
+let geo = 't1';
+
+const switchEls = document.querySelectorAll('#planSwitcher button');
+const billEls = document.querySelectorAll('#billingToggle button');
+const geoEls = document.querySelectorAll('#geoToggle button');
+const totalAmountEl = document.getElementById('totalAmount');
+const totalPerEl = document.getElementById('totalPer');
+const totalLabelEl = document.getElementById('totalLabel');
+const totalSubEl = document.getElementById('totalSub');
+const planTitleEl = document.getElementById('planTitle');
+const breakdownList = document.getElementById('breakdownList');
+const savingsTag = document.getElementById('savingsTag');
+const ctaBtn = document.getElementById('ctaBtn');
+const cmpYou = document.getElementById('cmpYou');
+const featureRows = document.querySelectorAll('.feature-row[data-id]');
+
+switchEls.forEach(b => b.addEventListener('click', () => {
+  switchEls.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  plan = b.dataset.plan;
+  applyPlanLock();
+  recalc();
+}));
+
+billEls.forEach(b => b.addEventListener('click', () => {
+  billEls.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  billing = b.dataset.bill;
+  recalc();
+}));
+
+geoEls.forEach(b => b.addEventListener('click', () => {
+  geoEls.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  geo = b.dataset.geo;
+  recalc();
+}));
+
+featureRows.forEach(row => {
+  const cb = row.querySelector('input[type="checkbox"]');
+  if (cb) cb.addEventListener('change', recalc);
+});
+
+function applyPlanLock() {
+  featureRows.forEach(row => {
+    const cb = row.querySelector('input[type="checkbox"]');
+    const price = parseFloat(row.dataset.price) || 0;
+    if (price === 0) return;
+    const tag = row.querySelector('.price-tag');
+    if (plan === 'free') {
+      cb.checked = false; cb.disabled = true;
+      tag.classList.add('locked'); tag.classList.remove('included');
+      tag.textContent = 'Premium';
+    } else if (plan === 'trial') {
+      cb.disabled = true; cb.checked = true;
+      tag.classList.remove('locked'); tag.classList.add('included');
+      tag.textContent = 'Включено';
+    } else {
+      cb.disabled = false; tag.classList.remove('locked', 'included');
+      tag.textContent = '+$' + price.toFixed(2) + '/mo';
+    }
+  });
+}
+
+function recalc() {
+  let monthly = PLAN_BASE[plan];
+  const selected = [];
+
+  if (plan === 'trial' || plan === 'premium') {
+    selected.push({ name: 'Premium base', val: PLAN_BASE.premium });
+  }
+
+  featureRows.forEach(row => {
+    const cb = row.querySelector('input[type="checkbox"]');
+    const price = parseFloat(row.dataset.price) || 0;
+    if (price === 0) return;
+    if (plan === 'free') return;
+    if (cb.checked) {
+      monthly += price;
+      selected.push({ name: row.querySelector('.ttl').firstChild.textContent.trim(), val: price });
+    }
+  });
+
+  if (plan === 'free') monthly = 0;
+
+  // Apply geo
+  monthly = monthly * GEO_MULT[geo];
+
+  if (plan === 'free') {
+    planTitleEl.textContent = 'Free Plan';
+    totalSubEl.textContent = 'Безкоштовно назавжди — без картки. Upgrade будь-коли.';
+    ctaBtn.textContent = 'Завантажити Free';
+  } else if (plan === 'trial') {
+    planTitleEl.textContent = '7-денний Trial';
+    totalSubEl.textContent = 'Повний доступ на 7 днів. Без даних картки.';
+    ctaBtn.textContent = 'Почати 7-денний trial';
+  } else {
+    planTitleEl.textContent = 'Premium · ' + GEO_LABEL[geo];
+    totalSubEl.textContent = 'Скасуй будь-коли · Auto-renew · М\'який downgrade.';
+    ctaBtn.textContent = 'Upgrade до Premium';
+  }
+
+  let display, per, label, savings;
+  if (plan === 'free' || plan === 'trial') {
+    display = 0; per = '/mo';
+    label = plan === 'free' ? 'Місячна ціна' : 'Під час trial';
+    savings = null;
+  } else if (billing === 'monthly') {
+    display = monthly; per = '/mo';
+    label = 'Місячна ціна · ' + GEO_LABEL[geo];
+    const annualEq = monthly * 12;
+    const annualPrice = monthly * 12 * ANNUAL_DISCOUNT;
+    savings = annualEq - annualPrice;
+  } else {
+    const annualPrice = monthly * 12 * ANNUAL_DISCOUNT;
+    display = annualPrice; per = '/yr';
+    label = 'Річна ціна · ' + GEO_LABEL[geo];
+    savings = (monthly * 12) - annualPrice;
+  }
+
+  totalAmountEl.textContent = display.toFixed(2);
+  totalPerEl.textContent = per;
+  totalLabelEl.textContent = label;
+
+  if (savings && savings > 0.5) {
+    savingsTag.style.display = 'inline-block';
+    if (billing === 'annual') savingsTag.textContent = `Економія $${savings.toFixed(2)}/рік vs місячна`;
+    else savingsTag.textContent = `Економія $${savings.toFixed(2)}/рік на річній`;
+  } else {
+    savingsTag.style.display = 'none';
+  }
+
+  if (plan === 'free') {
+    breakdownList.innerHTML = '<div class="br-item"><span class="name">Barcode · Улюблені · Water · Health Connect</span><span class="val">Включено</span></div>';
+  } else {
+    const geoMonthly = (val) => (val * GEO_MULT[geo]).toFixed(2);
+    breakdownList.innerHTML = selected.map(item =>
+      `<div class="br-item"><span class="name">${item.name}</span><span class="val">$${geoMonthly(item.val)}/mo</span></div>`
+    ).join('');
+  }
+
+  let annualForCompare;
+  if (plan === 'free' || plan === 'trial') annualForCompare = 0;
+  else annualForCompare = (billing === 'annual') ? display : monthly * 12 * ANNUAL_DISCOUNT;
+  cmpYou.textContent = '$' + annualForCompare.toFixed(2);
+}
+
+applyPlanLock();
+recalc();
+</script>
+</body>
+</html>
