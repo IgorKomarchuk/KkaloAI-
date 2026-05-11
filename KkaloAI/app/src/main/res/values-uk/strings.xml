@@ -135,7 +135,7 @@
     <string name="pw_plan_monthly_price_default">…</string>
     <string name="pw_plan_monthly_sub">Оплата щомісяця</string>
     <string name="pw_cta">Почати 7-денний пробний період</string>
-    <string name="pw_disclaimer">Скасувати можна будь-коли в Google Play. Під час пробного періоду оплати немає.</string>
+    <string name="pw_disclaimer">Після закінчення 7-денного пробного періоду буде автоматично списана вартість обраного плану. Скасуйте в Google Play до закінчення пробного періоду — і жодних списань не буде.</string>
     <string name="pw_err_service">Сервіс Google Play Billing недоступний. Спробуйте ще раз.</string>
     <string name="pw_err_offer">Ця підписка зараз недоступна.</string>
     <string name="pw_err_purchase">Не вдалося здійснити покупку. Спробуйте ще раз.</string>
@@ -157,6 +157,7 @@
     <string name="dash_favorites_cd">Обране</string>
     <string name="dash_refresh_cd">Оновити</string>
     <string name="dash_settings_cd">Налаштування</string>
+    <string name="dash_more_cd">Більше опцій</string>
     <string name="dash_scan_barcode_cd">Сканувати штрих-код</string>
     <string name="dash_snap_food_cd">Сфотографувати їжу</string>
     <string name="dash_planned_today">Заплановано сьогодні</string>
@@ -194,6 +195,8 @@
     <string name="scan_hint_placeholder">Як приготовано? (напр. смажене на олії)</string>
     <string name="scan_voice_unavailable">Голосове введення недоступне на цьому пристрої.</string>
     <string name="scan_voice_empty">Не вдалося розпізнати — спробуйте ще раз.</string>
+    <string name="scan_permission_required">Для сканування їжі потрібен дозвіл на камеру</string>
+    <string name="scan_open_settings">Відкрити налаштування</string>
 
     <!-- Daily check-in -->
     <string name="checkin_title_new">Щоденна самоперевірка</string>
@@ -214,6 +217,9 @@
     <!-- Water -->
     <string name="water_title">Вода</string>
     <string name="water_amount">%1$d / %2$d мл</string>
+    <string name="water_add_250">+250 мл</string>
+    <string name="water_add_500">+500 мл</string>
+    <string name="water_add_750">+750 мл</string>
 
     <!-- Health Connect runtime -->
     <string name="hc_denied">Доступ до Health Connect не надано.</string>
@@ -222,7 +228,11 @@
     <string name="fav_title">Обране</string>
     <string name="fav_empty">Ще немає обраного. Утримуйте страву щоб зберегти.</string>
     <string name="fav_added_toast">Додано до сьогоднішнього щоденника</string>
-    <string name="fav_remove_cd">Видалити</string>
+    <string name="fav_remove_cd">Видалити з улюблених</string>
+    <string name="fav_remove_title">Видалити з улюблених?</string>
+    <string name="fav_remove_confirm">Видалити \"%1$s\" з улюблених?</string>
+    <string name="fav_remove_confirm_btn">Видалити</string>
+    <string name="common_cancel">Скасувати</string>
     <string name="fav_log_again_cd">Додати знову</string>
 
     <!-- Weight entry -->
@@ -364,6 +374,9 @@
     <string name="stats_days">д</string>
     <string name="stats_avg_kcal">Середнє %1$d ккал / день</string>
     <string name="stats_goal_line">Пунктир = денна ціль (%1$d ккал)</string>
+    <string name="stats_kcal_chart_desc">Графік калорій: середнє %1$d ккал за %2$d днів</string>
+    <string name="stats_weight_chart_desc">Графік ваги, зміна: %1$s</string>
+    <string name="stats_donut_desc">Розподіл макросів: білки %1$d г, вуглеводи %2$d г, жири %3$d г</string>
     <string name="stats_weight_change">Зміна: %1$s</string>
     <string name="stats_weight_empty">Запишіть вагу з головного екрану щоб бачити тренд.</string>
     <string name="stats_macros_total">Макро за період</string>

@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -106,7 +108,8 @@ private fun KcalChart(state: StatsState) {
 
         Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
             Box(modifier = Modifier.padding(12.dp)) {
-                Canvas(modifier = Modifier.fillMaxWidth().height(220.dp)) {
+                val kcalChartDesc = stringResource(R.string.stats_kcal_chart_desc, state.avgKcal, state.rangeDays)
+                Canvas(modifier = Modifier.fillMaxWidth().height(220.dp).semantics { contentDescription = kcalChartDesc }) {
                     if (state.dailyKcal.isEmpty()) return@Canvas
                     val maxKcal = max(state.dailyKcal.maxOf { it.kcal }, state.calorieGoal).toFloat().coerceAtLeast(1f)
                     val barCount = state.dailyKcal.size
@@ -171,7 +174,8 @@ private fun WeightChart(state: StatsState) {
 
         Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
             Box(modifier = Modifier.padding(12.dp)) {
-                Canvas(modifier = Modifier.fillMaxWidth().height(220.dp)) {
+                val weightChartDesc = stringResource(R.string.stats_weight_chart_desc, deltaText)
+                Canvas(modifier = Modifier.fillMaxWidth().height(220.dp).semantics { contentDescription = weightChartDesc }) {
                     val pts = state.weightHistory
                     val minW = pts.minOf { it.kg }
                     val maxW = pts.maxOf { it.kg }
@@ -212,10 +216,12 @@ private fun MacroDonut(state: StatsState) {
         )
         Spacer(Modifier.height(12.dp))
 
+        val donutDesc = stringResource(R.string.stats_donut_desc, m.proteinG, m.carbsG, m.fatsG)
         Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
             Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Canvas(modifier = Modifier.size(200.dp)) {
+                Canvas(modifier = Modifier.size(200.dp).semantics { contentDescription = donutDesc }) {
                     val sw = 36f
+                    val arcGap = 2f
                     val arcSize = Size(size.width - sw, size.height - sw)
                     val topLeft = Offset(sw / 2, sw / 2)
                     var startAngle = -90f
@@ -225,17 +231,18 @@ private fun MacroDonut(state: StatsState) {
                         cPct to Color(0xFFF1C40F),
                         fPct to Color(0xFF3498DB)
                     ).forEach { (pct, color) ->
-                        val sweep = pct * 360f
+                        val fullSweep = pct * 360f
+                        val drawSweep = (fullSweep - arcGap).coerceAtLeast(0f)
                         drawArc(
                             color = color,
                             startAngle = startAngle,
-                            sweepAngle = sweep,
+                            sweepAngle = drawSweep,
                             useCenter = false,
                             topLeft = topLeft,
                             size = arcSize,
                             style = Stroke(width = sw, cap = StrokeCap.Butt)
                         )
-                        startAngle += sweep
+                        startAngle += fullSweep
                     }
                 }
                 Spacer(Modifier.height(16.dp))

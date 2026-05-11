@@ -82,7 +82,11 @@ fun WeightEntryScreen(
 
             OutlinedTextField(
                 value = draft,
-                onValueChange = { draft = it.filter { ch -> ch.isDigit() || ch == '.' } },
+                onValueChange = { new ->
+                    if (new.isEmpty() || new.matches(Regex("^\\d{0,3}(\\.\\d{0,1})?\$"))) {
+                        draft = new
+                    }
+                },
                 label = { Text(stringResource(R.string.weight_input_label)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),

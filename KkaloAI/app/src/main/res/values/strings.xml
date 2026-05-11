@@ -134,7 +134,7 @@
     <string name="pw_plan_monthly_price_default">…</string>
     <string name="pw_plan_monthly_sub">Billed monthly</string>
     <string name="pw_cta">Start 7-day free trial</string>
-    <string name="pw_disclaimer">Cancel anytime in Google Play. No charge during trial.</string>
+    <string name="pw_disclaimer">After your 7-day free trial, the selected plan will be charged automatically. Cancel anytime in Google Play before the trial ends.</string>
     <string name="pw_err_service">Google Play Billing is not available. Please try again.</string>
     <string name="pw_err_offer">This subscription offer is not available right now.</string>
     <string name="pw_err_purchase">Purchase failed. Please try again.</string>
@@ -156,6 +156,7 @@
     <string name="dash_favorites_cd">Favorites</string>
     <string name="dash_refresh_cd">Refresh</string>
     <string name="dash_settings_cd">Settings</string>
+    <string name="dash_more_cd">More options</string>
     <string name="dash_scan_barcode_cd">Scan barcode</string>
     <string name="dash_snap_food_cd">Snap food</string>
     <string name="dash_planned_today">Planned today</string>
@@ -193,6 +194,8 @@
     <string name="scan_hint_placeholder">How was it cooked? (e.g. fried with oil)</string>
     <string name="scan_voice_unavailable">Voice recognition not available on this device.</string>
     <string name="scan_voice_empty">Couldn\'t hear you — please try again.</string>
+    <string name="scan_permission_required">Camera permission is required to scan food</string>
+    <string name="scan_open_settings">Open App Settings</string>
 
     <!-- Daily check-in -->
     <string name="checkin_title_new">Daily Check-in</string>
@@ -213,6 +216,9 @@
     <!-- Water -->
     <string name="water_title">Water</string>
     <string name="water_amount">%1$d / %2$d ml</string>
+    <string name="water_add_250">+250 ml</string>
+    <string name="water_add_500">+500 ml</string>
+    <string name="water_add_750">+750 ml</string>
 
     <!-- Health Connect runtime -->
     <string name="hc_denied">Health Connect access was denied.</string>
@@ -221,8 +227,12 @@
     <string name="fav_title">Favorites</string>
     <string name="fav_empty">No favorites yet. Long-press a meal to save it.</string>
     <string name="fav_added_toast">Added to today\'s log</string>
-    <string name="fav_remove_cd">Remove</string>
+    <string name="fav_remove_cd">Remove from favorites</string>
     <string name="fav_log_again_cd">Log again</string>
+    <string name="fav_remove_title">Remove favorite?</string>
+    <string name="fav_remove_confirm">Remove \"%1$s\" from favorites?</string>
+    <string name="fav_remove_confirm_btn">Remove</string>
+    <string name="common_cancel">Cancel</string>
 
     <!-- Weight entry -->
     <string name="weight_title_screen">Log Weight</string>
@@ -363,6 +373,9 @@
     <string name="stats_days">d</string>
     <string name="stats_avg_kcal">Avg %1$d kcal / day</string>
     <string name="stats_goal_line">Dashed line = your daily goal (%1$d kcal)</string>
+    <string name="stats_kcal_chart_desc">Calorie bar chart: average %1$d kcal over %2$d days</string>
+    <string name="stats_weight_chart_desc">Weight line chart, change: %1$s</string>
+    <string name="stats_donut_desc">Macro split: protein %1$d g, carbs %2$d g, fats %3$d g</string>
     <string name="stats_weight_change">Change: %1$s</string>
     <string name="stats_weight_empty">Log your weight from the Dashboard to see a trend.</string>
     <string name="stats_macros_total">Macros logged in this period</string>

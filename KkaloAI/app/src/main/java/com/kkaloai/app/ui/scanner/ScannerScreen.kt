@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.net.Uri
+import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -119,11 +121,23 @@ fun ScannerScreen(
                 modifier = Modifier.fillMaxSize()
             )
         } else {
+            val ctx = LocalContext.current
             Box(
                 modifier = Modifier.fillMaxSize().background(Color.Black),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Camera permission required", color = Color.White)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(stringResource(R.string.scan_permission_required), color = Color.White)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", ctx.packageName, null)
+                        }
+                        ctx.startActivity(intent)
+                    }) {
+                        Text(stringResource(R.string.scan_open_settings))
+                    }
+                }
             }
         }
 
@@ -189,7 +203,8 @@ private fun ScannerModeBar(
 ) {
     androidx.compose.foundation.layout.Row(
         modifier = modifier
-            .padding(top = 36.dp)
+            .statusBarsPadding()
+            .padding(top = 8.dp)
             .background(
                 Color.Black.copy(alpha = 0.45f),
                 androidx.compose.foundation.shape.RoundedCornerShape(50)
@@ -316,6 +331,7 @@ fun ScannerHud(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .navigationBarsPadding()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom

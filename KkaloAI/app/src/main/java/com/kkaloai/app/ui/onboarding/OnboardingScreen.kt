@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -85,7 +87,8 @@ fun OnboardingScreen(
             progress = { (pagerState.currentPage + 1) / PAGE_COUNT.toFloat() },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 36.dp, start = 24.dp, end = 56.dp)
+                .statusBarsPadding()
+                .padding(top = 8.dp, start = 24.dp, end = 56.dp)
                 .align(Alignment.TopStart),
             color = MaterialTheme.colorScheme.primary,
             trackColor = Color.White.copy(alpha = 0.12f)
@@ -96,7 +99,8 @@ fun OnboardingScreen(
                 onClick = { showLangSheet = true },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 32.dp, end = 12.dp)
+                    .statusBarsPadding()
+                    .padding(top = 4.dp, end = 12.dp)
             ) {
                 Icon(
                     Icons.Default.Language,
@@ -110,6 +114,7 @@ fun OnboardingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .navigationBarsPadding()
                 .padding(24.dp)
                 .align(Alignment.BottomCenter),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -160,7 +165,7 @@ fun OnboardingScreen(
 private fun LanguagePickerSheet(onDismiss: () -> Unit) {
     val current = AppCompatDelegate.getApplicationLocales().get(0)?.language ?: "en"
     ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.navigationBarsPadding().padding(16.dp)) {
             Text(
                 text = stringResource(R.string.onb_language),
                 style = MaterialTheme.typography.titleLarge,

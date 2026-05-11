@@ -102,6 +102,7 @@ fun PlannerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingInfo)
+                .imePadding()
                 .padding(horizontal = 16.dp),
             contentPadding = PaddingValues(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -111,10 +112,14 @@ fun PlannerScreen(
             }
         }
         
-        // Auto scroll on new messages
+        // Auto scroll only when user is already near the bottom
         LaunchedEffect(messages.size) {
-            if (messages.isNotEmpty()) {
-                listState.animateScrollToItem(messages.size - 1)
+            if (messages.isNotEmpty() && !listState.isScrollInProgress) {
+                val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+                val isAtBottom = lastVisible >= messages.size - 2
+                if (isAtBottom) {
+                    listState.animateScrollToItem(messages.size - 1)
+                }
             }
         }
     }

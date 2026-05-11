@@ -222,16 +222,18 @@ private fun ReminderRow(
     onTimeClick: (() -> Unit)? = null
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(if (onTimeClick != null) Modifier.clickable(onClick = onTimeClick) else Modifier),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .then(if (onTimeClick != null) Modifier.clickable(onClick = onTimeClick) else Modifier)
+            ) {
                 Text(title, fontWeight = FontWeight.Bold)
                 Text(
                     subtitle,

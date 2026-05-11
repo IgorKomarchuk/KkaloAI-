@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -80,11 +82,13 @@ fun PaywallScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(56.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = stringResource(R.string.pw_unlock_title),
@@ -174,7 +178,8 @@ fun PaywallScreen(
             onClick = { onUnlocked() },
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 36.dp, end = 12.dp)
+                .statusBarsPadding()
+                .padding(top = 4.dp, end = 12.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Close,
@@ -185,7 +190,7 @@ fun PaywallScreen(
 
         SnackbarHost(
             hostState = snackbarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding()
         )
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,6 +21,7 @@ import com.kkaloai.app.data.model.FoodRecognitionResult
 import com.kkaloai.app.data.model.GeminiFoodResponse
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfirmResultScreen(
     response: GeminiFoodResponse,
@@ -28,7 +30,7 @@ fun ConfirmResultScreen(
     viewModel: ConfirmResultViewModel = hiltViewModel()
 ) {
     var scaleFactor by remember { mutableStateOf(1f) }
-    
+
     val adjustedItems = response.items.map { item ->
         item.copy(
             calories = (item.calories * scaleFactor).roundToInt(),
@@ -37,22 +39,29 @@ fun ConfirmResultScreen(
             fats = item.fats * scaleFactor
         )
     }
-    
+
     val totalCalories = adjustedItems.sumOf { it.calories }
 
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.confirm_results), fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = onCancel) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                    }
+                }
+            )
+        }
+    ) { scaffoldPadding ->
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(scaffoldPadding)
+            .padding(horizontal = 16.dp)
     ) {
-        Text(
-            text = stringResource(R.string.confirm_results),
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
+        Spacer(modifier = Modifier.height(8.dp))
+
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
@@ -156,6 +165,7 @@ fun ConfirmResultScreen(
             Text(stringResource(R.string.share_viral))
         }
     }
+    } // end Scaffold content
 }
 
 @Composable

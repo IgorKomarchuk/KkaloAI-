@@ -84,7 +84,7 @@ private fun PlanList(
     onExport: () -> Unit,
     onRegen: () -> Unit
 ) {
-    Column {
+    Column(modifier = Modifier.fillMaxSize()) {
         Text(plan.summary, style = MaterialTheme.typography.bodyMedium)
         Spacer(Modifier.height(12.dp))
 
@@ -104,7 +104,10 @@ private fun PlanList(
         TextButton(onClick = onRegen) { Text(stringResource(R.string.mp_regen)) }
         Spacer(Modifier.height(8.dp))
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             items(plan.days) { day ->
                 Card(shape = RoundedCornerShape(16.dp)) {
                     Column(modifier = Modifier.padding(12.dp)) {

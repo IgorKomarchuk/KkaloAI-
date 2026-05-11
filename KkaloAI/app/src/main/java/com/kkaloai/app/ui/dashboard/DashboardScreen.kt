@@ -89,20 +89,39 @@ fun DashboardScreen(
                     IconButton(onClick = onStatsClick) {
                         Icon(Icons.Default.BarChart, contentDescription = stringResource(R.string.dash_stats_cd))
                     }
-                    IconButton(onClick = onAchievementsClick) {
-                        Icon(Icons.Default.EmojiEvents, contentDescription = stringResource(R.string.dash_achievements_cd))
-                    }
-                    IconButton(onClick = onMealPlanClick) {
-                        Icon(Icons.Default.MenuBook, contentDescription = stringResource(R.string.dash_mealplan_cd))
-                    }
-                    IconButton(onClick = onFavoritesClick) {
-                        Icon(Icons.Default.Star, contentDescription = stringResource(R.string.dash_favorites_cd))
-                    }
-                    IconButton(onClick = { viewModel.refreshBiofeedback() }) {
-                        Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.dash_refresh_cd))
-                    }
                     IconButton(onClick = onSettingsClick) {
                         Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.dash_settings_cd))
+                    }
+                    var showOverflowMenu by remember { mutableStateOf(false) }
+                    Box {
+                        IconButton(onClick = { showOverflowMenu = true }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.dash_more_cd))
+                        }
+                        DropdownMenu(
+                            expanded = showOverflowMenu,
+                            onDismissRequest = { showOverflowMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.dash_achievements_cd)) },
+                                leadingIcon = { Icon(Icons.Default.EmojiEvents, contentDescription = null) },
+                                onClick = { showOverflowMenu = false; onAchievementsClick() }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.dash_mealplan_cd)) },
+                                leadingIcon = { Icon(Icons.Default.MenuBook, contentDescription = null) },
+                                onClick = { showOverflowMenu = false; onMealPlanClick() }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.dash_favorites_cd)) },
+                                leadingIcon = { Icon(Icons.Default.Star, contentDescription = null) },
+                                onClick = { showOverflowMenu = false; onFavoritesClick() }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.dash_refresh_cd)) },
+                                leadingIcon = { Icon(Icons.Default.Refresh, contentDescription = null) },
+                                onClick = { showOverflowMenu = false; viewModel.refreshBiofeedback() }
+                            )
+                        }
                     }
                 }
             )

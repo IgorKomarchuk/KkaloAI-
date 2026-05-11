@@ -41,7 +41,7 @@ fun WaterTrackerCard(
             Spacer(modifier = Modifier.height(12.dp))
             LinearProgressIndicator(
                 progress = { progress },
-                modifier = Modifier.fillMaxWidth().height(8.dp),
+                modifier = Modifier.fillMaxWidth().height(10.dp),
                 color = Color(0xFF29B6F6),
                 trackColor = Color(0xFF29B6F6).copy(alpha = 0.15f),
                 strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
@@ -51,9 +51,9 @@ fun WaterTrackerCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                WaterQuickAddButton("+250", Modifier.weight(1f)) { onAdd(250) }
-                WaterQuickAddButton("+500", Modifier.weight(1f)) { onAdd(500) }
-                WaterQuickAddButton("+750", Modifier.weight(1f)) { onAdd(750) }
+                WaterQuickAddButton(stringResource(R.string.water_add_250), Modifier.weight(1f)) { onAdd(250) }
+                WaterQuickAddButton(stringResource(R.string.water_add_500), Modifier.weight(1f)) { onAdd(500) }
+                WaterQuickAddButton(stringResource(R.string.water_add_750), Modifier.weight(1f)) { onAdd(750) }
             }
         }
     }

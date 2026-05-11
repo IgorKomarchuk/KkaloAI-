@@ -101,6 +101,26 @@ private fun FavoriteItem(
     onRelog: () -> Unit,
     onRemove: () -> Unit
 ) {
+    var showConfirmRemove by remember { mutableStateOf(false) }
+
+    if (showConfirmRemove) {
+        AlertDialog(
+            onDismissRequest = { showConfirmRemove = false },
+            title = { Text(stringResource(R.string.fav_remove_title)) },
+            text = { Text(stringResource(R.string.fav_remove_confirm, meal.name)) },
+            confirmButton = {
+                TextButton(onClick = { showConfirmRemove = false; onRemove() }) {
+                    Text(stringResource(R.string.fav_remove_confirm_btn), color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showConfirmRemove = false }) {
+                    Text(stringResource(R.string.common_cancel))
+                }
+            }
+        )
+    }
+
     Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
@@ -114,7 +134,7 @@ private fun FavoriteItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            IconButton(onClick = onRemove) {
+            IconButton(onClick = { showConfirmRemove = true }) {
                 Icon(Icons.Default.Star, contentDescription = stringResource(R.string.fav_remove_cd), tint = Color(0xFFFFC107))
             }
             FilledIconButton(onClick = onRelog) {
